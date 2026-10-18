@@ -4,7 +4,9 @@
   "description": "A collection of tools and resources to generate and manage knowledge artefacts and agent instructions.",
   "keywords": [
     "art",
-    "agentic-workflows",
+    "markdown",
+    "agent-workflows",
+    "delegation",
     "agent-instructions"
   ],
   "author": "Noodlestan",

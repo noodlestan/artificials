@@ -1,9 +1,13 @@
 {
   "name": "apps-art-md-web",
   "keywords": [
+    "web-app",
+    "demo",
     "art",
     "markdown",
-    "demo"
+    "agent-workflows",
+    "delegation",
+    "agent-instructions"
   ],
   "type": "module",
   "version": "0.0.1",

@@ -4,7 +4,7 @@
 
 A collection of tools and resources to generate and manage knowledge artefacts and agent instructions.
 
-**Keywords:** art, agentic-workflows, agent-instructions.
+**Keywords:** art, markdown, agent-workflows, delegation, agent-instructions.
 
 ## Projects
 

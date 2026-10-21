@@ -8,12 +8,12 @@ A collection of tools and resources to generate and manage knowledge artefacts a
 
 ## Projects
 
-- Application: Art MD Website (PLANNED)
+- Application: Art MD Website — [prod](http://art-md.noodlestan.org)
 - Application: Art JS Website (PLANNED)
-- Application: Art Work Website (PLANNED)
+- Application: Art Works Website (PLANNED)
 - [Project: Art MD](https://github.com/noodlestan/art-md)
 - [Project: Art JS](https://github.com/noodlestan/art-js)
-- [Project: Art Work](https://github.com/noodlestan/art-work)
+- [Project: Art Works](https://github.com/noodlestan/art-works)
 
 ## Development
 

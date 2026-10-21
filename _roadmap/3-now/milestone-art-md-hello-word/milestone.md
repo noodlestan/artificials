@@ -305,7 +305,6 @@ Run from the `$PROJECT` root:
 ```bash
 npm run lint:fix # autofix formatting issues
 npm run lint # report remaining issues
-npm run art-work sanity # to check git status across all repos
 ```
 
 ---

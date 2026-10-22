@@ -1,6 +1,8 @@
 import { createMemo, createSignal, For, Show } from 'solid-js';
+
 import CodeDemo from '../../demos/code/CodeDemo';
 import type { DemoSource } from '../../demos/code/sources';
+
 import styles from './CodecDemo.module.css';
 
 export default function CodecDemo(props: { sources: DemoSource[] }) {

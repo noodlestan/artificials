@@ -2,7 +2,7 @@
   background: var(--color-input-bg);
   color: var(--color-content);
   font-family: var(--type-code-family);
-  font-size: 0.875rem;
+  font-size: var(--text-size-small);
   line-height: 1.5;
   min-height: 20rem;
   padding: 0.75rem;

@@ -2,8 +2,9 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-}
 
-.DemoPane > h2 {
-  font-size: 1.25rem;
+  h2 {
+    margin: 0;
+    font-size: var(--text-size-normal);
+  }
 }

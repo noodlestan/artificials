@@ -28,7 +28,9 @@
   },
   "dependencies": {
     "@art-md/codec": "^0.0.2",
+    "@astrojs/mdx": "^8.1.1",
     "@astrojs/solid-js": "^7.0.2",
+    "@noodlestan/astro-components": "0.1.1",
     "astro": "^7.2.7",
     "solid-js": "^1.9.15"
   },

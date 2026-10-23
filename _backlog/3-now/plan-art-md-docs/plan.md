@@ -130,7 +130,7 @@ Execution from `$WORKSPACE/`. Extraction work is performed in `$ART_MD` on branc
 
 | Iteration / Instructions           | Status  |
 | ---------------------------------- | ------- |
-| Iteration: Add Purrfiles Entities  | `READY` |
+| Iteration: Add Purrfiles Entities  | `DONE`  |
 | Iteration: Add Purrfiles Extract   | `READY` |
 | Iteration: Extract Art MD Meta     | `READY` |
 | Iteration: Create Docs Collections | `DRAFT` |
@@ -141,7 +141,7 @@ Execution from `$WORKSPACE/`. Extraction work is performed in `$ART_MD` on branc
 
 **Id:** `add-purrfiles-entities`
 
-**Status:** `READY`
+**Status:** `DONE`
 
 **Purpose:** Create the browser-safe entity model and meta service as a canonical package.
 
@@ -168,9 +168,9 @@ Execution from `$WORKSPACE/`. Extraction work is performed in `$ART_MD` on branc
 
 #### Commits:
 
-| ID                       | Repository / Checkout / Branch | Policy   | Hash  | Status     |
-| ------------------------ | ------------------------------ | -------- | ----- | ---------- |
-| `add-purrfiles-entities` | Art MD / `$ART_MD` / `main`    | `NOPUSH` | (TBD) | `AUTHORED` |
+| ID                       | Repository / Checkout / Branch | Policy   | Hash      | Status      |
+| ------------------------ | ------------------------------ | -------- | --------- | ----------- |
+| `add-purrfiles-entities` | Art MD / `$ART_MD` / `main`    | `NOPUSH` | `108b3f8` | `COMMITTED` |
 
 ##### Commit: `add-purrfiles-entities`
 
@@ -383,7 +383,7 @@ build(art-md-web): Add docs package, module, and entity routes.
 
 ### Next
 
-Review the instructions for Iteration: Add Purrfiles Entities, then delegate it.
+Review the instructions for Iteration: Add Purrfiles Extract, then delegate it.
 
 ### Blockers
 
@@ -433,6 +433,7 @@ npm run build
 
 - `$ART_MD/libs/parser/dist/meta.json` contains Module `parse` with `helpers: ["parse"]`.
 - `$ART_MD_WEB` builds and `/docs` lists `@art-md/parser`.
+- `@noodlestan/purrfiles-entities` builds, lints, and passes 26 unit tests in `$ART_MD`.
 
 ### Decisions
 
@@ -456,3 +457,7 @@ npm run build
 - Create "Repository: Noodlestan Purrtrait" and "Project: Noodlestan Purrtrait"
 - Extract the entity rendering components to an "astro entities" package in Noodlestan Purrtrait (name TBD)
 - Extract the entity search interactions to a "solids components" — either in in Noodlestan Purrtrait (name TBD), in case it depends on `@noodlestan/purrfiles-entities` shapes — or in `@purrtrait/solid-search` in case it depends only on generic entity shapes.
+
+### Feedback
+
+- Plan record omits template sections `Domains`, `Workflows`, `Workflow Operations`, `Required Skills`, `Resource Types in Scope`, `Findings`, and `Knowledge to Update`. These do not affect workers, whose entry point is a self-contained instructions file.

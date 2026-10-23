@@ -131,7 +131,7 @@ Execution from `$WORKSPACE/`. Extraction work is performed in `$ART_MD` on branc
 | Iteration / Instructions           | Status  |
 | ---------------------------------- | ------- |
 | Iteration: Add Purrfiles Entities  | `DONE`  |
-| Iteration: Add Purrfiles Extract   | `READY` |
+| Iteration: Add Purrfiles Extract   | `DONE`  |
 | Iteration: Extract Art MD Meta     | `READY` |
 | Iteration: Create Docs Collections | `DRAFT` |
 | Iteration: Add Docs Index          | `DRAFT` |
@@ -184,7 +184,7 @@ build(purrfiles-entities): Add generic entity model and meta service.
 
 **Id:** `add-purrfiles-extract`
 
-**Status:** `READY`
+**Status:** `DONE`
 
 **Purpose:** Create the Node/TypeScript extraction package that consumes the entity model.
 
@@ -210,9 +210,9 @@ build(purrfiles-entities): Add generic entity model and meta service.
 
 #### Commits:
 
-| ID                      | Repository / Checkout / Branch | Policy   | Hash  | Status     |
-| ----------------------- | ------------------------------ | -------- | ----- | ---------- |
-| `add-purrfiles-extract` | Art MD / `$ART_MD` / `main`    | `NOPUSH` | (TBD) | `AUTHORED` |
+| ID                      | Repository / Checkout / Branch | Policy   | Hash      | Status      |
+| ----------------------- | ------------------------------ | -------- | --------- | ----------- |
+| `add-purrfiles-extract` | Art MD / `$ART_MD` / `main`    | `NOPUSH` | `454d1d3` | `COMMITTED` |
 
 ##### Commit: `add-purrfiles-extract`
 
@@ -383,7 +383,7 @@ build(art-md-web): Add docs package, module, and entity routes.
 
 ### Next
 
-Review the instructions for Iteration: Add Purrfiles Extract, then delegate it.
+Review the instructions for Iteration: Extract Art MD Meta, then delegate it.
 
 ### Blockers
 

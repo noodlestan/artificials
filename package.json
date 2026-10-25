@@ -11,14 +11,19 @@
   ],
   "author": "Noodlestan",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/noodlestan/artificials.git"
+  },
   "private": true,
+  "engines": {
+    "node": ">=22"
+  },
   "packageManager": "npm@10.2.3",
   "workspaces": [
     "apps/**"
   ],
-  "engines": {
-    "node": ">=22"
-  },
+  "prettier": "@noodlestan/prettier-config",
   "scripts": {
     "turbo": "turbo",
     "dev": "turbo run dev --ui tui",
@@ -32,11 +37,10 @@
   "devDependencies": {
     "@noodlestan/conventions-typescript": "0.1.0",
     "@noodlestan/conventions-unit-tests": "0.1.0",
-    "@noodlestan/prettier-config": "0.1.0",
-    "@noodlestan/tsconfig": "0.2.0",
-    "lefthook": "2.1.9",
-    "prettier": "3.8.4",
-    "turbo": "2.9.18"
-  },
-  "prettier": "@noodlestan/prettier-config"
+    "@noodlestan/prettier-config": "0.1.1",
+    "@noodlestan/tsconfig": "0.2.1",
+    "lefthook": "2.2.2",
+    "prettier": "3.9.10",
+    "turbo": "2.11.10"
+  }
 }

@@ -1,5 +1,7 @@
 {
   "name": "apps-art-md-web",
+  "version": "0.0.2",
+  "description": "Static website application built with Astro, hosted on AWS S3 with CloudFront CDN.",
   "keywords": [
     "web-app",
     "demo",
@@ -9,11 +11,18 @@
     "delegation",
     "agent-instructions"
   ],
-  "type": "module",
-  "version": "0.0.1",
-  "engines": {
-    "node": ">=22.12.0"
+  "author": "Noodlestan",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/noodlestan/artificials.git",
+    "directory": "apps/art-md-web"
   },
+  "private": true,
+  "engines": {
+    "node": ">=22"
+  },
+  "type": "module",
   "prettier": "@noodlestan/prettier-config-astro",
   "scripts": {
     "dev": "astro dev",
@@ -27,17 +36,15 @@
     "ci": "npm run build && npm run lint && npm run test"
   },
   "dependencies": {
-    "@art-md/codec": "^0.0.2",
-    "@astrojs/mdx": "^8.1.1",
-    "@astrojs/solid-js": "^7.0.2",
-    "@noodlestan/astro-components": "0.1.1",
-    "astro": "^7.2.7",
-    "solid-js": "^1.9.15"
-  },
-  "allowScripts": {
-    "esbuild": true
+    "@art-md/codec": "0.0.3",
+    "@astrojs/mdx": "8.1.1",
+    "@astrojs/solid-js": "7.1.1",
+    "@noodlestan/astro-components": "0.1.2",
+    "astro": "7.4.2",
+    "solid-js": "1.9.17"
   },
   "devDependencies": {
-    "@noodlestan/prettier-config-astro": "0.1.0"
+    "@noodlestan/prettier-config-astro": "0.1.1",
+    "prettier-plugin-astro": "1.1.0"
   }
 }

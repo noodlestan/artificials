@@ -128,14 +128,16 @@ Execution from `$WORKSPACE/`. Extraction work is performed in `$ART_MD` on branc
 
 ## Items:
 
-| Iteration / Instructions           | Status |
-| ---------------------------------- | ------ |
-| Iteration: Add Purrfiles Entities  | `DONE` |
-| Iteration: Add Purrfiles Extract   | `DONE` |
-| Iteration: Extract Art MD Meta     | `DONE` |
-| Iteration: Create Docs Collections | `DONE` |
-| Iteration: Add Docs Index          | `DONE` |
-| Iteration: Add Docs Routes         | `DONE` |
+| Iteration / Instructions           | Status  |
+| ---------------------------------- | ------- |
+| Iteration: Add Purrfiles Entities  | `DONE`  |
+| Iteration: Add Purrfiles Extract   | `DONE`  |
+| Iteration: Extract Art MD Meta     | `DONE`  |
+| Iteration: Create Docs Collections | `DONE`  |
+| Iteration: Add Docs Index          | `DONE`  |
+| Iteration: Add Docs Routes         | `DONE`  |
+| Iteration: Document Parser API     | `READY` |
+| Iteration: Fix Docs Rendering      | `READY` |
 
 ### Iteration: Add Purrfiles Entities
 
@@ -395,11 +397,108 @@ build(art-md-web): Add docs index listing packages.
 build(art-md-web): Add docs package, module, and entity routes.
 ```
 
+### Iteration: Document Parser API
+
+**Id:** `document-parser-api`
+
+**Status:** `READY`
+
+**Purpose:** Give `@art-md/parser` a documented API so the docs site has something to render.
+
+**Description:** Add JSDoc to every source file in `$ART_MD/libs/parser`, including `private/`; add the missing barrel file for the public `parse` module and give each public barrel its own module-level `/** */` above the exports; document `ParserConfig` members.
+
+**Instructions Mode:** `INSTRUCTIONS_INLINED_IN_ITERATION`
+
+**Instructions:**
+
+Work from `$ART_MD/libs/parser`. Mandatory reading for the two modules `knowledge/api.md` documents — `config` and `parse` — is `$ART_MD/libs/parser/knowledge/api.md`; take wording from it rather than inventing new descriptions. Also read `$ART_MD/libs/parser/knowledge/parser.md` for the `buildDocument` visit loop and the mdast mapping.
+
+1. **Barrel files.** `src/parse/` has no `index.ts`; every other public module has one. Add `src/parse/index.ts` exporting `parse` (value) and the types it is the canonical home of. Then give every public barrel — `src/index.ts`, `src/buildDocument/index.ts`, `src/config/index.ts`, `src/mdast/index.ts`, `src/parse/index.ts` — a module-level `/** */` directly above its export block, describing what the module contributes. `src/private/index.ts` is internal and gets no barrel-level claim beyond a short line saying it is private.
+2. **Every exported symbol gets JSDoc.** Cover all of `src/`, including `src/private/` and `src/test/` helpers: `buildDocument`, `createDefaultParserConfig`, `isBlockType`, `BLOCK_TYPES`, `parse`, `createDocumentVisitContext`, and the type declarations (`ParserConfig`, `DocumentVisitContext`, `HandleResult`, and the rest).
+3. **Multi-line and human readable.** A summary line, then a blank `*` line, then body paragraphs where the behaviour needs explaining. Do not write one-line telegraphic stubs. Wrap to a readable width; do not let a single sentence run the width of the file.
+4. **Canonical `@param` tags on every function.** Each parameter gets its own `@param {Type} name - description.`, then `@returns {Type} description.` for functions that return. Match the signature exactly — `buildDocument` takes `defaultConstruct`, `constructParsers`, `docContext`; `parse` takes `markdown`, `config`, and its overloads take a `context` first. Where an overload set exists, document the implementation signature once rather than repeating identical tags per overload.
+5. **`ParserConfig` members.** In `src/config/types.ts`, put `/** */` above the `defaultConstruct` and `constructs` members individually, taking the description from `knowledge/api.md`: `defaultConstruct` is the fallback factory used when no construct claims a node; `constructs` is the ordered list of factories consulted during parsing.
+6. **Keep behaviour untouched.** This is a comments-and-barrels change. No signature, logic, or export-list changes beyond adding `src/parse/index.ts`. If adding a barrel would change what `src/index.ts` re-exports, keep the root export list exactly as it is.
+
+**Validate** by running `npm run ci` from `$ART_MD`, then confirming `meta.json` changed: from `$ART_MD` run `npm run extract` and check that `libs/parser/dist/meta.json` now carries a `description` on `buildDocument`, `config`, `mdast`, `isBlockType`, and `createDefaultParserConfig`, and a non-empty `paramTags` on `buildDocument`. If any description is still absent, its JSDoc is missing or mis-attached — fix it before committing.
+
+**Changes:**
+
+- Add JSDoc across `$ART_MD/libs/parser/src`, including `private/` and test helpers.
+- Add `$ART_MD/libs/parser/src/parse/index.ts` and module-level JSDoc to all public barrels.
+- Add member JSDoc to `ParserConfig.defaultConstruct` and `ParserConfig.constructs`.
+- Re-extract and verify descriptions and `paramTags` land in `dist/meta.json`.
+
+**Dependencies:**
+
+- Iteration: Extract Art MD Meta.
+
+#### Commits:
+
+| ID                    | Repository / Checkout / Branch | Policy   | Hash  | Status     |
+| --------------------- | ------------------------------ | -------- | ----- | ---------- |
+| `document-parser-api` | Art MD / `$ART_MD` / `main`    | `NOPUSH` | (TBD) | `AUTHORED` |
+
+##### Commit: `document-parser-api`
+
+**Message:**
+
+```text
+docs(package-parser): Document the parser API with JSDoc.
+```
+
+### Iteration: Fix Docs Rendering
+
+**Id:** `fix-docs-rendering`
+
+**Status:** `READY`
+
+**Purpose:** Correct where the plan was faulty, so the site stops rendering functions as types and starts rendering the documentation the site was meant to show.
+
+**Description:** Two defects in instructions this plan authored, both found after delivery: types were derived without filtering on `kind`, and signature rendering ignored JSDoc entirely.
+
+**Instructions Mode:** `INSTRUCTIONS_INLINED_IN_ITERATION`
+
+**Instructions:**
+
+1. **Stop hand-rolling the type filter.** In `$ART_MD_WEB/src/pages/docs/[ns]/[pkg]/[mod].astro` and `.../[mod]/[type]/[ent].astro`, replace the `Object.values(declared).map(toDeclaredType)` sweeps with `getEntityTypes` from `@noodlestan/purrfiles-entities`, and use `getEntityFunctions` in place of the manual `toDeclaredFunction` mapping over `entry.data.functions`. Both helpers already exist and already filter on `kind`. This removes the phantom `Types` entry on `buildDocument`, `mdast`, and `parse`, and drops the stray duplicate on `config`.
+2. **Render what the source documents.** Extend `$ART_MD_WEB/src/lib/signature.ts` so a function renders each parameter's `paramTags` description alongside its name and type, and appends `returnsTag` when present. Keep the existing kind-based `renderType` fallback unchanged.
+3. **Check `types` on object members too**, so a member carrying a `description` shows it under its name.
+
+Do not restructure components, add styling, or change route shapes.
+
+**Validate** by running `npm run build` from `$ART_MD_WEB` and confirming: `dist/docs/art-md/parser/buildDocument/index.html` has no `Types` section; `dist/docs/art-md/parser/config/index.html` has exactly one type (`ParserConfig`); and parameter descriptions from iteration `document-parser-api` appear in the rendered signature.
+
+**Changes:**
+
+- Use `getEntityTypes` / `getEntityFunctions` in both docs pages.
+- Render `paramTags` and `returnsTag` in `src/lib/signature.ts`.
+- Render member descriptions on object type members.
+
+**Dependencies:**
+
+- Iteration: Document Parser API.
+- Iteration: Add Docs Routes.
+
+#### Commits:
+
+| ID                   | Repository / Checkout / Branch        | Policy   | Hash  | Status     |
+| -------------------- | ------------------------------------- | -------- | ----- | ---------- |
+| `fix-docs-rendering` | Artificials / `$ARTIFICIALS` / `main` | `NOPUSH` | (TBD) | `AUTHORED` |
+
+##### Commit: `fix-docs-rendering`
+
+**Message:**
+
+```text
+fix(art-md-web): Render types through canonical helpers and show JSDoc.
+```
+
 ## Work
 
 ### Next
 
-All iterations are `DONE`. Final commit `d186036` sits in `$ARTIFICIALS` on `main`, not pushed per `NOPUSH`; push both checkouts and close the plan when directed.
+Execute Iteration: Document Parser API (`READY`) in `$ART_MD`, then Iteration: Fix Docs Rendering (`READY`) in `$ARTIFICIALS`. Both instructions are inlined; no delegation required. The six delivered iterations remain `DONE` and unpushed.
 
 ### Blockers
 

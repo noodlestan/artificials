@@ -59,7 +59,7 @@ Package links point at `/docs/{ns}/{pkg}`, which resolves to nothing until Itera
 - `$ART_MD_WEB/src/components/site/SiteNav.astro` — the navigation to extend.
 - `$ART_MD_WEB/src/pages/404.astro` — the smallest Astro page in the site; follow its structure.
 - `$ART_MD_WEB/src/pages/index.md` — frontmatter shape for pages using a layout.
-- `$WORKSPACE/node_modules/@noodlestan/astro-components/src/styles/global.css` — `.main-section` and `.markdown` layout and typography.
+- `$ARTIFICIALS/node_modules/@noodlestan/astro-components/src/styles/global.css` — `.main-section` and `.markdown` layout and typography.
 - `$NO_COMPLY/apps/standard-ui-demo/src/app/screens/ApiScreen/` — reference index, package, and module page layouts.
 - `$ARTIFICIALS/node_modules/@noodlestan/conventions-typescript/art/index.md` — TypeScript conventions.
 

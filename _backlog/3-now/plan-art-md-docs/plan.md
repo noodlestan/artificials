@@ -134,7 +134,7 @@ Execution from `$WORKSPACE/`. Extraction work is performed in `$ART_MD` on branc
 | Iteration: Add Purrfiles Extract   | `DONE`  |
 | Iteration: Extract Art MD Meta     | `DONE`  |
 | Iteration: Create Docs Collections | `DONE`  |
-| Iteration: Add Docs Index          | `READY` |
+| Iteration: Add Docs Index          | `DONE`  |
 | Iteration: Add Docs Routes         | `DRAFT` |
 
 ### Iteration: Add Purrfiles Entities
@@ -316,7 +316,7 @@ build(art-md-web): Add docs entities and packages collections.
 
 **Id:** `add-docs-index`
 
-**Status:** `READY`
+**Status:** `DONE`
 
 **Purpose:** Ship a first visible docs page listing packages.
 
@@ -340,9 +340,9 @@ build(art-md-web): Add docs entities and packages collections.
 
 #### Commits:
 
-| ID               | Repository / Checkout / Branch        | Policy   | Hash  | Status     |
-| ---------------- | ------------------------------------- | -------- | ----- | ---------- |
-| `add-docs-index` | Artificials / `$ARTIFICIALS` / `main` | `NOPUSH` | (TBD) | `AUTHORED` |
+| ID               | Repository / Checkout / Branch        | Policy   | Hash      | Status      |
+| ---------------- | ------------------------------------- | -------- | --------- | ----------- |
+| `add-docs-index` | Artificials / `$ARTIFICIALS` / `main` | `NOPUSH` | `b50f9a8` | `COMMITTED` |
 
 ##### Commit: `add-docs-index`
 
@@ -395,7 +395,7 @@ build(art-md-web): Add docs package, module, and entity routes.
 
 ### Next
 
-Review `./instructions/add-docs-index.md` for Iteration: Add Docs Index (`READY`, commit `AUTHORED`), then delegate it. Iteration: Create Docs Collections is complete (`569a610`, not pushed).
+Author `./instructions/add-docs-routes.md` for Iteration: Add Docs Routes (`DRAFT`), then delegate it. Iterations 4 and 5 are complete (`569a610`, `b50f9a8`, not pushed).
 
 ### Blockers
 
@@ -482,3 +482,4 @@ npm run build
 - `$ART_MD` has no root `build` script; its canonical entry point is `npm run ci`, which builds every package via turbo (`^ci` → `build`) and then runs `extract`. Setting Up must name `npm run ci`, not `npm run build`.
 - A linked cross-repo package that externalises `@purrception/*` TypeScript-source dependencies cannot be imported by plain `node`; verify such links through a bundler-aware runner (`npx tsx -e`) and assert only the required exports, not a full export list.
 - In Astro 7 the build-mode data store resolves to `apps/art-md-web/node_modules/.astro/data-store.json`; `.astro/data-store.json` no longer exists, and `astro sync` declares collections in the generated `.astro/content.d.ts`.
+- Astro app dependencies hoist into the checkout root, so shared-package paths in mandatory reading must resolve through `$ARTIFICIALS/node_modules`, not `$WORKSPACE/node_modules` — the workspace root installs only its own dev dependencies.

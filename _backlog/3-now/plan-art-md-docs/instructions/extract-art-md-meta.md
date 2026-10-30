@@ -178,10 +178,10 @@ Update `$PACKAGE/package.json`:
 {
   "devDependencies": {
     "@noodlestan/purrfiles-extract": "*",
-    "@purrception/lang-ts-extract": "^0.1.0",
-    "@purrception/source-fs": "^0.1.0",
-    "tsx": "^4.19.2",
-    "vitest": "4.1.8"
+    "@purrception/lang-ts-extract": "0.1.1",
+    "@purrception/source-fs": "0.1.1",
+    "tsx": "4.23.15",
+    "vitest": "5.0.5"
   }
 }
 ```

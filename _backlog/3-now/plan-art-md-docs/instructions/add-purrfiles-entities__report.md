@@ -43,4 +43,4 @@
 - `$PACKAGE` `npm run test:ci` — passed; 26 tests across 3 files; coverage 98.94% lines, 98.14% branches, 96.29% functions, 99.01% statements.
 - `$ART_MD` `npm run ci` — passed; 8 turbo tasks successful, including the pre-commit hook run.
 - Forbidden imports scan under `$PACKAGE/src/` — no `solid-js`, `typescript`, `node:fs`, or `@purrception/*-extract` imports found.
-- Commit `108b3f8` created with message `build(purrfiles-entities): Add generic entity model and meta service.` and not pushed, per `NOPUSH`.
+- Commit `fed18dc` created with message `build(purrfiles-entities): Add generic entity model and meta service.` and not pushed, per `NOPUSH`. (Recorded as `108b3f8` at the time; rewritten on 2026-10-28 — see the plan's Decisions.)

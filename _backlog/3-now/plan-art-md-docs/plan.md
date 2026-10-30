@@ -132,8 +132,8 @@ Execution from `$WORKSPACE/`. Extraction work is performed in `$ART_MD` on branc
 | ---------------------------------- | ------- |
 | Iteration: Add Purrfiles Entities  | `DONE`  |
 | Iteration: Add Purrfiles Extract   | `DONE`  |
-| Iteration: Extract Art MD Meta     | `READY` |
-| Iteration: Create Docs Collections | `DRAFT` |
+| Iteration: Extract Art MD Meta     | `DONE`  |
+| Iteration: Create Docs Collections | `READY` |
 | Iteration: Add Docs Index          | `DRAFT` |
 | Iteration: Add Docs Routes         | `DRAFT` |
 
@@ -156,7 +156,7 @@ Execution from `$WORKSPACE/`. Extraction work is performed in `$ART_MD` on branc
 **Changes:**
 
 - Create `$ART_MD/libs/purrfiles-entities/` package (config, build, records, README, guide) with canonical name `@noodlestan/purrfiles-entities`; `type: module`, `sideEffects: false`, publishable.
-- Add generic `PurrfilesEntityPartial` / `PurrfilesEntityData` types extending `EntityDataBase`, with `path` and a concrete `Module` type carrying `helpers`; declared symbols may hold both type and function declarations.
+- Add generic `PurrfilesEntityPartial` / `PurrfilesEntityData` types extending `EntityDataBase`, with `path` and a concrete `Module` type carrying `functions` (named `helpers` when first authored, renamed when file discovery was generalised); declared symbols may hold both type and function declarations.
 - Copy and rename `createNoComplyMetaService` to `createMetaService`, keeping the docs subset: `getEntities`, `getPackageNames`, `hasPackage`, `getPackageModuleNames`, `getModuleMaybe`, `getModuleEntities`, `getEntityMaybe`, and optional `resolveLink`.
 - Add the entity helpers `getEntityTypes` and `getEntityFunctions`.
 - Enforce browser-safe imports: no `solid-js`, `typescript`, `node:fs`, or `@purrception/lang-ts-extract`.
@@ -170,7 +170,7 @@ Execution from `$WORKSPACE/`. Extraction work is performed in `$ART_MD` on branc
 
 | ID                       | Repository / Checkout / Branch | Policy   | Hash      | Status      |
 | ------------------------ | ------------------------------ | -------- | --------- | ----------- |
-| `add-purrfiles-entities` | Art MD / `$ART_MD` / `main`    | `NOPUSH` | `108b3f8` | `COMMITTED` |
+| `add-purrfiles-entities` | Art MD / `$ART_MD` / `main`    | `NOPUSH` | `b87253f` | `COMMITTED` |
 
 ##### Commit: `add-purrfiles-entities`
 
@@ -199,10 +199,11 @@ build(purrfiles-entities): Add generic entity model and meta service.
 **Changes:**
 
 - Create `$ART_MD/cli/purrfiles-extract/` package (config, build, records, README, guide) with canonical name `@noodlestan/purrfiles-extract`.
-- Add `createModuleEntityExtractor` with module matcher (`^([^/]+)$`), file resolver, and entity extractor.
-- Resolver rules: prefer `index.ts`; if absent, use the single non-test file named after the directory as entry (for example `parse/parse.ts`); collect helpers from `helpers/` plus that entry file; ignore `types.ts`, `constants.ts`, and `*.test.ts`.
+- Add `createModuleEntityExtractor` with module matcher, file resolver, and entity extractor. The matcher accepts any non-empty directory under the root (subdirectories recurse) and sets `module` to the parent directory name; the root directory never yields an entity.
+- Resolver rules: `index.*` → docs source; else the same-name entry file (for example `parse/parse.ts`); `types.*` → types; every other non-test, non-declaration source file → symbol sources (so `constants.ts` is read). Directories holding no source files yield no module.
+- Expose `createModuleEntityExtractor({ extensions, ignore, skipSubDirs })`; default to TypeScript extensions, no ignores, recursion on.
 - Depend on `@noodlestan/purrfiles-entities` for the entity types.
-- Add a fixture test proving `src/parse/` yields Module `parse` with helper `parse`.
+- Add a fixture test proving `src/parse/` yields Module `parse` with function `parse`.
 
 **Dependencies:**
 
@@ -212,7 +213,7 @@ build(purrfiles-entities): Add generic entity model and meta service.
 
 | ID                      | Repository / Checkout / Branch | Policy   | Hash      | Status      |
 | ----------------------- | ------------------------------ | -------- | --------- | ----------- |
-| `add-purrfiles-extract` | Art MD / `$ART_MD` / `main`    | `NOPUSH` | `454d1d3` | `COMMITTED` |
+| `add-purrfiles-extract` | Art MD / `$ART_MD` / `main`    | `NOPUSH` | `8e294dc` | `COMMITTED` |
 
 ##### Commit: `add-purrfiles-extract`
 
@@ -226,7 +227,7 @@ build(purrfiles-extract): Add generic module entity extractor.
 
 **Id:** `extract-art-md-meta`
 
-**Status:** `READY`
+**Status:** `DONE`
 
 **Purpose:** Produce the first real `meta.json` from `@art-md/parser`.
 
@@ -240,10 +241,11 @@ build(purrfiles-extract): Add generic module entity extractor.
 
 **Changes:**
 
-- Add `$ART_MD/libs/parser/scripts/extract.ts` calling `extractEntitiesFromFileSystem` with `rootDir: 'src/'`, the module extractor, and `meta: { package: '@art-md/parser' }`; write `dist/meta.json`.
+- Add `$ART_MD/libs/parser/scripts/extract.ts` calling `extractEntitiesFromFileSystem` with `rootDir: 'src/'`, the module extractor, `ignore: ['private', 'test']`, and `meta: { package: '@art-md/parser' }`; write `dist/meta.json`.
 - Add `"extract": "tsx scripts/extract.ts"` and the required dev dependencies (`@noodlestan/purrfiles-extract`, `@purrception/source-fs`, `@purrception/lang-ts-extract`, `tsx`).
-- Replace the root `"extract": "echo no purrception yet"` with a command that runs package extraction (turbo or npm workspaces).
-- Verify `dist/meta.json` contains Module `parse` with helper `parse`; run `npm run ci` from `$ART_MD`.
+- Replace the root `"extract": "echo no purrception yet"` with `"extract": "turbo run extract"`, and add the `extract` task to `$ART_MD/turbo.json` (`dependsOn: ["^build"]`, `cache: false`, `outputs: ["dist/meta.json"]`) so extraction always has built dependencies.
+- Add the `0-build-deps` step to `$ART_MD/lefthook.yml` so the pre-commit `1-extract` runs against built `dist/` output (resolves the `BLOCKER` in the report).
+- Verify `dist/meta.json` contains Module `parse` with `functions: ["parse"]`; run `npm run ci` from `$ART_MD`.
 
 **Dependencies:**
 
@@ -251,9 +253,9 @@ build(purrfiles-extract): Add generic module entity extractor.
 
 #### Commits:
 
-| ID                    | Repository / Checkout / Branch | Policy   | Hash  | Status     |
-| --------------------- | ------------------------------ | -------- | ----- | ---------- |
-| `extract-art-md-meta` | Art MD / `$ART_MD` / `main`    | `NOPUSH` | (TBD) | `AUTHORED` |
+| ID                    | Repository / Checkout / Branch | Policy   | Hash      | Status      |
+| --------------------- | ------------------------------ | -------- | --------- | ----------- |
+| `extract-art-md-meta` | Art MD / `$ART_MD` / `main`    | `NOPUSH` | `8e294dc` | `COMMITTED` |
 
 ##### Commit: `extract-art-md-meta`
 
@@ -263,11 +265,13 @@ build(purrfiles-extract): Add generic module entity extractor.
 build(parser): Add purrception metadata extraction.
 ```
 
+**Note:** Never created as a standalone commit. The worker hit a `BLOCKER` (see report) and the iteration was reworked during history reorganisation: its wiring landed in `8e294dc` together with the extractor fixes and the hook correction the blocker required.
+
 ### Iteration: Create Docs Collections
 
 **Id:** `create-docs-collections`
 
-**Status:** `DRAFT`
+**Status:** `READY`
 
 **Purpose:** Load the meta JSON into Astro collections so pages can be generated statically.
 
@@ -275,9 +279,13 @@ build(parser): Add purrception metadata extraction.
 
 **Instructions Mode:** `INSTRUCTIONS_SELF_CONTAINED_FILE`
 
+**Instructions:** `./instructions/create-docs-collections.md`
+
+**Report:** `./instructions/create-docs-collections__report.md`
+
 **Changes:**
 
-- Add `@noodlestan/purrfiles-entities` as a dependency of `$ART_MD_WEB` (workspace link while the package lives in `$ART_MD`).
+- Add `@noodlestan/purrfiles-entities` as a dependency of `$ART_MD_WEB` via `file:../../../art-md/libs/purrfiles-entities` (npm links it; `$ART_MD` must be built first).
 - Add `$ART_MD_WEB/scripts/sync-meta.mjs` copying `$ART_MD/libs/parser/dist/meta.json` to `$ART_MD_WEB/src/data/meta.json`; run it from `dev`, `build`, and an `extract` script.
 - Add `$ART_MD_WEB/src/content.config.ts` with:
   - `entities` — one entry per meta entity, id `{package}/{type}/{name}`, data validated by a generic entity schema.
@@ -355,9 +363,9 @@ build(art-md-web): Add docs index listing packages.
 **Changes:**
 
 - Add `docs/[ns]/[pkg].astro` — package page listing modules.
-- Add `docs/[ns]/[pkg]/[mod].astro` — module page listing entities, helpers, and types.
+- Add `docs/[ns]/[pkg]/[mod].astro` — module page listing entities, functions, and types.
 - Add `docs/[ns]/[pkg]/[mod]/[type]/[ent].astro` — entity page with a type switch; only `Module` is rendered in v1.
-- Add docs components: breadcrumbs, entity summary, entities section, helpers/functions section, types section.
+- Add docs components: breadcrumbs, entity summary, entities section, functions section, types section.
 - Generate `getStaticPaths` from the collections; return 404 for unknown ids.
 
 **Dependencies:**
@@ -383,7 +391,7 @@ build(art-md-web): Add docs package, module, and entity routes.
 
 ### Next
 
-Review the instructions for Iteration: Extract Art MD Meta, then delegate it.
+Review `./instructions/create-docs-collections.md` for Iteration: Create Docs Collections (`DRAFT`, commit `AUTHORED`), then delegate it. This is the first iteration in `$ARTIFICIALS`.
 
 ### Blockers
 
@@ -431,9 +439,10 @@ npm run build
 
 ### Evidence
 
-- `$ART_MD/libs/parser/dist/meta.json` contains Module `parse` with `helpers: ["parse"]`.
-- `$ART_MD_WEB` builds and `/docs` lists `@art-md/parser`.
-- `@noodlestan/purrfiles-entities` builds, lints, and passes 26 unit tests in `$ART_MD`.
+- `$ART_MD/libs/parser/dist/meta.json` contains 4 Module entities (`buildDocument`, `config`, `mdast`, `parse`); Module `parse` has `functions: ["parse"]` and `description: "Module: parse — turns Art MD source into Art documents."`. The file is gitignored — it is produced by `npm run extract` from `$ART_MD`.
+- `@noodlestan/purrfiles-entities` builds, lints, and passes 26 unit tests in `$ART_MD`; full `npm run ci` passes 9 turbo tasks.
+- `$ART_MD` installs `@purrception/lang-ts-extract@0.1.1`, `@purrception/lang-ts@0.1.1`, `@purrception/source-fs@0.1.1`, and `@purrception/primitives@0.1.0`.
+- Pending (iterations 4–6): `$ART_MD_WEB` builds and `/docs` lists `@art-md/parser`.
 
 ### Decisions
 
@@ -443,7 +452,10 @@ npm run build
 - **Temporary home** — both packages are created under `$ART_MD` until moved to `noodlestan/purrfiles`; the move is out of scope.
 - **Meta JSON is synced, not imported cross-repo** — a script copies `dist/meta.json` into the app.
 - **Route shape** — `/docs/{ns}/{pkg}/{mod}/{type}/{ent}` mirrors the No Comply demo and handles scoped package names.
-- **Module fallback** — directories without `index.ts` use their same-name file as entry and helper source.
+- **Module fallback** — directories without an index file use their same-name file as entry and docs source; directories holding nothing but subdirectories are not modules.
+- **Extractor options** — `createModuleEntityExtractor({ extensions, ignore, skipSubDirs })` is freeform `purrfiles-extract` config extending the standard `@purrception/source-fs` `DirectoryExtractorOptions`. Defaults: TypeScript extensions only (no `.js` — `lang-ts-extract` has no `allowJs`), `ignore: []`, `skipSubDirs: false`. `@art-md/parser` extracts with `ignore: ['private', 'test']`.
+- **Entities reach the site via a `file:` link** — `$ART_MD` and `$ARTIFICIALS` are separate repositories with their own package roots, so npm workspaces cannot resolve `@noodlestan/purrfiles-entities` by name. `$ART_MD_WEB` declares it as `file:../../../art-md/libs/purrfiles-entities`; publishing stays out of scope. This is an explicit exception to the exact-version rule in `_ops/packages/policy.md`, valid only while both purrfiles packages remain temporary residents of `$ART_MD`.
+- **Hashes refreshed 2026-10-30** — the commit hashes recorded in this plan now match current `main` in `$ART_MD` (`b87253f`, `8e294dc`).
 - **Instructions mode** — all iterations use self-contained files because each touches multiple files or needs code-level detail.
 
 ### Follow Ups

@@ -185,12 +185,12 @@ Create `$PACKAGE/package.json`:
   },
   "dependencies": {
     "@noodlestan/purrfiles-entities": "*",
-    "@purrception/lang-ts-extract": "^0.1.0",
-    "@purrception/primitives": "^0.1.0",
-    "@purrception/source-fs": "^0.1.0"
+    "@purrception/lang-ts-extract": "0.1.1",
+    "@purrception/primitives": "0.1.0",
+    "@purrception/source-fs": "0.1.1"
   },
   "devDependencies": {
-    "vitest": "4.1.8"
+    "vitest": "5.0.5"
   }
 }
 ```

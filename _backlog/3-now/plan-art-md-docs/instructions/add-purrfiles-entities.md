@@ -179,11 +179,11 @@ Create `$PACKAGE/package.json`:
     "ci": "npm run lint && npm run build && npm run test:ci"
   },
   "dependencies": {
-    "@purrception/lang-ts": "^0.1.0",
-    "@purrception/primitives": "^0.1.0"
+    "@purrception/lang-ts": "0.1.1",
+    "@purrception/primitives": "0.1.0"
   },
   "devDependencies": {
-    "vitest": "4.1.8"
+    "vitest": "5.0.5"
   }
 }
 ```

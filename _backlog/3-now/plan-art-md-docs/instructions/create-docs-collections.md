@@ -62,7 +62,7 @@ The `entities` collection holds one entry per extracted entity, identified as `{
 - `$ARTIFICIALS/node_modules/astro/dist/content/config.d.ts` — `defineCollection` and the accepted loader forms.
 - `$ARTIFICIALS/node_modules/astro/dist/content/loaders/types.d.ts` — `Loader` contract.
 - `$WORKSPACE/checkouts/management/_ops/packages/policy.md` — dependency pinning model; read the exception notice in Step 1.
-- `$WORKSPACE/node_modules/@noodlestan/conventions-typescript/art/index.md` — TypeScript conventions.
+- `$ARTIFICIALS/node_modules/@noodlestan/conventions-typescript/art/index.md` — TypeScript conventions.
 
 - RULE: You MUST follow any links under `## Mandatory Reading` sections found in the listed files.
 - RULE: If you are unable to read a file linked under `## Mandatory Reading` you must stop and REPORT A BLOCKER.

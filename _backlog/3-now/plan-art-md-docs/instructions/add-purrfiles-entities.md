@@ -61,7 +61,7 @@ Create `@noodlestan/purrfiles-entities` under `$ART_MD/libs/`: a browser-safe pa
 - `$REFERENCE/src/entities/Module/` — the `Module` entity type to port.
 - `$REFERENCE/src/entities/helpers/` — `getEntityTypes` and `getEntityFunctions`.
 - `$REFERENCE/src/private/index.ts`, `$REFERENCE/src/private/types.ts`, `$REFERENCE/src/private/indexEntities.ts`, `$REFERENCE/src/private/resolveEntityExpressionParts.ts` — indexing and expression parsing.
-- `$WORKSPACE/node_modules/@noodlestan/conventions-typescript/art/index.md` — TypeScript conventions.
+- `$ARTIFICIALS/node_modules/@noodlestan/conventions-typescript/art/index.md` — TypeScript conventions.
 - `$WORKSPACE/node_modules/@noodlestan/conventions-unit-tests/art/index.md` — unit test conventions.
 
 - RULE: You MUST follow any links under `## Mandatory Reading` sections found in the listed files.

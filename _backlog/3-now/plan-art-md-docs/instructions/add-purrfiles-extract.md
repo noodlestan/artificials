@@ -62,7 +62,7 @@ Create `@noodlestan/purrfiles-extract` under `$ART_MD/cli/`: a Node/TypeScript p
 - `$REFERENCE/src/entities/Module/` — Module matcher, extractor, resolver to port.
 - `$REFERENCE/src/utils/` — `findIndexFile`, `findHelperFiles`, `findTypesFile`.
 - `$NO_COMPLY/node_modules/@purrception/source-fs/dist/esm/` — `DirectoryExtractContext`, `extractEntitiesFromFileSystem`, `defineDirectoryExtractor` types.
-- `$WORKSPACE/node_modules/@noodlestan/conventions-typescript/art/index.md` — TypeScript conventions.
+- `$ARTIFICIALS/node_modules/@noodlestan/conventions-typescript/art/index.md` — TypeScript conventions.
 - `$WORKSPACE/node_modules/@noodlestan/conventions-unit-tests/art/index.md` — unit test conventions.
 
 - RULE: You MUST follow any links under `## Mandatory Reading` sections found in the listed files.

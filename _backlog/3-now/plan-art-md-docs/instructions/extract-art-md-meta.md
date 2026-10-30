@@ -56,7 +56,7 @@ Wire the extractor into `@art-md/parser` and produce the first real `dist/meta.j
 - `$ART_MD/libs/parser/src/index.ts`, `$ART_MD/libs/parser/src/parse/parse.ts` — first extracted source.
 - `$EXTRACT/src/index.ts`, `$EXTRACT/src/entities/Module/createModuleEntityExtractor.ts` — public extractor API.
 - `$NO_COMPLY/libs/solid-accessibility/scripts/extract.ts` — extraction script pattern (reference only).
-- `$WORKSPACE/node_modules/@noodlestan/conventions-typescript/art/index.md` — TypeScript conventions.
+- `$ARTIFICIALS/node_modules/@noodlestan/conventions-typescript/art/index.md` — TypeScript conventions.
 - `$WORKSPACE/node_modules/@noodlestan/conventions-unit-tests/art/index.md` — unit test conventions.
 
 - RULE: You MUST follow any links under `## Mandatory Reading` sections found in the listed files.

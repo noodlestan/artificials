@@ -391,7 +391,7 @@ build(art-md-web): Add docs package, module, and entity routes.
 
 ### Next
 
-Review `./instructions/create-docs-collections.md` for Iteration: Create Docs Collections (`DRAFT`, commit `AUTHORED`), then delegate it. This is the first iteration in `$ARTIFICIALS`.
+Delegate Iteration: Create Docs Collections (`READY`, commit `AUTHORED`) to a worker, then record the outcome. This is the first iteration in `$ARTIFICIALS`.
 
 ### Blockers
 

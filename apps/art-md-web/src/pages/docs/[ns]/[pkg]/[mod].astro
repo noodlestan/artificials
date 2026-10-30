@@ -1,0 +1,72 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+import DocsBreadcrumbs from '../../../../components/docs/DocsBreadcrumbs.astro';
+import EntitiesSection from '../../../../components/docs/EntitiesSection.astro';
+import EntitySummary from '../../../../components/docs/EntitySummary.astro';
+import FunctionsSection from '../../../../components/docs/FunctionsSection.astro';
+import TypesSection from '../../../../components/docs/TypesSection.astro';
+import PageLayout from '../../../../layouts/PageLayout.astro';
+import { entityHref, packageParts } from '../../../../lib/routes';
+import {
+	toDeclaredFunction,
+	toDeclaredType,
+	type DeclaredFunction,
+	type DeclaredType,
+} from '../../../../lib/signature';
+
+interface Props {
+	entry: CollectionEntry<'entities'>;
+	subEntities: { href: string; label: string }[];
+	functions: DeclaredFunction[];
+	types: DeclaredType[];
+}
+
+export async function getStaticPaths() {
+	const modules = await getCollection('entities', entry => entry.data.type === 'module');
+	const all = await getCollection('entities');
+
+	return modules.map(entry => {
+		const { namespace, name } = packageParts(entry.data.package);
+		const mod = entry.data.name;
+
+		// v1 modules declare no sub-entities; this stays empty until other entity types exist.
+		const subEntities = all
+			.filter(candidate => candidate.data.module === mod && candidate.data.type !== 'module')
+			.map(candidate => ({
+				href: entityHref(entry.data.package, mod, candidate.data.type, candidate.data.name),
+				label: `${candidate.data.type}: ${candidate.data.name}`,
+			}));
+
+		const declared = entry.data.symbols.declared as Record<string, unknown>;
+		const functions = (entry.data.functions ?? [])
+			.map(name => toDeclaredFunction(declared[name]))
+			.filter((fn): fn is DeclaredFunction => Boolean(fn));
+		const types = Object.values(declared)
+			.map(toDeclaredType)
+			.filter((declaredType): declaredType is DeclaredType => Boolean(declaredType));
+
+		return {
+			params: { ns: namespace, pkg: name, mod },
+			props: { entry, subEntities, functions, types },
+		};
+	});
+}
+
+const { entry, subEntities, functions, types } = Astro.props;
+const { package: pkg, name: mod, description } = entry.data;
+
+const content = {
+	title: mod,
+	description: description ?? `Module ${mod} of ${pkg}.`,
+};
+---
+
+<PageLayout content={content}>
+	<DocsBreadcrumbs pkg={pkg} mod={mod} />
+	<h1>{mod}</h1>
+	<EntitySummary description={description} />
+	<EntitiesSection entities={subEntities} />
+	<FunctionsSection functions={functions} />
+	<TypesSection types={types} />
+</PageLayout>

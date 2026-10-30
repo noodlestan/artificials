@@ -1,0 +1,44 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+import DocsBreadcrumbs from '../../../components/docs/DocsBreadcrumbs.astro';
+import PageLayout from '../../../layouts/PageLayout.astro';
+import { moduleHref, packageParts } from '../../../lib/routes';
+
+interface Props {
+	entry: CollectionEntry<'packages'>;
+}
+
+export async function getStaticPaths() {
+	const packages = await getCollection('packages');
+
+	return packages.map(entry => {
+		const { namespace, name } = packageParts(entry.data.package);
+
+		return { params: { ns: namespace, pkg: name }, props: { entry } };
+	});
+}
+
+const { entry } = Astro.props;
+const { package: pkg } = entry.data;
+
+const content = {
+	title: pkg,
+	description: `Modules exported by ${pkg}.`,
+};
+---
+
+<PageLayout content={content}>
+	<DocsBreadcrumbs pkg={pkg} />
+	<h1>{pkg}</h1>
+	<section>
+		<h2>Modules</h2>
+		<ul>
+			{entry.data.moduleNames.map(mod => (
+				<li>
+					<a href={moduleHref(pkg, mod)}>{mod}</a>
+				</li>
+			))}
+		</ul>
+	</section>
+</PageLayout>

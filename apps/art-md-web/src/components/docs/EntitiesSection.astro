@@ -1,0 +1,20 @@
+---
+interface Props {
+	entities: { href: string; label: string }[];
+}
+
+const { entities } = Astro.props;
+---
+
+{entities.length > 0 && (
+	<section>
+		<h2>Entities</h2>
+		<ul>
+			{entities.map(entity => (
+				<li>
+					<a href={entity.href}>{entity.label}</a>
+				</li>
+			))}
+		</ul>
+	</section>
+)}

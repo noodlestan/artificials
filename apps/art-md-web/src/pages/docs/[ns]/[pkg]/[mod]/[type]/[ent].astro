@@ -1,0 +1,80 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+import DocsBreadcrumbs from '../../../../../../components/docs/DocsBreadcrumbs.astro';
+import EntitySummary from '../../../../../../components/docs/EntitySummary.astro';
+import FunctionsSection from '../../../../../../components/docs/FunctionsSection.astro';
+import TypesSection from '../../../../../../components/docs/TypesSection.astro';
+import PageLayout from '../../../../../../layouts/PageLayout.astro';
+import { packageParts } from '../../../../../../lib/routes';
+import {
+	toDeclaredFunction,
+	toDeclaredType,
+	type DeclaredFunction,
+	type DeclaredType,
+} from '../../../../../../lib/signature';
+
+interface Props {
+	entry: CollectionEntry<'entities'>;
+	functions: DeclaredFunction[];
+	types: DeclaredType[];
+}
+
+export async function getStaticPaths() {
+	const all = await getCollection('entities');
+
+	return all.map(entry => {
+		const { package: pkg, type, name, module } = entry.data;
+
+		// A module entity is its own module; other entity types name theirs explicitly.
+		const mod = module ?? name;
+		const { namespace, name: pkgName } = packageParts(pkg);
+
+		const declared = (entry.data.symbols?.declared ?? {}) as Record<string, unknown>;
+		const functions = (entry.data.functions ?? [])
+			.map(declName => toDeclaredFunction(declared[declName]))
+			.filter((fn): fn is DeclaredFunction => Boolean(fn));
+		const types = Object.values(declared)
+			.map(toDeclaredType)
+			.filter((declaredType): declaredType is DeclaredType => Boolean(declaredType));
+
+		return {
+			params: { ns: namespace, pkg: pkgName, mod, type, ent: name },
+			props: { entry, functions, types },
+		};
+	});
+}
+
+const { entry, functions, types } = Astro.props;
+const { package: pkg, type, name, description } = entry.data;
+
+// v1 only renders the `module` type; any other type is an unknown page.
+const known = type === 'module';
+
+const content = {
+	title: `${type}: ${name}`,
+	description: description ?? `${type} ${name}.`,
+};
+---
+
+<PageLayout content={content}>
+	{!known ? (
+		<>
+			<h1>Page not found</h1>
+			<p>
+				Entity {pkg}/{type}:{name} is not available yet.
+			</p>
+			<p>
+				<a href="/docs">Docs home</a>
+			</p>
+		</>
+	) : (
+		<>
+			<DocsBreadcrumbs pkg={pkg} mod={name} type={type} ent={name} />
+			<h1>{name}</h1>
+			<EntitySummary description={description} />
+			<FunctionsSection functions={functions} />
+			<TypesSection types={types} />
+		</>
+	)}
+</PageLayout>

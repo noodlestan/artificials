@@ -1,0 +1,21 @@
+---
+import { renderFunctionSignature, type DeclaredFunction } from '../../lib/signature';
+
+interface Props {
+	functions: DeclaredFunction[];
+}
+
+const { functions } = Astro.props;
+---
+
+{functions.length > 0 && (
+	<section>
+		<h2>Functions</h2>
+		{functions.map(fn => (
+			<section>
+				<h3>{fn.name}</h3>
+				<pre><code>{renderFunctionSignature(fn.name, fn.node)}</code></pre>
+			</section>
+		))}
+	</section>
+)}

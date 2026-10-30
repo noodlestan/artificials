@@ -1,0 +1,50 @@
+---
+import { renderType, type DeclaredType } from '../../lib/signature';
+
+interface Props {
+	types: DeclaredType[];
+}
+
+const { types } = Astro.props;
+
+const publicTypes = types.filter(declType => !declType.private);
+const privateTypes = types.filter(declType => declType.private);
+---
+
+{publicTypes.length > 0 && (
+	<section>
+		<h2>Types</h2>
+		{publicTypes.map(declType => (
+			<section>
+				<h3>{declType.name}</h3>
+				{declType.node.kind === 'object' ? (
+					<ul>
+						{Object.entries(declType.node.members).map(([name, member]) => (
+							<li>
+								<code>
+									{name}
+									{member.optional ? '?' : ''}
+								</code>
+								<code>{renderType(member.type)}</code>
+							</li>
+						))}
+					</ul>
+				) : (
+					<pre><code>{renderType(declType.node)}</code></pre>
+				)}
+			</section>
+		))}
+	</section>
+)}
+
+{privateTypes.length > 0 && (
+	<section>
+		<h2>Private Types</h2>
+		{privateTypes.map(declType => (
+			<section>
+				<h3>{declType.name} (private)</h3>
+				<pre><code>{renderType(declType.node)}</code></pre>
+			</section>
+		))}
+	</section>
+)}

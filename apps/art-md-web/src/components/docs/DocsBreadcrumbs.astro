@@ -1,0 +1,40 @@
+---
+import { packageHref, moduleHref } from '../../lib/routes';
+
+interface Props {
+	pkg: string;
+	mod?: string;
+	type?: string;
+	ent?: string;
+}
+
+const { pkg, mod, type, ent } = Astro.props;
+---
+
+<nav aria-label="Breadcrumbs">
+	<a href="/docs">Docs</a>
+	{!mod && <span> / Package</span>}
+	{mod && (
+		<>
+			{' / '}
+			<a href={packageHref(pkg)}>{pkg}</a>
+		</>
+	)}
+	{mod && !type && <span> / module</span>}
+	{mod && type && (
+		<>
+			{' / '}
+			<a href={moduleHref(pkg, mod)}>{mod}</a>
+			<span>
+				{' / '}
+				{type}: {ent}
+			</span>
+		</>
+	)}
+</nav>
+
+<style>
+	nav {
+		font-size: var(--text-size-normal);
+	}
+</style>

@@ -134,7 +134,7 @@ Execution from `$WORKSPACE/`. Extraction work is performed in `$ART_MD` on branc
 | Iteration: Add Purrfiles Extract   | `DONE`  |
 | Iteration: Extract Art MD Meta     | `DONE`  |
 | Iteration: Create Docs Collections | `DONE`  |
-| Iteration: Add Docs Index          | `DRAFT` |
+| Iteration: Add Docs Index          | `READY` |
 | Iteration: Add Docs Routes         | `DRAFT` |
 
 ### Iteration: Add Purrfiles Entities
@@ -316,13 +316,17 @@ build(art-md-web): Add docs entities and packages collections.
 
 **Id:** `add-docs-index`
 
-**Status:** `DRAFT`
+**Status:** `READY`
 
 **Purpose:** Ship a first visible docs page listing packages.
 
 **Description:** Add `/docs` using the `packages` collection, plus a Docs link in the site navigation.
 
 **Instructions Mode:** `INSTRUCTIONS_SELF_CONTAINED_FILE`
+
+**Instructions:** `./instructions/add-docs-index.md`
+
+**Report:** `./instructions/add-docs-index__report.md`
 
 **Changes:**
 
@@ -391,7 +395,7 @@ build(art-md-web): Add docs package, module, and entity routes.
 
 ### Next
 
-Author `./instructions/add-docs-index.md` for Iteration: Add Docs Index (`DRAFT`), then delegate it. Iteration: Create Docs Collections is complete (`569a610`, not pushed).
+Review `./instructions/add-docs-index.md` for Iteration: Add Docs Index (`READY`, commit `AUTHORED`), then delegate it. Iteration: Create Docs Collections is complete (`569a610`, not pushed).
 
 ### Blockers
 

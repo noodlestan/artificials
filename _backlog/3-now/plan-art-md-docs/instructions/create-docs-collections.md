@@ -77,11 +77,10 @@ The `entities` collection holds one entry per extracted entity, identified as `{
 
 **Instructions:** (From `$ART_MD_WEB/_guide.md`)
 
-Run from `$ART_MD` to produce `$META` and `$ENTITIES/dist/` (the website links the package's build output):
+Run from `$ART_MD` — the canonical check, which builds `$ENTITIES/dist/` and produces `$META` (the website links the package's build output, and turbo runs `extract` after `build`):
 
 ```bash
-npm run build
-npm run extract
+npm run ci
 ```
 
 Run from `$ARTIFICIALS`:
@@ -89,6 +88,8 @@ Run from `$ARTIFICIALS`:
 ```bash
 npm ci
 ```
+
+Note: `$ART_MD` has no root `build` script; `npm run ci` is the entry point that builds every package via turbo (`^ci` → `build`) and then runs `extract`.
 
 ### Writing Commit Message
 
@@ -152,10 +153,14 @@ npm install
 Verify the link resolves, from `$ART_MD_WEB`:
 
 ```bash
-node --input-type=module -e "import('@noodlestan/purrfiles-entities').then(m => console.log(Object.keys(m).sort().join(',')))"
+npx tsx -e "import('@noodlestan/purrfiles-entities').then(m => console.log(typeof m.createMetaService))"
 ```
 
-Expected outcome: the command prints `createMetaService,getEntityFunctions,getEntityTypes` and exits `0`. If it fails, confirm `$ENTITIES/dist/index.mjs` exists (Setting Up) and REPORT A BLOCKER.
+Expected outcome: the command prints `function` and exits `0`.
+
+The linked package externalises its `@purrception/*` dependencies, which publish TypeScript source; plain `node` cannot import them, so the check runs through a bundler-aware runner (`tsx`), the same way Astro's Vite build resolves them. Only the presence of `createMetaService` matters — the full export list is not fixed here.
+
+If the check fails, confirm `$ENTITIES/dist/index.mjs` exists (Setting Up) and that `npm install` from `$ARTIFICIALS` completed, then REPORT A BLOCKER.
 
 ### Step `2 / 6` — Sync `meta.json` into the website
 

@@ -133,7 +133,7 @@ Execution from `$WORKSPACE/`. Extraction work is performed in `$ART_MD` on branc
 | Iteration: Add Purrfiles Entities  | `DONE`  |
 | Iteration: Add Purrfiles Extract   | `DONE`  |
 | Iteration: Extract Art MD Meta     | `DONE`  |
-| Iteration: Create Docs Collections | `READY` |
+| Iteration: Create Docs Collections | `DONE`  |
 | Iteration: Add Docs Index          | `DRAFT` |
 | Iteration: Add Docs Routes         | `DRAFT` |
 
@@ -271,7 +271,7 @@ build(parser): Add purrception metadata extraction.
 
 **Id:** `create-docs-collections`
 
-**Status:** `READY`
+**Status:** `DONE`
 
 **Purpose:** Load the meta JSON into Astro collections so pages can be generated statically.
 
@@ -300,9 +300,9 @@ build(parser): Add purrception metadata extraction.
 
 #### Commits:
 
-| ID                        | Repository / Checkout / Branch        | Policy   | Hash  | Status     |
-| ------------------------- | ------------------------------------- | -------- | ----- | ---------- |
-| `create-docs-collections` | Artificials / `$ARTIFICIALS` / `main` | `NOPUSH` | (TBD) | `AUTHORED` |
+| ID                        | Repository / Checkout / Branch        | Policy   | Hash      | Status      |
+| ------------------------- | ------------------------------------- | -------- | --------- | ----------- |
+| `create-docs-collections` | Artificials / `$ARTIFICIALS` / `main` | `NOPUSH` | `569a610` | `COMMITTED` |
 
 ##### Commit: `create-docs-collections`
 
@@ -391,7 +391,7 @@ build(art-md-web): Add docs package, module, and entity routes.
 
 ### Next
 
-Delegate Iteration: Create Docs Collections (`READY`, commit `AUTHORED`) to a worker, then record the outcome. This is the first iteration in `$ARTIFICIALS`.
+Author `./instructions/add-docs-index.md` for Iteration: Add Docs Index (`DRAFT`), then delegate it. Iteration: Create Docs Collections is complete (`569a610`, not pushed).
 
 ### Blockers
 
@@ -442,7 +442,8 @@ npm run build
 - `$ART_MD/libs/parser/dist/meta.json` contains 4 Module entities (`buildDocument`, `config`, `mdast`, `parse`); Module `parse` has `functions: ["parse"]` and `description: "Module: parse — turns Art MD source into Art documents."`. The file is gitignored — it is produced by `npm run extract` from `$ART_MD`.
 - `@noodlestan/purrfiles-entities` builds, lints, and passes 26 unit tests in `$ART_MD`; full `npm run ci` passes 9 turbo tasks.
 - `$ART_MD` installs `@purrception/lang-ts-extract@0.1.1`, `@purrception/lang-ts@0.1.1`, `@purrception/source-fs@0.1.1`, and `@purrception/primitives@0.1.0`.
-- Pending (iterations 4–6): `$ART_MD_WEB` builds and `/docs` lists `@art-md/parser`.
+- Iteration 4 executed as commit `569a610` (not pushed): `$ART_MD_WEB/src/content.config.ts` exports `entities` and `packages`, `$ART_MD_WEB/src/lib/routes.ts` maps `@art-md/parser` → `/docs/art-md/parser`, and the full website build (`astro sync` + `astro build`, 4 pages) passes through the root `npm run ci` pre-commit hook.
+- Still pending (iterations 5–6): `/docs` renders a package list and the package, module, and entity routes exist.
 
 ### Decisions
 
@@ -455,7 +456,7 @@ npm run build
 - **Module fallback** — directories without an index file use their same-name file as entry and docs source; directories holding nothing but subdirectories are not modules.
 - **Extractor options** — `createModuleEntityExtractor({ extensions, ignore, skipSubDirs })` is freeform `purrfiles-extract` config extending the standard `@purrception/source-fs` `DirectoryExtractorOptions`. Defaults: TypeScript extensions only (no `.js` — `lang-ts-extract` has no `allowJs`), `ignore: []`, `skipSubDirs: false`. `@art-md/parser` extracts with `ignore: ['private', 'test']`.
 - **Entities reach the site via a `file:` link** — `$ART_MD` and `$ARTIFICIALS` are separate repositories with their own package roots, so npm workspaces cannot resolve `@noodlestan/purrfiles-entities` by name. `$ART_MD_WEB` declares it as `file:../../../art-md/libs/purrfiles-entities`; publishing stays out of scope. This is an explicit exception to the exact-version rule in `_ops/packages/policy.md`, valid only while both purrfiles packages remain temporary residents of `$ART_MD`.
-- **Hashes refreshed 2026-10-30** — the commit hashes recorded in this plan now match current `main` in `$ART_MD` (`b87253f`, `8e294dc`).
+- **Hashes refreshed 2026-10-30** — the commit hashes recorded in this plan now match current `main` in `$ART_MD` (`b87253f`, `8e294dc`) and in `$ARTIFICIALS` (`569a610`).
 - **Instructions mode** — all iterations use self-contained files because each touches multiple files or needs code-level detail.
 
 ### Follow Ups
@@ -473,3 +474,7 @@ npm run build
 ### Feedback
 
 - Plan record omits template sections `Domains`, `Workflows`, `Workflow Operations`, `Required Skills`, `Resource Types in Scope`, `Findings`, and `Knowledge to Update`. These do not affect workers, whose entry point is a self-contained instructions file.
+- Generated content must be listed in both `.gitignore` and `.prettierignore`, and linted **after** it is regenerated: `src/data/meta.json` satisfies git but not the app-level `prettier . -c` that runs during the pre-commit hook. Lint steps in future instructions must run `lint:fix` → build/extract → `lint`.
+- `$ART_MD` has no root `build` script; its canonical entry point is `npm run ci`, which builds every package via turbo (`^ci` → `build`) and then runs `extract`. Setting Up must name `npm run ci`, not `npm run build`.
+- A linked cross-repo package that externalises `@purrception/*` TypeScript-source dependencies cannot be imported by plain `node`; verify such links through a bundler-aware runner (`npx tsx -e`) and assert only the required exports, not a full export list.
+- In Astro 7 the build-mode data store resolves to `apps/art-md-web/node_modules/.astro/data-store.json`; `.astro/data-store.json` no longer exists, and `astro sync` declares collections in the generated `.astro/content.d.ts`.

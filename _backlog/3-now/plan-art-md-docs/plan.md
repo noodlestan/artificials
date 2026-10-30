@@ -2,7 +2,7 @@
 
 **ID:** `art-md-docs`
 
-**Status:** `WORKING`
+**Status:** `DONE`
 
 **Template:** `$DOMAINS/plans/templates/plan.tart`
 
@@ -128,14 +128,14 @@ Execution from `$WORKSPACE/`. Extraction work is performed in `$ART_MD` on branc
 
 ## Items:
 
-| Iteration / Instructions           | Status  |
-| ---------------------------------- | ------- |
-| Iteration: Add Purrfiles Entities  | `DONE`  |
-| Iteration: Add Purrfiles Extract   | `DONE`  |
-| Iteration: Extract Art MD Meta     | `DONE`  |
-| Iteration: Create Docs Collections | `DONE`  |
-| Iteration: Add Docs Index          | `DONE`  |
-| Iteration: Add Docs Routes         | `READY` |
+| Iteration / Instructions           | Status |
+| ---------------------------------- | ------ |
+| Iteration: Add Purrfiles Entities  | `DONE` |
+| Iteration: Add Purrfiles Extract   | `DONE` |
+| Iteration: Extract Art MD Meta     | `DONE` |
+| Iteration: Create Docs Collections | `DONE` |
+| Iteration: Add Docs Index          | `DONE` |
+| Iteration: Add Docs Routes         | `DONE` |
 
 ### Iteration: Add Purrfiles Entities
 
@@ -356,7 +356,7 @@ build(art-md-web): Add docs index listing packages.
 
 **Id:** `add-docs-routes`
 
-**Status:** `READY`
+**Status:** `DONE`
 
 **Purpose:** Complete the docs navigation from package to module to entity.
 
@@ -383,9 +383,9 @@ build(art-md-web): Add docs index listing packages.
 
 #### Commits:
 
-| ID                | Repository / Checkout / Branch        | Policy   | Hash  | Status     |
-| ----------------- | ------------------------------------- | -------- | ----- | ---------- |
-| `add-docs-routes` | Artificials / `$ARTIFICIALS` / `main` | `NOPUSH` | (TBD) | `AUTHORED` |
+| ID                | Repository / Checkout / Branch        | Policy   | Hash      | Status      |
+| ----------------- | ------------------------------------- | -------- | --------- | ----------- |
+| `add-docs-routes` | Artificials / `$ARTIFICIALS` / `main` | `NOPUSH` | `d186036` | `COMMITTED` |
 
 ##### Commit: `add-docs-routes`
 
@@ -399,7 +399,7 @@ build(art-md-web): Add docs package, module, and entity routes.
 
 ### Next
 
-Review `./instructions/add-docs-routes.md` for Iteration: Add Docs Routes (`READY`, commit `AUTHORED`), then delegate it. Iterations 4 and 5 are complete (`569a610`, `b50f9a8`, not pushed).
+All iterations are `DONE`. Final commit `d186036` sits in `$ARTIFICIALS` on `main`, not pushed per `NOPUSH`; push both checkouts and close the plan when directed.
 
 ### Blockers
 
@@ -451,7 +451,8 @@ npm run build
 - `@noodlestan/purrfiles-entities` builds, lints, and passes 26 unit tests in `$ART_MD`; full `npm run ci` passes 9 turbo tasks.
 - `$ART_MD` installs `@purrception/lang-ts-extract@0.1.1`, `@purrception/lang-ts@0.1.1`, `@purrception/source-fs@0.1.1`, and `@purrception/primitives@0.1.0`.
 - Iteration 4 executed as commit `569a610` (not pushed): `$ART_MD_WEB/src/content.config.ts` exports `entities` and `packages`, `$ART_MD_WEB/src/lib/routes.ts` maps `@art-md/parser` → `/docs/art-md/parser`, and the full website build (`astro sync` + `astro build`, 4 pages) passes through the root `npm run ci` pre-commit hook.
-- Still pending (iterations 5–6): `/docs` renders a package list and the package, module, and entity routes exist.
+- Iteration 5 executed as commit `b50f9a8` (not pushed): `/docs` lists packages from the `packages` collection, with module counts and links, and a Docs entry was added to the site navigation.
+- Iteration 6 executed as commit `d186036` (not pushed): package, module, and entity routes render from the collections — 14 pages build; `dist/docs/art-md/parser/parse/module/parse/index.html` exists; the `config` module page lists `createDefaultParserConfig` and `ParserConfig`; the entities section hides for all four v1 modules; lint passes after build; pre-commit hook passes without `--no-verify`.
 
 ### Decisions
 

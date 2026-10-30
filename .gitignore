@@ -43,6 +43,9 @@ pids
 **/generated
 **/dist
 
+# Generated data
+apps/art-md-web/src/data/meta.json
+
 # TypeScript build info
 *.tsbuildinfo
 

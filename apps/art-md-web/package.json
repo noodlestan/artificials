@@ -25,11 +25,12 @@
   "type": "module",
   "prettier": "@noodlestan/prettier-config-astro",
   "scripts": {
-    "dev": "astro dev",
+    "dev": "npm run extract && astro dev",
+    "extract": "node scripts/sync-meta.mjs",
     "lint": "prettier . -c",
     "lint:fix": "prettier . -c --write",
     "build:clean": "rm -rf dist",
-    "build": "astro build",
+    "build": "npm run extract && astro build",
     "test": "echo none yet",
     "preview": "astro preview",
     "start": "astro",
@@ -40,8 +41,12 @@
     "@astrojs/mdx": "8.1.1",
     "@astrojs/solid-js": "7.1.1",
     "@noodlestan/astro-components": "0.1.2",
+    "@noodlestan/purrfiles-entities": "file:../../../art-md/libs/purrfiles-entities",
     "astro": "7.4.2",
     "solid-js": "1.9.17"
+  },
+  "allowScripts": {
+    "esbuild": true
   },
   "devDependencies": {
     "@noodlestan/prettier-config-astro": "0.1.1",

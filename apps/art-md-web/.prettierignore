@@ -5,3 +5,6 @@ dist/
 
 # Astro
 .astro/
+
+# Generated data
+src/data/meta.json

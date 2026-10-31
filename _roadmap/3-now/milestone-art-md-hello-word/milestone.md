@@ -27,6 +27,7 @@
 | `$PROJECT`   | `$WORKSPACE/checkouts/artificials` | Artificials project checkout — implementation target |
 | `$ART_MD`    | `$WORKSPACE/checkouts/art-md`      | Art MD project checkout — observe progress           |
 | `$ART_JS`    | `$WORKSPACE/checkouts/art-js`      | Art JS project checkout — observe progress           |
+| `$PURRTRAIT` | `$WORKSPACE/checkouts/purrtrait`   | Purrtrait project checkout — rendering packages      |
 
 ## Summary
 
@@ -210,20 +211,23 @@ Execution is coordinated from `$WORKSPACE`. The implementation target is `$PROJE
 
 ## Items:
 
-| Phase | Resource / Record                                                                                     | Status     |
-| ----- | ----------------------------------------------------------------------------------------------------- | ---------- |
-| 1     | Plan: Scaffold Art MD Website `$PROJECT/_backlog/1-done/plan-scaffold-art-md-website/plan.md`         | `DONE`     |
-| 1     | Plan: Home content and about page `$PROJECT/_backlog/1-done/plan-home-content-and-about-page/plan.md` | `DONE`     |
-| -     |                                                                                                       |            |
-| 2     | Plan: Code Demo POC SolidJS `$PROJECT/_backlog/1-done/plan-code-demo-poc-solidjs/plan.md`             | `DONE`     |
-| 2     | Plan: Decompose Codec Demo `$PROJECT/_backlog/1-done/plan-decompose-codec-demo/plan.md`               | `DONE`     |
-| 2     | Plan: Design POC `$PROJECT/_backlog/1-done/plan-design-poc/plan.md`                                   | `DONE`     |
-| 2     | Plan: Decompose Style Elements                                                                        | -          |
-| 2     | Plan: Demo Interactions POC                                                                           | -          |
-| -     |                                                                                                       |            |
-| 3     | Plan: Integrate Records in Demo                                                                       | -          |
-| -     |                                                                                                       |            |
-| 4     | Plan: Art MD Docs `$PROJECT/_backlog/3-now/plan-art-md-docs/plan.md`                                  | `PLANNING` |
+| Phase | Resource / Record                                                                                         | Status     |
+| ----- | --------------------------------------------------------------------------------------------------------- | ---------- |
+| 1     | Plan: Scaffold Art MD Website `$PROJECT/_backlog/1-done/plan-scaffold-art-md-website/plan.md`             | `DONE`     |
+| 1     | Plan: Home content and about page `$PROJECT/_backlog/1-done/plan-home-content-and-about-page/plan.md`     | `DONE`     |
+| -     |                                                                                                           |            |
+| 2     | Plan: Code Demo POC SolidJS `$PROJECT/_backlog/1-done/plan-code-demo-poc-solidjs/plan.md`                 | `DONE`     |
+| 2     | Plan: Decompose Codec Demo `$PROJECT/_backlog/1-done/plan-decompose-codec-demo/plan.md`                   | `DONE`     |
+| 2     | Plan: Design POC `$PROJECT/_backlog/1-done/plan-design-poc/plan.md`                                       | `DONE`     |
+| 2     | Plan: Decompose Style Elements                                                                            | -          |
+| 2     | Plan: Demo Interactions POC                                                                               | -          |
+| -     |                                                                                                           |            |
+| 3     | Plan: Integrate Records in Demo                                                                           | -          |
+| -     |                                                                                                           |            |
+| 4     | Plan: Art MD Docs `$PROJECT/_backlog/3-now/plan-art-md-docs/plan.md`                                      | `DONE`     |
+| 4     | Plan: Add JS Doc Renderer Package `$PURRTRAIT/_backlog/6-plan/plan-add-js-doc-renderer-package/plan.md`   | `PLANNING` |
+| 4     | Plan: Astro Components `$PURRTRAIT/_backlog/6-plan/plan-astro-components/plan.md`                         | `PLANNING` |
+| 4     | Plan: Integrate Purrtrait and Shiki `$PROJECT/_backlog/6-plan/plan-integrate-purrtrait-and-shiki/plan.md` | `PLANNING` |
 
 The following items are not yet captured in a work item document.
 
@@ -281,7 +285,7 @@ The following items are not yet captured in a work item document.
 
 ### Next
 
-All Phase 2 plans DONE.
+All Phase 2 plans DONE. Plan: Art MD Docs DONE (integrated as `00c5b97` in `$PROJECT`, not pushed). Phase 4 continues with three planned successors: extract the JSDoc renderer core, add the Astro components package, and integrate both into the Art MD Website — eliminating `apps/art-md-web/src/lib/signature.ts`.
 
 ### Blockers
 

@@ -69,7 +69,7 @@ The website work in `$PROJECT` ships the rendering. Getting there and then off t
   | Dependency                    | Version                                         | Why                                                                                                                              |
   | ----------------------------- | ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
   | `@purrtrait/astro-components` | `file:../../../purrtrait/libs/astro-components` | Not yet published or created (Plan: Astro Components).                                                                           |
-  | `@purrtrait/jsdoc-renderer`   | `file:../../../purrtrait/libs/jsdoc-renderer`   | Not yet published or created (Plan: Add JS Doc Renderer Package).                                                                |
+  | `@purrtrait/jsdoc-renderer`   | `file:../../../purrtrait/libs/jsdoc-renderer`   | Not yet published or created (Plan: Add JSDoc Renderer Package).                                                                 |
   | `@purrtrait/lang-ts`          | `file:../../../purrtrait/libs/lang-ts`          | Published `0.0.11` ships a `git+ssh://…#main` dependency; the local manifest is correct, so link it until purrtrait republishes. |
   | `@purrtrait/code-renderer`    | `0.0.11` (npm)                                  | Published with no dependencies — safe to pin.                                                                                    |
   | `@purrception/lang-ts`        | `0.1.1` (npm)                                   | Already pinned exact elsewhere in the workspace.                                                                                 |
@@ -159,7 +159,7 @@ build(art-md-web): Integrate purrtrait code renderer and shiki.
 **Changes:**
 
 - Rework `src/components/docs/EntitySummary.astro` into a `JsDocBlock.astro` consumer: entity `description` and `tags`, with `resolveLink` wired from `createMetaService().resolveLink` so `{@link …}` targets become `/docs/api/...` anchors; keep rendering nothing when empty.
-- Extend `src/components/docs/FunctionsSection.astro`: per function, render the JsDoc description and the `paramTags` / `returnsTag` entries under the code block — through the jsdoc-renderer params/returns surface; if that coverage is missing, the gap is closed in Plan: Add JS Doc Renderer Package or Plan: Astro Components, never as a local helper.
+- Extend `src/components/docs/FunctionsSection.astro`: per function, render the JsDoc description and the `paramTags` / `returnsTag` entries under the code block — through the jsdoc-renderer params/returns surface; if that coverage is missing, the gap is closed in Plan: Add JSDoc Renderer Package or Plan: Astro Components, never as a local helper.
 - Extend `src/components/docs/TypesSection.astro`: per type, render the JsDoc description and tags above the declaration block, and each object member's `description` under its name (data already carried by the declaration node).
 - Keep breadcrumbs, entities section, routes, and the 404 fallback unchanged.
 - Verify: `npm run build` and `npm run lint` from `$ART_MD_WEB`; confirm `dist/docs/api/art-md/parser/index.html` shows the module tags, the `parse` page shows the function description and param/returns entries, and the `config` page shows `ParserConfig`'s member descriptions; confirm `{@link}` targets render as `/docs/api/...` anchors.
@@ -205,7 +205,7 @@ From `$PURRTRAIT`, release in dependency order: `jsdoc-renderer` (zero dependenc
 
 **Dependencies:**
 
-- Plan: Add JS Doc Renderer Package.
+- Plan: Add JSDoc Renderer Package.
 - Plan: Astro Components.
 
 #### Commits:
@@ -431,7 +431,7 @@ Write instructions for Iteration: Integrate Code Rendering once Plan: Astro Comp
 ### Blockers
 
 - **Plan: Astro Components** must ship `@purrtrait/astro-components` (`CodeBlock.astro`, then `JsDocBlock.astro`) before either iteration here can be written — the package does not exist yet.
-- **Plan: Add JS Doc Renderer Package** must ship `@purrtrait/jsdoc-renderer` before `JsDocBlock.astro` can be built, which in turn blocks iteration 2.
+- **Plan: Add JSDoc Renderer Package** must ship `@purrtrait/jsdoc-renderer` before `JsDocBlock.astro` can be built, which in turn blocks iteration 2.
 
 ---
 

@@ -6,14 +6,14 @@ import {
 	type PurrfilesEntityData,
 } from '@noodlestan/purrfiles-entities';
 
-import DocsBreadcrumbs from '../../../../components/docs/DocsBreadcrumbs.astro';
-import EntitiesSection from '../../../../components/docs/EntitiesSection.astro';
-import EntitySummary from '../../../../components/docs/EntitySummary.astro';
-import FunctionsSection from '../../../../components/docs/FunctionsSection.astro';
-import TypesSection from '../../../../components/docs/TypesSection.astro';
-import PageLayout from '../../../../layouts/PageLayout.astro';
-import { entityHref, packageParts } from '../../../../lib/routes';
-import type { DeclaredFunction, DeclaredType } from '../../../../lib/signature';
+import DocsBreadcrumbs from '../../../../../components/docs/DocsBreadcrumbs.astro';
+import EntitiesSection from '../../../../../components/docs/EntitiesSection.astro';
+import EntitySummary from '../../../../../components/docs/EntitySummary.astro';
+import FunctionsSection from '../../../../../components/docs/FunctionsSection.astro';
+import TypesSection from '../../../../../components/docs/TypesSection.astro';
+import PageLayout from '../../../../../layouts/PageLayout.astro';
+import { entityHref, packageParts } from '../../../../../lib/routes';
+import type { DeclaredFunction, DeclaredType } from '../../../../../lib/signature';
 
 interface Props {
 	entry: CollectionEntry<'entities'>;

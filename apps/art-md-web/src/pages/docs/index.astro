@@ -1,16 +1,9 @@
 ---
-import { getCollection } from 'astro:content';
-
 import PageLayout from '../../layouts/PageLayout.astro';
-import { packageHref } from '../../lib/routes';
-
-const packages = (await getCollection('packages')).sort((a, b) =>
-	a.data.package.localeCompare(b.data.package),
-);
 
 const content = {
 	title: 'Docs',
-	description: 'API documentation for the Art MD packages, extracted from their source.',
+	description: 'Art MD documentation.',
 };
 
 const countModules = (moduleNames: string[]) =>
@@ -23,45 +16,12 @@ const countEntities = (entityCount: number) =>
 <PageLayout content={content}>
 	<h1>Docs</h1>
 	<p>
-		API documentation extracted from the <code>@art-md</code> packages. Every package lists its
-		modules, and every module lists the entities it exports.
+		Documentation for <code>@art-md</code>.
 	</p>
-	{packages.length === 0 ? (
-		<p>No packages have been extracted yet.</p>
-	) : (
-		<ul class="package-list">
-			{packages.map(pkg => (
-				<li>
-					<a href={packageHref(pkg.data.package)}>{pkg.data.package}</a>
-					<span class="package-counts">
-						{countModules(pkg.data.moduleNames)}, {countEntities(pkg.data.entityCount)}
-					</span>
-				</li>
-			))}
-		</ul>
-	)}
+	<h2>Index</h2>
+	<ul>
+		<li>
+			<a href="/docs/api">API documentation</a> — extracted from the <code>@art-md</code> packages.
+		</li>
+	</ul>
 </PageLayout>
-
-<style>
-	.package-list {
-		list-style: none;
-		padding-inline-start: 0;
-		display: flex;
-		flex-direction: column;
-		gap: 0.75rem;
-		margin-block-start: 1rem;
-	}
-
-	.package-list li {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: baseline;
-		gap: 0.5rem;
-	}
-
-	.package-counts {
-		font-size: var(--text-size-small);
-		color: var(--color-content);
-		opacity: 0.75;
-	}
-</style>

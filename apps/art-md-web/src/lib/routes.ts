@@ -1,4 +1,4 @@
-const DOCS_ROOT = '/docs';
+const DOCS_ROOT = '/docs/api';
 
 const UNPREFIXED_NAMESPACE = '_';
 

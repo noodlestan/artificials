@@ -19,8 +19,8 @@ enabling automated generation, extraction, and transformation.
 
 ## Learn more
 
-- [Art MD on GitHub](https://github.com/noodlestan/art-md) — the language specification
-  and JavaScript libraries.
-- [About](/about) — Goals and status of this project.
 - [Demo](/codec-demo) — Try the codec in the browser.
+- [Docs](/docs) — API documentation.
+- [About](/about) — Goals and status of this project.
+- [Art MD on GitHub](https://github.com/noodlestan/art-md) — the language specification and JavaScript libraries.
 - [Noodlestan on Discord](https://discord.gg/4MBbPK7sU) — waiting for you there.

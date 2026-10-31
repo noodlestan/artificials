@@ -1,5 +1,9 @@
 ---
-import { renderFunctionSignature, type DeclaredFunction } from '../../lib/signature';
+import {
+	describeFunction,
+	renderFunctionSignature,
+	type DeclaredFunction,
+} from '../../lib/signature';
 
 interface Props {
 	functions: DeclaredFunction[];
@@ -11,11 +15,29 @@ const { functions } = Astro.props;
 {functions.length > 0 && (
 	<section>
 		<h2>Functions</h2>
-		{functions.map(fn => (
-			<section>
-				<h3>{fn.name}</h3>
-				<pre><code>{renderFunctionSignature(fn.name, fn.node)}</code></pre>
-			</section>
-		))}
+		{functions.map(fn => {
+			const docs = describeFunction(fn.node);
+
+			return (
+				<section>
+					<h3>{fn.name}</h3>
+					<pre><code>{renderFunctionSignature(fn.name, fn.node)}</code></pre>
+					{docs && docs.params.length > 0 && (
+						<ul>
+							{docs.params.map(param => (
+								<li>
+									<code>{param.name}</code> — {param.description}
+								</li>
+							))}
+						</ul>
+					)}
+					{docs?.returns && (
+						<p>
+							<strong>Returns</strong> — {docs.returns}
+						</p>
+					)}
+				</section>
+			);
+		})}
 	</section>
 )}

@@ -1,5 +1,5 @@
 ---
-import { renderType, type DeclaredType } from '../../lib/signature';
+import { normalizeComment, renderType, type DeclaredType } from '../../lib/signature';
 
 interface Props {
 	types: DeclaredType[];
@@ -19,15 +19,20 @@ const privateTypes = types.filter(declType => declType.private);
 				<h3>{declType.name}</h3>
 				{declType.node.kind === 'object' ? (
 					<ul>
-						{Object.entries(declType.node.members).map(([name, member]) => (
-							<li>
-								<code>
-									{name}
-									{member.optional ? '?' : ''}
-								</code>
-								<code>{renderType(member.type)}</code>
-							</li>
-						))}
+						{Object.entries(declType.node.members).map(([name, member]) => {
+							const memberDoc = normalizeComment(member.description);
+
+							return (
+								<li>
+									<code>
+										{name}
+										{member.optional ? '?' : ''}
+									</code>
+									<code>{renderType(member.type)}</code>
+									{memberDoc && <p>{memberDoc}</p>}
+								</li>
+							);
+						})}
 					</ul>
 				) : (
 					<pre><code>{renderType(declType.node)}</code></pre>

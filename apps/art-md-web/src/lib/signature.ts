@@ -7,20 +7,69 @@ export type TypeNode =
 	| { kind: 'literal'; value: string | number | boolean }
 	| {
 			kind: 'object';
-			members: Record<string, { type: TypeNode; optional?: boolean; readonly?: boolean }>;
+			members: Record<string, ObjectMember>;
 	  }
-	| {
-			kind: 'function';
-			params?: { name: string; type: TypeNode; optional?: boolean }[];
-			returns?: { type: TypeNode };
-	  }
+	| FunctionTypeNode
 	| { kind: string };
+
+export type ObjectMember = {
+	type: TypeNode;
+	optional?: boolean;
+	readonly?: boolean;
+	/** JSDoc comment attached to the member in source. */
+	description?: string;
+};
+
+export type FunctionTypeNode = {
+	kind: 'function';
+	params?: FunctionParam[];
+	returns?: { type: TypeNode; description?: string };
+	/** Canonical `@param` tags, keyed by parameter name. */
+	paramTags?: Record<string, string>;
+	/** Canonical `@returns` tag text. */
+	returnsTag?: string;
+};
+
+export type FunctionParam = {
+	name: string;
+	type: TypeNode;
+	optional?: boolean;
+	/** JSDoc comment attached to the parameter in source, or its `@param` tag. */
+	description?: string;
+};
 
 export type DeclaredFunction = { name: string; node: TypeNode };
 
 export type DeclaredType = { name: string; node: TypeNode; private?: boolean };
 
-function renderParams(params?: { name: string; type: TypeNode; optional?: boolean }[]): string {
+/** Parameter descriptions paired with their names, for rendering. */
+export type FunctionDocs = {
+	params: { name: string; description: string }[];
+	returns?: string;
+};
+
+/**
+ * Reduces a canonical JSDoc fragment to a single readable sentence.
+ *
+ * Extracted comments keep their formatting: the ` - ` separator that follows
+ * the parameter name in an `@param` tag, and the line breaks of a multi-line
+ * block. Rendering wants one line, so collapse whitespace and drop the
+ * separator.
+ *
+ * Returns `undefined` when nothing is left, so callers can skip empty rows.
+ */
+export function normalizeComment(comment?: string): string | undefined {
+	if (!comment) return undefined;
+
+	const collapsed = comment
+		.replace(/\s+/g, ' ')
+		.trim()
+		.replace(/^-+\s*/, '');
+
+	return collapsed.length > 0 ? collapsed : undefined;
+}
+
+function renderParams(params?: FunctionParam[]): string {
 	return (params ?? [])
 		.map(param => `${param.name}${param.optional ? '?' : ''}: ${renderType(param.type)}`)
 		.join(', ');
@@ -64,14 +113,29 @@ export function renderFunctionSignature(name: string, node: TypeNode): string {
 	return `${name}: ${renderType(node)}`;
 }
 
-export function toDeclaredFunction(value: unknown): DeclaredFunction | undefined {
-	const declaration = value as { name?: string; node?: TypeNode } | undefined;
-	if (!declaration?.name || !declaration.node) return undefined;
-	return { name: declaration.name, node: declaration.node };
-}
+/**
+ * Collects the documentation attached to a function declaration.
+ *
+ * Reads the resolved `description` on each parameter and on the return type,
+ * falling back to the `@param` and `@returns` tags on the node — the extractor
+ * writes both, and which one is populated depends on how the comment was
+ * attached. Parameters without any documentation are omitted so the section
+ * renders no empty rows.
+ *
+ * Returns `undefined` for non-function nodes.
+ */
+export function describeFunction(node: TypeNode): FunctionDocs | undefined {
+	if (node.kind !== 'function') return undefined;
 
-export function toDeclaredType(value: unknown): DeclaredType | undefined {
-	const declaration = value as { name?: string; node?: TypeNode; private?: boolean } | undefined;
-	if (!declaration?.name || !declaration.node) return undefined;
-	return { name: declaration.name, node: declaration.node, private: declaration.private };
+	const params = (node.params ?? [])
+		.map(param => ({
+			name: param.name,
+			description: normalizeComment(param.description ?? node.paramTags?.[param.name]),
+		}))
+		.filter((param): param is { name: string; description: string } => Boolean(param.description));
+
+	return {
+		params,
+		returns: normalizeComment(node.returns?.description ?? node.returnsTag),
+	};
 }

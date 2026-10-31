@@ -1,5 +1,10 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
+import {
+	getEntityFunctions,
+	getEntityTypes,
+	type PurrfilesEntityData,
+} from '@noodlestan/purrfiles-entities';
 
 import DocsBreadcrumbs from '../../../../components/docs/DocsBreadcrumbs.astro';
 import EntitiesSection from '../../../../components/docs/EntitiesSection.astro';
@@ -8,12 +13,7 @@ import FunctionsSection from '../../../../components/docs/FunctionsSection.astro
 import TypesSection from '../../../../components/docs/TypesSection.astro';
 import PageLayout from '../../../../layouts/PageLayout.astro';
 import { entityHref, packageParts } from '../../../../lib/routes';
-import {
-	toDeclaredFunction,
-	toDeclaredType,
-	type DeclaredFunction,
-	type DeclaredType,
-} from '../../../../lib/signature';
+import type { DeclaredFunction, DeclaredType } from '../../../../lib/signature';
 
 interface Props {
 	entry: CollectionEntry<'entities'>;
@@ -38,13 +38,12 @@ export async function getStaticPaths() {
 				label: `${candidate.data.type}: ${candidate.data.name}`,
 			}));
 
-		const declared = entry.data.symbols.declared as Record<string, unknown>;
-		const functions = (entry.data.functions ?? [])
-			.map(name => toDeclaredFunction(declared[name]))
-			.filter((fn): fn is DeclaredFunction => Boolean(fn));
-		const types = Object.values(declared)
-			.map(toDeclaredType)
-			.filter((declaredType): declaredType is DeclaredType => Boolean(declaredType));
+		// The canonical helpers filter on `kind`, so functions never leak into
+		// the types list. The cast bridges the zod-validated entry data onto the
+		// entity shape they expect.
+		const entity = entry.data as unknown as PurrfilesEntityData;
+		const functions = getEntityFunctions(entity, entity.functions) as DeclaredFunction[];
+		const types = getEntityTypes(entity) as DeclaredType[];
 
 		return {
 			params: { ns: namespace, pkg: name, mod },

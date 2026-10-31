@@ -128,16 +128,17 @@ Execution from `$WORKSPACE/`. Extraction work is performed in `$ART_MD` on branc
 
 ## Items:
 
-| Iteration / Instructions           | Status  |
-| ---------------------------------- | ------- |
-| Iteration: Add Purrfiles Entities  | `DONE`  |
-| Iteration: Add Purrfiles Extract   | `DONE`  |
-| Iteration: Extract Art MD Meta     | `DONE`  |
-| Iteration: Create Docs Collections | `DONE`  |
-| Iteration: Add Docs Index          | `DONE`  |
-| Iteration: Add Docs Routes         | `DONE`  |
-| Iteration: Document Parser API     | `READY` |
-| Iteration: Fix Docs Rendering      | `READY` |
+| Iteration / Instructions           | Status |
+| ---------------------------------- | ------ |
+| Iteration: Add Purrfiles Entities  | `DONE` |
+| Iteration: Add Purrfiles Extract   | `DONE` |
+| Iteration: Extract Art MD Meta     | `DONE` |
+| Iteration: Create Docs Collections | `DONE` |
+| Iteration: Add Docs Index          | `DONE` |
+| Iteration: Add Docs Routes         | `DONE` |
+| Iteration: Document Parser API     | `DONE` |
+| Iteration: Fix Docs Rendering      | `DONE` |
+| Iteration: Nest Docs Under API     | `DONE` |
 
 ### Iteration: Add Purrfiles Entities
 
@@ -401,7 +402,7 @@ build(art-md-web): Add docs package, module, and entity routes.
 
 **Id:** `document-parser-api`
 
-**Status:** `READY`
+**Status:** `DONE`
 
 **Purpose:** Give `@art-md/parser` a documented API so the docs site has something to render.
 
@@ -435,9 +436,9 @@ Work from `$ART_MD/libs/parser`. Mandatory reading for the two modules `knowledg
 
 #### Commits:
 
-| ID                    | Repository / Checkout / Branch | Policy   | Hash  | Status     |
-| --------------------- | ------------------------------ | -------- | ----- | ---------- |
-| `document-parser-api` | Art MD / `$ART_MD` / `main`    | `NOPUSH` | (TBD) | `AUTHORED` |
+| ID                    | Repository / Checkout / Branch | Policy   | Hash      | Status      |
+| --------------------- | ------------------------------ | -------- | --------- | ----------- |
+| `document-parser-api` | Art MD / `$ART_MD` / `main`    | `NOPUSH` | `9e7ef57` | `COMMITTED` |
 
 ##### Commit: `document-parser-api`
 
@@ -451,7 +452,7 @@ docs(package-parser): Document the parser API with JSDoc.
 
 **Id:** `fix-docs-rendering`
 
-**Status:** `READY`
+**Status:** `DONE`
 
 **Purpose:** Correct where the plan was faulty, so the site stops rendering functions as types and starts rendering the documentation the site was meant to show.
 
@@ -482,9 +483,9 @@ Do not restructure components, add styling, or change route shapes.
 
 #### Commits:
 
-| ID                   | Repository / Checkout / Branch        | Policy   | Hash  | Status     |
-| -------------------- | ------------------------------------- | -------- | ----- | ---------- |
-| `fix-docs-rendering` | Artificials / `$ARTIFICIALS` / `main` | `NOPUSH` | (TBD) | `AUTHORED` |
+| ID                   | Repository / Checkout / Branch        | Policy   | Hash      | Status      |
+| -------------------- | ------------------------------------- | -------- | --------- | ----------- |
+| `fix-docs-rendering` | Artificials / `$ARTIFICIALS` / `main` | `NOPUSH` | `d931b76` | `COMMITTED` |
 
 ##### Commit: `fix-docs-rendering`
 
@@ -494,11 +495,51 @@ Do not restructure components, add styling, or change route shapes.
 fix(art-md-web): Render types through canonical helpers and show JSDoc.
 ```
 
+### Iteration: Nest Docs Under API
+
+**Id:** `nest-docs-api`
+
+**Status:** `DONE`
+
+**Purpose:** Give the docs tree room to grow by separating the docs index from the extracted API.
+
+**Description:** Move the extracted package, module, and entity routes from `/docs/{ns}/...` to `/docs/api/{ns}/...`, so `/docs` becomes a documentation landing page rather than the package list.
+
+**Instructions Mode:** `INSTRUCTIONS_INLINED_IN_ITERATION`
+
+**Instructions:**
+
+Change `DOCS_ROOT` in `$ART_MD_WEB/src/lib/routes.ts` to `/docs/api`; the href helpers then move every route at once. Move the three dynamic pages to `$ART_MD_WEB/src/pages/docs/api/[ns]/...`, move the package list to `docs/api/index.astro`, reduce `docs/index.astro` to a landing page linking `/docs/api`, point `DocsBreadcrumbs` and the `SiteNav` entry at the new roots, and add a `Docs` link to `src/pages/index.md`.
+
+**Changes:**
+
+- `DOCS_ROOT` → `/docs/api` in `src/lib/routes.ts`.
+- Move `[ns]/...` pages under `src/pages/docs/api/`; add `docs/api/index.astro`.
+- Reduce `docs/index.astro` to a landing page; update `DocsBreadcrumbs.astro`, `SiteNav.astro`, `src/pages/index.md`.
+
+**Dependencies:**
+
+- Iteration: Add Docs Routes.
+
+#### Commits:
+
+| ID              | Repository / Checkout / Branch        | Policy   | Hash      | Status      |
+| --------------- | ------------------------------------- | -------- | --------- | ----------- |
+| `nest-docs-api` | Artificials / `$ARTIFICIALS` / `main` | `NOPUSH` | `c4a6859` | `COMMITTED` |
+
+##### Commit: `nest-docs-api`
+
+**Message:**
+
+```text
+refactor(art-md-web): Nest all package docs under a docs/api/ route.
+```
+
 ## Work
 
 ### Next
 
-Execute Iteration: Document Parser API (`READY`) in `$ART_MD`, then Iteration: Fix Docs Rendering (`READY`) in `$ARTIFICIALS`. Both instructions are inlined; no delegation required. The six delivered iterations remain `DONE` and unpushed.
+Plan complete — all nine iterations `DONE` and every commit `COMMITTED`. Both checkouts are `NOPUSH` and unpushed; push when directed and close the plan.
 
 ### Blockers
 

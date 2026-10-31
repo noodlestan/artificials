@@ -224,10 +224,10 @@ Execution is coordinated from `$WORKSPACE`. The implementation target is `$PROJE
 | -     |                                                                                                           |            |
 | 3     | Plan: Integrate Records in Demo                                                                           | -          |
 | -     |                                                                                                           |            |
-| 4     | Plan: Art MD Docs `$PROJECT/_backlog/3-now/plan-art-md-docs/plan.md`                                      | `DONE`     |
+| 4     | Plan: Art MD Docs `$PROJECT/_backlog/1-done/plan-art-md-docs/plan.md`                                     | `DONE`     |
 | 4     | Plan: Add JS Doc Renderer Package `$PURRTRAIT/_backlog/6-plan/plan-add-js-doc-renderer-package/plan.md`   | `PLANNING` |
 | 4     | Plan: Astro Components `$PURRTRAIT/_backlog/6-plan/plan-astro-components/plan.md`                         | `PLANNING` |
-| 4     | Plan: Integrate Purrtrait and Shiki `$PROJECT/_backlog/6-plan/plan-integrate-purrtrait-and-shiki/plan.md` | `PLANNING` |
+| 4     | Plan: Integrate Purrtrait and Shiki `$PROJECT/_backlog/4-next/plan-integrate-purrtrait-and-shiki/plan.md` | `PLANNING` |
 
 The following items are not yet captured in a work item document.
 

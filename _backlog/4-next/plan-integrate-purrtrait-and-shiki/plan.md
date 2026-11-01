@@ -68,15 +68,15 @@ The website work in `$PROJECT` ships the rendering. Getting there and then off t
 
   | Dependency                    | Version                                         | Why                                                                                                                              |
   | ----------------------------- | ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-  | `@purrtrait/astro-components` | `file:../../../purrtrait/libs/astro-components` | Not yet published or created (Plan: Astro Components).                                                                           |
-  | `@purrtrait/jsdoc-renderer`   | `file:../../../purrtrait/libs/jsdoc-renderer`   | Not yet published or created (Plan: Add JSDoc Renderer Package).                                                                 |
+  | `@purrtrait/astro-components` | `file:../../../purrtrait/libs/astro-components` | Delivered by Plan: Astro Components but not yet published; `file:` until `publish-purrtrait-renderers` retires it.               |
+  | `@purrtrait/jsdoc-renderer`   | `0.0.2` (npm)                                   | Published by Plan: Add JSDoc Renderer Package — pinned exact from npm on day one, never linked.                                  |
   | `@purrtrait/lang-ts`          | `file:../../../purrtrait/libs/lang-ts`          | Published `0.0.11` ships a `git+ssh://…#main` dependency; the local manifest is correct, so link it until purrtrait republishes. |
   | `@purrtrait/code-renderer`    | `0.0.11` (npm)                                  | Published with no dependencies — safe to pin.                                                                                    |
   | `@purrception/lang-ts`        | `0.1.1` (npm)                                   | Already pinned exact elsewhere in the workspace.                                                                                 |
-  | `shiki`                       | `4.5.0` (npm)                                   | Already installed transitively via `astro`.                                                                                      |
+  | `shiki`                       | `4.5.0` (npm)                                   | Installed transitively via `astro` today; declared directly because `CodeBlock.astro` imports it.                                |
   | `marked`                      | `18.1.2` (npm)                                  | Descriptions render as markdown.                                                                                                 |
 
-  This leaves four `file:` links to retire later in this plan (the three above plus the pre-existing `purrfiles-entities`), rather than the five the `file:`-everywhere approach would have added.
+  This leaves three `file:` links to retire later in this plan (astro-components, `lang-ts`, and the pre-existing `purrfiles-entities`), rather than the five the `file:`-everywhere approach would have added.
 
 - Delete `src/lib/signature.ts` — every local signature helper goes; typed symbol access uses the canonical `getEntityTypes` / `getEntityFunctions` helpers from `@noodlestan/purrfiles-entities`, which the docs pages already consume.
 - Rework `FunctionsSection.astro` and `TypesSection.astro` to render declaration code blocks through `CodeBlock.astro`, and descriptions, tags, and links through `JsDocBlock.astro`.
@@ -84,7 +84,7 @@ The website work in `$PROJECT` ships the rendering. Getting there and then off t
 
 **Dependencies:**
 
-- `@purrtrait/astro-components` must exist (Plan: Astro Components).
+- `@purrtrait/astro-components` must exist (Plan: Astro Components) — `DONE`, package delivered; only the publish is outstanding.
 
 ## Execution Context
 
@@ -94,22 +94,22 @@ Executed from `$WORKSPACE/`. Website work happens in `$PROJECT` on branch `main`
 
 ## Items:
 
-| Iteration / Instructions               | Status     |
-| -------------------------------------- | ---------- |
-| Iteration: Integrate Code Rendering    | `PLANNING` |
-| Iteration: Add Descriptions and Tags   | `PLANNING` |
-| Iteration: Publish Purrtrait Renderers | `PLANNING` |
-| Iteration: Consume Purrtrait Releases  | `PLANNING` |
-| Iteration: Publish Purrfiles Packages  | `PLANNING` |
-| Iteration: Retire File Links           | `PLANNING` |
-| Iteration: Move Purrfiles Packages     | `PLANNING` |
-| Iteration: Update Knowledge and Plans  | `PLANNING` |
+| Iteration / Instructions                                                           | Status  |
+| ---------------------------------------------------------------------------------- | ------- |
+| Iteration: Integrate Code Rendering `./instructions/integrate-code-rendering.md`   | `READY` |
+| Iteration: Add Descriptions and Tags `./instructions/add-descriptions-and-tags.md` | `READY` |
+| Iteration: Publish Purrtrait Renderers                                             | `READY` |
+| Iteration: Consume Purrtrait Releases                                              | `READY` |
+| Iteration: Publish Purrfiles Packages                                              | `READY` |
+| Iteration: Retire File Links                                                       | `READY` |
+| Iteration: Move Purrfiles Packages                                                 | `READY` |
+| Iteration: Update Knowledge and Plans                                              | `READY` |
 
 ### Iteration: Integrate Code Rendering
 
 **Id:** `integrate-code-rendering`
 
-**Status:** `PLANNING`
+**Status:** `READY`
 
 **Purpose:** Render serialized, highlighted declaration code instead of plain-text signatures.
 
@@ -117,9 +117,11 @@ Executed from `$WORKSPACE/`. Website work happens in `$PROJECT` on branch `main`
 
 **Instructions Mode:** `INSTRUCTIONS_SELF_CONTAINED_FILE`
 
+**Instructions:** `./instructions/integrate-code-rendering.md`
+
 **Changes:**
 
-- Add the dependencies listed in the scope; run `npm ci` from `$PROJECT`.
+- Dependencies listed in the scope (exact npm pins where published; `file:` only for `@purrtrait/astro-components` and `@purrtrait/lang-ts`); `npm install` then `npm ci` from `$PROJECT`.
 - Keep `getEntityTypes` / `getEntityFunctions` from `@noodlestan/purrfiles-entities` as the only typed symbol access: `fix-docs-rendering` (`d931b76`) already removed the manual `toDeclaredType` / `toDeclaredFunction` sweeps, so there is nothing to replace here.
 - Rewrite `src/components/docs/FunctionsSection.astro`: per function, a heading and a `CodeBlock.astro` rendering the serialized function declaration.
 - Rewrite `src/components/docs/TypesSection.astro`: per type, a heading (with `(private)` suffix) and a `CodeBlock.astro` rendering the serialized declaration; keep the public/private split.
@@ -128,7 +130,7 @@ Executed from `$WORKSPACE/`. Website work happens in `$PROJECT` on branch `main`
 
 **Dependencies:**
 
-- Iteration: Add Astro Code Block (Plan: Astro Components).
+- Iteration: Add Astro Code Block (Plan: Astro Components) — `DONE`.
 
 #### Commits:
 
@@ -148,13 +150,15 @@ build(art-md-web): Integrate purrtrait code renderer and shiki.
 
 **Id:** `add-descriptions-and-tags`
 
-**Status:** `PLANNING`
+**Status:** `READY`
 
 **Purpose:** Show descriptions, tags, and links at module, function, and type granularity.
 
 **Description:** Bring the docs pages to reference granularity: entity summary with description and tags, per-function description with param/return tags, per-type description with tags and member descriptions.
 
 **Instructions Mode:** `INSTRUCTIONS_SELF_CONTAINED_FILE`
+
+**Instructions:** `./instructions/add-descriptions-and-tags.md`
 
 **Changes:**
 
@@ -166,7 +170,7 @@ build(art-md-web): Integrate purrtrait code renderer and shiki.
 
 **Dependencies:**
 
-- Iteration: Add Astro Js Doc Block (Plan: Astro Components).
+- Iteration: Add Astro Js Doc Block (Plan: Astro Components) — `DONE`.
 
 #### Commits:
 
@@ -186,7 +190,7 @@ build(art-md-web): Add js doc descriptions and tags to docs.
 
 **Id:** `publish-purrtrait-renderers`
 
-**Status:** `PLANNING`
+**Status:** `READY`
 
 **Purpose:** Put the rendering packages on npm so the website can stop linking across checkouts.
 
@@ -196,7 +200,7 @@ build(art-md-web): Add js doc descriptions and tags to docs.
 
 **Instructions:**
 
-From `$PURRTRAIT`, release in dependency order: `jsdoc-renderer` (zero dependencies) first, then `astro-components`, then `lang-ts` at `0.0.12` — `0.0.11` is the artifact on npm that ships the git dependency, and `ed38271` already corrected its manifest. Republish `code-renderer` only if the jsdoc rewire changed it. Each release gets its own `release(...)` commit; stop and hand version numbers to the user for `npm publish`, and confirm each resolves with `npm view <package> version` before moving on.
+From `$PURRTRAIT`, release in dependency order: verify `jsdoc-renderer@0.0.2` already resolves (`npm view @purrtrait/jsdoc-renderer version` — published by its own plan, no work left here), then release `astro-components` (currently `0.0.1`, unpublished), then `lang-ts` at `0.0.12` — `0.0.11` is the artifact on npm that ships the git dependency, and `ed38271` already corrected its manifest. Republish `code-renderer` only if the jsdoc rewire changed it. Each release gets its own `release(...)` commit; stop and hand version numbers to the user for `npm publish`, and confirm each resolves with `npm view <package> version` before moving on.
 
 **Changes:**
 
@@ -226,21 +230,21 @@ release(purrtrait): Publish the renderer packages.
 
 **Id:** `consume-purrtrait-releases`
 
-**Status:** `PLANNING`
+**Status:** `READY`
 
 **Purpose:** Replace the renderer `file:` links with exact npm pins.
 
-**Description:** Swap `@purrtrait/jsdoc-renderer`, `@purrtrait/astro-components`, and `@purrtrait/lang-ts` from `file:` links to the versions published by the previous iteration, keeping `@purrtrait/code-renderer` on its existing pin.
+**Description:** Swap `@purrtrait/astro-components` and `@purrtrait/lang-ts` from `file:` links to the exact versions published by the previous iteration — `@purrtrait/jsdoc-renderer` is already pinned `0.0.2` from npm and was never linked — keeping `@purrtrait/code-renderer` on its existing pin.
 
 **Instructions Mode:** `INSTRUCTIONS_INLINED_IN_ITERATION`
 
 **Instructions:**
 
-In `$ART_MD_WEB/package.json`, replace the three renderer `file:` entries with exact versions from the previous iteration, then `npm ci` from `$PROJECT`. Keep `@purrtrait/code-renderer` at its pin, and leave `@noodlestan/purrfiles-entities` linked — it is retired in a later iteration.
+In `$ART_MD_WEB/package.json`, replace the two remaining renderer `file:` entries (`@purrtrait/astro-components`, `@purrtrait/lang-ts`) with exact versions from the previous iteration, then `npm ci` from `$PROJECT`. Keep `@purrtrait/code-renderer` and `@purrtrait/jsdoc-renderer` on their pins, and leave `@noodlestan/purrfiles-entities` linked — it is retired in a later iteration.
 
 **Changes:**
 
-- Swap three `file:` entries for exact npm versions in `apps/art-md-web/package.json`.
+- Swap the two remaining renderer `file:` entries for exact npm versions in `apps/art-md-web/package.json`.
 - Reinstall and rebuild; confirm no renderer still resolves through a checkout link.
 
 **Dependencies:**
@@ -266,7 +270,7 @@ build(art-md-web): Pin the purrtrait renderer releases.
 
 **Id:** `publish-purrfiles-packages`
 
-**Status:** `PLANNING`
+**Status:** `READY`
 
 **Purpose:** Publish the meta packages so the last cross-repo link can go.
 
@@ -305,7 +309,7 @@ release(art-md): Publish the purrfiles packages.
 
 **Id:** `retire-file-links`
 
-**Status:** `PLANNING`
+**Status:** `READY`
 
 **Purpose:** Finish with no `file:` dependency left anywhere in the workspace.
 
@@ -346,7 +350,7 @@ build(art-md-web): Pin purrfiles-entities and retire file links.
 
 **Id:** `move-purrfiles-packages`
 
-**Status:** `PLANNING`
+**Status:** `READY`
 
 **Purpose:** Give the purrfiles packages their own repository and workspace records.
 
@@ -386,7 +390,7 @@ records(purrfiles): Move the purrfiles packages to their repository.
 
 **Id:** `update-knowledge-and-plans`
 
-**Status:** `PLANNING`
+**Status:** `READY`
 
 **Purpose:** Record what changed and queue what comes next.
 
@@ -426,12 +430,11 @@ plan(art-md-web): Record the purrtrait docs work and open follow-on plans.
 
 ### Next
 
-Write instructions for Iteration: Integrate Code Rendering once Plan: Astro Components iteration 1 lands, then delegate.
+Both web iterations have self-contained instructions: `./instructions/integrate-code-rendering.md` and `./instructions/add-descriptions-and-tags.md`; the six operational iterations carry inline instructions. Plan: Add JSDoc Renderer Package and Plan: Astro Components are both `DONE`, so every `PLANNING` iteration is unblocked — delegate in order: `integrate-code-rendering` → `add-descriptions-and-tags` → `publish-purrtrait-renderers` (user `npm publish` gate) → `consume-purrtrait-releases` → `publish-purrfiles-packages` (user gate) → `retire-file-links` → `move-purrfiles-packages` → `update-knowledge-and-plans`.
 
 ### Blockers
 
-- **Plan: Astro Components** must ship `@purrtrait/astro-components` (`CodeBlock.astro`, then `JsDocBlock.astro`) before either iteration here can be written — the package does not exist yet.
-- **Plan: Add JSDoc Renderer Package** must ship `@purrtrait/jsdoc-renderer` before `JsDocBlock.astro` can be built, which in turn blocks iteration 2.
+- None — the former blockers (Plan: Astro Components, Plan: Add JSDoc Renderer Package) are both `DONE`; `@purrtrait/jsdoc-renderer@0.0.2` is published and `@purrtrait/astro-components` is built, awaiting its publish in `publish-purrtrait-renderers`.
 
 ---
 

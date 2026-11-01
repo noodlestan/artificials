@@ -227,7 +227,7 @@ Execution is coordinated from `$WORKSPACE`. The implementation target is `$PROJE
 | -     |                                                                                                           |            |
 | 4     | Plan: Art MD Docs `$PROJECT/_backlog/1-done/plan-art-md-docs/plan.md`                                     | `DONE`     |
 | 4     | Plan: Add JSDoc Renderer Package `$PURRTRAIT/_backlog/1-done/plan-add-jsdoc-renderer-package/plan.md`     | `DONE`     |
-| 4     | Plan: Astro Components `$PURRTRAIT/_backlog/6-plan/plan-astro-components/plan.md`                         | `PLANNING` |
+| 4     | Plan: Astro Components `$PURRTRAIT/_backlog/3-now/plan-astro-components/plan.md`                          | `READY`    |
 | 4     | Plan: Integrate Purrtrait and Shiki `$PROJECT/_backlog/4-next/plan-integrate-purrtrait-and-shiki/plan.md` | `PLANNING` |
 | 4     | Plan: Componentize Docs `$PROJECT/_backlog/4-next/plan-componentize-docs/plan.md`                         | `DRAFT`    |
 

@@ -9,4 +9,12 @@ import { ENDPOINTS } from './src/constants';
 export default defineConfig({
 	site: ENDPOINTS['art-md'].site,
 	integrations: [mdx(), solid()],
+	vite: {
+		ssr: {
+			// The purrtrait packages ship raw TypeScript with bundler-style
+			// imports (directory index, extensionless). Leave them to Node and
+			// the ESM loader rejects them — force them through Vite's transform.
+			noExternal: [/^@purrtrait\//, '@purrception/lang-ts'],
+		},
+	},
 });

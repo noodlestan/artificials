@@ -2,7 +2,7 @@
 
 **ID:** `integrate-purrtrait-and-shiki`
 
-**Status:** `PLANNING`
+**Status:** `READY`
 
 **Template:** `$DOMAINS/plans/templates/plan.tart`
 

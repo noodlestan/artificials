@@ -1,5 +1,6 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
+import type { FunctionDeclaration, TypeDeclaration } from '@purrception/lang-ts';
 import {
 	getEntityFunctions,
 	getEntityTypes,
@@ -13,13 +14,12 @@ import FunctionsSection from '../../../../../components/docs/FunctionsSection.as
 import TypesSection from '../../../../../components/docs/TypesSection.astro';
 import PageLayout from '../../../../../layouts/PageLayout.astro';
 import { entityHref, packageParts } from '../../../../../lib/routes';
-import type { DeclaredFunction, DeclaredType } from '../../../../../lib/signature';
 
 interface Props {
 	entry: CollectionEntry<'entities'>;
 	subEntities: { href: string; label: string }[];
-	functions: DeclaredFunction[];
-	types: DeclaredType[];
+	functions: FunctionDeclaration[];
+	types: TypeDeclaration[];
 }
 
 export async function getStaticPaths() {
@@ -42,8 +42,8 @@ export async function getStaticPaths() {
 		// the types list. The cast bridges the zod-validated entry data onto the
 		// entity shape they expect.
 		const entity = entry.data as unknown as PurrfilesEntityData;
-		const functions = getEntityFunctions(entity, entity.functions) as DeclaredFunction[];
-		const types = getEntityTypes(entity) as DeclaredType[];
+		const functions = getEntityFunctions(entity, entity.functions) as FunctionDeclaration[];
+		const types = getEntityTypes(entity) as TypeDeclaration[];
 
 		return {
 			params: { ns: namespace, pkg: name, mod },

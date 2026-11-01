@@ -42,7 +42,14 @@
     "@astrojs/solid-js": "7.1.1",
     "@noodlestan/astro-components": "0.1.2",
     "@noodlestan/purrfiles-entities": "file:../../../art-md/libs/purrfiles-entities",
+    "@purrception/lang-ts": "0.1.1",
+    "@purrtrait/astro-components": "file:../../../purrtrait/libs/astro-components",
+    "@purrtrait/code-renderer": "0.0.11",
+    "@purrtrait/jsdoc-renderer": "0.0.2",
+    "@purrtrait/lang-ts": "file:../../../purrtrait/libs/lang-ts",
     "astro": "7.4.2",
+    "marked": "18.1.2",
+    "shiki": "4.5.0",
     "solid-js": "1.9.17"
   },
   "allowScripts": {

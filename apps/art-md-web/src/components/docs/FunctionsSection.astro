@@ -1,12 +1,9 @@
 ---
-import {
-	describeFunction,
-	renderFunctionSignature,
-	type DeclaredFunction,
-} from '../../lib/signature';
+import type { FunctionDeclaration } from '@purrception/lang-ts';
+import CodeBlock from '@purrtrait/astro-components/components/CodeBlock.astro';
 
 interface Props {
-	functions: DeclaredFunction[];
+	functions: FunctionDeclaration[];
 }
 
 const { functions } = Astro.props;
@@ -15,29 +12,11 @@ const { functions } = Astro.props;
 {functions.length > 0 && (
 	<section>
 		<h2>Functions</h2>
-		{functions.map(fn => {
-			const docs = describeFunction(fn.node);
-
-			return (
-				<section>
-					<h3>{fn.name}</h3>
-					<pre><code>{renderFunctionSignature(fn.name, fn.node)}</code></pre>
-					{docs && docs.params.length > 0 && (
-						<ul>
-							{docs.params.map(param => (
-								<li>
-									<code>{param.name}</code> — {param.description}
-								</li>
-							))}
-						</ul>
-					)}
-					{docs?.returns && (
-						<p>
-							<strong>Returns</strong> — {docs.returns}
-						</p>
-					)}
-				</section>
-			);
-		})}
+		{functions.map(fn => (
+			<section>
+				<h3>{fn.name}</h3>
+				<CodeBlock lang="ts" nodes={[fn]} />
+			</section>
+		))}
 	</section>
 )}

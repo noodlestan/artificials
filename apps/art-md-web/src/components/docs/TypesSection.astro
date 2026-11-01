@@ -1,8 +1,9 @@
 ---
-import { normalizeComment, renderType, type DeclaredType } from '../../lib/signature';
+import type { TypeDeclaration } from '@purrception/lang-ts';
+import CodeBlock from '@purrtrait/astro-components/components/CodeBlock.astro';
 
 interface Props {
-	types: DeclaredType[];
+	types: TypeDeclaration[];
 }
 
 const { types } = Astro.props;
@@ -17,26 +18,7 @@ const privateTypes = types.filter(declType => declType.private);
 		{publicTypes.map(declType => (
 			<section>
 				<h3>{declType.name}</h3>
-				{declType.node.kind === 'object' ? (
-					<ul>
-						{Object.entries(declType.node.members).map(([name, member]) => {
-							const memberDoc = normalizeComment(member.description);
-
-							return (
-								<li>
-									<code>
-										{name}
-										{member.optional ? '?' : ''}
-									</code>
-									<code>{renderType(member.type)}</code>
-									{memberDoc && <p>{memberDoc}</p>}
-								</li>
-							);
-						})}
-					</ul>
-				) : (
-					<pre><code>{renderType(declType.node)}</code></pre>
-				)}
+				<CodeBlock lang="ts" nodes={[declType]} />
 			</section>
 		))}
 	</section>
@@ -48,7 +30,7 @@ const privateTypes = types.filter(declType => declType.private);
 		{privateTypes.map(declType => (
 			<section>
 				<h3>{declType.name} (private)</h3>
-				<pre><code>{renderType(declType.node)}</code></pre>
+				<CodeBlock lang="ts" nodes={[declType]} />
 			</section>
 		))}
 	</section>

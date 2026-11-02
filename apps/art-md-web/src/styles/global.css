@@ -64,3 +64,60 @@
 
   --page-margin-h: clamp(1rem, calc(1rem + (100vw - 20rem) * 0.05), 3rem);
 }
+
+/* --- Purrtrait docs rendering ------------------------------------------ */
+/* The astro components emit bare markup: Shiki's dual themes inline only the
+   `--shiki-*` variables, so the rules that consume them live here. */
+
+.shiki,
+.shiki span {
+  color: var(--shiki-light);
+  background-color: var(--shiki-light-bg);
+  font-style: var(--shiki-light-font-style, normal);
+  font-weight: var(--shiki-light-font-weight, normal);
+  text-decoration: var(--shiki-light-text-decoration, none);
+}
+
+@media screen and (prefers-color-scheme: dark) {
+  .shiki,
+  .shiki span {
+    color: var(--shiki-dark);
+    background-color: var(--shiki-dark-bg);
+    font-style: var(--shiki-dark-font-style, normal);
+    font-weight: var(--shiki-dark-font-weight, normal);
+    text-decoration: var(--shiki-dark-text-decoration, none);
+  }
+}
+
+.code-block {
+  margin: 0 0 var(--text-size-normal);
+}
+
+.code-block pre.shiki {
+  margin: 0;
+  padding: 0.75em 1em;
+  border-radius: 0.375rem;
+  font-size: var(--text-size-small);
+  line-height: var(--text-line-height);
+  overflow-x: auto;
+}
+
+.jsdoc-title {
+  margin: var(--text-size-normal) 0 var(--text-size-small);
+}
+
+.jsdoc-description {
+  max-width: var(--text-max-width);
+  margin: 0 0 var(--text-size-small);
+}
+
+.tags,
+.jsdoc-links,
+.jsdoc-params {
+  margin: 0 0 var(--text-size-small);
+  padding-left: 1.25em;
+}
+
+.jsdoc-returns {
+  margin: 0 0 var(--text-size-small);
+}

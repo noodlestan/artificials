@@ -1,15 +1,34 @@
 ---
 import type { TypeDeclaration } from '@purrception/lang-ts';
 import CodeBlock from '@purrtrait/astro-components/components/CodeBlock.astro';
+import JsDocBlock from '@purrtrait/astro-components/components/JsDocBlock.astro';
+
+import type { DocsResolveLink } from '../../lib/meta';
 
 interface Props {
 	types: TypeDeclaration[];
+	resolveLink?: DocsResolveLink;
 }
 
-const { types } = Astro.props;
+const { types, resolveLink } = Astro.props;
 
 const publicTypes = types.filter(declType => !declType.private);
 const privateTypes = types.filter(declType => declType.private);
+
+// Object members carry their own JSDoc. The declaration block already shows
+// the member types, so only described members make the list.
+const documentedMembers = (declType: TypeDeclaration) => {
+	const node = declType.node as {
+		members?: Record<string, { optional?: boolean; description?: string }>;
+	};
+
+	return Object.entries(node.members ?? {})
+		.filter(([, member]) => Boolean(member.description))
+		.map(([name, member]) => ({
+			name: member.optional ? `${name}?` : name,
+			description: member.description as string,
+		}));
+};
 ---
 
 {publicTypes.length > 0 && (
@@ -18,7 +37,18 @@ const privateTypes = types.filter(declType => declType.private);
 		{publicTypes.map(declType => (
 			<section>
 				<h3>{declType.name}</h3>
+				<JsDocBlock jsdoc={declType.node} resolveLink={resolveLink} />
 				<CodeBlock lang="ts" nodes={[declType]} />
+				{documentedMembers(declType).length > 0 && (
+					<ul>
+						{documentedMembers(declType).map(member => (
+							<li>
+								<code>{member.name}</code>
+								<p>{member.description}</p>
+							</li>
+						))}
+					</ul>
+				)}
 			</section>
 		))}
 	</section>
@@ -30,7 +60,18 @@ const privateTypes = types.filter(declType => declType.private);
 		{privateTypes.map(declType => (
 			<section>
 				<h3>{declType.name} (private)</h3>
+				<JsDocBlock jsdoc={declType.node} resolveLink={resolveLink} />
 				<CodeBlock lang="ts" nodes={[declType]} />
+				{documentedMembers(declType).length > 0 && (
+					<ul>
+						{documentedMembers(declType).map(member => (
+							<li>
+								<code>{member.name}</code>
+								<p>{member.description}</p>
+							</li>
+						))}
+					</ul>
+				)}
 			</section>
 		))}
 	</section>

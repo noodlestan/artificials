@@ -1,12 +1,16 @@
 ---
-import type { FunctionDeclaration } from '@purrception/lang-ts';
+import type { FunctionDeclaration, FunctionJsDocData } from '@purrception/lang-ts';
 import CodeBlock from '@purrtrait/astro-components/components/CodeBlock.astro';
+import JsDocBlock from '@purrtrait/astro-components/components/JsDocBlock.astro';
+
+import type { DocsResolveLink } from '../../lib/meta';
 
 interface Props {
 	functions: FunctionDeclaration[];
+	resolveLink?: DocsResolveLink;
 }
 
-const { functions } = Astro.props;
+const { functions, resolveLink } = Astro.props;
 ---
 
 {functions.length > 0 && (
@@ -16,6 +20,7 @@ const { functions } = Astro.props;
 			<section>
 				<h3>{fn.name}</h3>
 				<CodeBlock lang="ts" nodes={[fn]} />
+				<JsDocBlock jsdoc={fn.node as FunctionJsDocData} resolveLink={resolveLink} />
 			</section>
 		))}
 	</section>

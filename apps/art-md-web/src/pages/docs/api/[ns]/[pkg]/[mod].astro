@@ -13,6 +13,7 @@ import EntitySummary from '../../../../../components/docs/EntitySummary.astro';
 import FunctionsSection from '../../../../../components/docs/FunctionsSection.astro';
 import TypesSection from '../../../../../components/docs/TypesSection.astro';
 import PageLayout from '../../../../../layouts/PageLayout.astro';
+import { createDocsResolveLink } from '../../../../../lib/meta';
 import { entityHref, packageParts } from '../../../../../lib/routes';
 
 interface Props {
@@ -55,6 +56,13 @@ export async function getStaticPaths() {
 const { entry, subEntities, functions, types } = Astro.props;
 const { package: pkg, name: mod, description } = entry.data;
 
+// The `entities` schema is a loose object, so `tags` is carried but untyped.
+const tags = (entry.data as { tags?: Record<string, string | string[]> }).tags ?? {};
+const all = await getCollection('entities');
+const resolveLink = createDocsResolveLink(
+	all.map(candidate => candidate.data as unknown as PurrfilesEntityData),
+);
+
 const content = {
 	title: mod,
 	description: description ?? `Module ${mod} of ${pkg}.`,
@@ -64,8 +72,8 @@ const content = {
 <PageLayout content={content}>
 	<DocsBreadcrumbs pkg={pkg} mod={mod} />
 	<h1>{mod}</h1>
-	<EntitySummary description={description} />
+	<EntitySummary jsdoc={{ description, tags }} resolveLink={resolveLink} />
 	<EntitiesSection entities={subEntities} />
-	<FunctionsSection functions={functions} />
-	<TypesSection types={types} />
+	<FunctionsSection functions={functions} resolveLink={resolveLink} />
+	<TypesSection types={types} resolveLink={resolveLink} />
 </PageLayout>

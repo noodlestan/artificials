@@ -18,7 +18,7 @@ const { functions, resolveLink } = Astro.props;
 		<h2>Functions</h2>
 		{functions.map(fn => (
 			<section>
-				<h3>{fn.name}</h3>
+				<h3 id={fn.name}>{fn.name}</h3>
 				<CodeBlock lang="ts" nodes={[fn]} />
 				<JsDocBlock jsdoc={fn.node as FunctionJsDocData} resolveLink={resolveLink} />
 			</section>

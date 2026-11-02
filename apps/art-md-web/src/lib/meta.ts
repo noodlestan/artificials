@@ -14,8 +14,10 @@ export type DocsResolveLink = (target: string) => { text: string; href: string }
  */
 export function createDocsResolveLink(entities: PurrfilesEntityData[]): DocsResolveLink {
 	const meta = createMetaService(entities, {
-		makeEntityHref: (entity, _symbol) =>
-			entityHref(entity.package, entity.module ?? entity.name, entity.type, entity.name),
+		makeEntityHref: (entity, symbol) =>
+			`${entityHref(entity.package, entity.module ?? entity.name, entity.type, entity.name)}${
+				symbol ? `#${symbol}` : ''
+			}`,
 	});
 
 	return target => {

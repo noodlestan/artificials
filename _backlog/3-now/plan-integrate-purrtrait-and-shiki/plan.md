@@ -2,7 +2,7 @@
 
 **ID:** `integrate-purrtrait-and-shiki`
 
-**Status:** `READY`
+**Status:** `WORKING`
 
 **Template:** `$DOMAINS/plans/templates/plan.tart`
 
@@ -96,7 +96,7 @@ Executed from `$WORKSPACE/`. Website work happens in `$PROJECT` on branch `main`
 
 | Iteration / Instructions                                                           | Status  |
 | ---------------------------------------------------------------------------------- | ------- |
-| Iteration: Integrate Code Rendering `./instructions/integrate-code-rendering.md`   | `READY` |
+| Iteration: Integrate Code Rendering `./instructions/integrate-code-rendering.md`   | `DONE`  |
 | Iteration: Add Descriptions and Tags `./instructions/add-descriptions-and-tags.md` | `READY` |
 | Iteration: Publish Purrtrait Renderers                                             | `READY` |
 | Iteration: Consume Purrtrait Releases                                              | `READY` |
@@ -109,7 +109,7 @@ Executed from `$WORKSPACE/`. Website work happens in `$PROJECT` on branch `main`
 
 **Id:** `integrate-code-rendering`
 
-**Status:** `READY`
+**Status:** `DONE`
 
 **Purpose:** Render serialized, highlighted declaration code instead of plain-text signatures.
 
@@ -118,6 +118,8 @@ Executed from `$WORKSPACE/`. Website work happens in `$PROJECT` on branch `main`
 **Instructions Mode:** `INSTRUCTIONS_SELF_CONTAINED_FILE`
 
 **Instructions:** `./instructions/integrate-code-rendering.md`
+
+**Report:** `./instructions/integrate-code-rendering__report.md`
 
 **Changes:**
 
@@ -134,9 +136,9 @@ Executed from `$WORKSPACE/`. Website work happens in `$PROJECT` on branch `main`
 
 #### Commits:
 
-| ID                         | Repository / Checkout / Branch    | Policy   | Hash  | Status     |
-| -------------------------- | --------------------------------- | -------- | ----- | ---------- |
-| `integrate-code-rendering` | Artificials / `$PROJECT` / `main` | `NOPUSH` | (TBD) | `AUTHORED` |
+| ID                         | Repository / Checkout / Branch    | Policy   | Hash      | Status      |
+| -------------------------- | --------------------------------- | -------- | --------- | ----------- |
+| `integrate-code-rendering` | Artificials / `$PROJECT` / `main` | `NOPUSH` | `9404085` | `COMMITTED` |
 
 ##### Commit: `integrate-code-rendering`
 
@@ -430,7 +432,7 @@ plan(art-md-web): Record the purrtrait docs work and open follow-on plans.
 
 ### Next
 
-Both web iterations have self-contained instructions: `./instructions/integrate-code-rendering.md` and `./instructions/add-descriptions-and-tags.md`; the six operational iterations carry inline instructions. Plan: Add JSDoc Renderer Package and Plan: Astro Components are both `DONE`, so every `PLANNING` iteration is unblocked — delegate in order: `integrate-code-rendering` → `add-descriptions-and-tags` → `publish-purrtrait-renderers` (user `npm publish` gate) → `consume-purrtrait-releases` → `publish-purrfiles-packages` (user gate) → `retire-file-links` → `move-purrfiles-packages` → `update-knowledge-and-plans`.
+Both web iterations have self-contained instructions: `./instructions/integrate-code-rendering.md` and `./instructions/add-descriptions-and-tags.md`; the six operational iterations carry inline instructions. Plan: Add JSDoc Renderer Package and Plan: Astro Components are both `DONE`, so every `PLANNING` iteration is unblocked — delegate in order: ~~`integrate-code-rendering`~~ (`DONE`, `9404085`) → `add-descriptions-and-tags` → `publish-purrtrait-renderers` (user `npm publish` gate) → `consume-purrtrait-releases` → `publish-purrfiles-packages` (user gate) → `retire-file-links` → `move-purrfiles-packages` → `update-knowledge-and-plans`.
 
 ### Blockers
 
@@ -495,7 +497,7 @@ npm run lint # prettier check — MUST run AFTER build
 
 ### Evidence
 
-- None yet.
+- `integrate-code-rendering` (`9404085`) — `src/lib/signature.ts` deleted with no remaining references; `FunctionsSection.astro` and `TypesSection.astro` render `CodeBlock.astro` with full declaration wrappers; seven dependencies pinned; `lint:fix`, `astro sync`, `build`, `lint`, and the root pre-commit CI all pass; built module pages contain `pre.shiki` highlighted markup. Report: `./instructions/integrate-code-rendering__report.md`.
 
 ### Decisions
 
@@ -513,4 +515,6 @@ npm run lint # prettier check — MUST run AFTER build
 
 ### Feedback
 
-- None yet.
+- Step 5's verification `grep -l 'astro-code\|--shiki' …/dist/docs/api/art-md/parser/index.html` targets the package page, which renders no functions/types sections — highlighted markup lives on module pages (e.g. `dist/docs/api/art-md/parser/parse/index.html`); `CodeBlock.astro` emits `pre.shiki` with `--shiki-*` variables, not `astro-code`. Fix the check path in later iterations.
+- The root pre-commit hook (`npm run ci`) lints the whole working tree, so uncommitted `_backlog/` files block commits; keep plan and report files formatted (root `npm run lint:fix`) before committing.
+- The Step 1 dependency table order was superseded by the step's own "alphabetically sorted" rule; applied true alphabetical order — pinned values unchanged.

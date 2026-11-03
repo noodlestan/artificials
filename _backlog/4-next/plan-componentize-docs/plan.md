@@ -300,6 +300,7 @@ Then confirm the JSDoc surface survived the extraction — for every rendered en
 
 ### Follow Ups
 
+- Meta availability moves to a pinned `@art-md/parser` dependency (Plan: Distribute Meta JSON); coverage checks read it from `node_modules`, not `src/data`.
 - Migrate other Noodlestan Astro sites to the shared package.
 
 ### Feedback

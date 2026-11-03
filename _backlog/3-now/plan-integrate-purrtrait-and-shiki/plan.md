@@ -94,17 +94,17 @@ Executed from `$WORKSPACE/`. Website work happens in `$PROJECT` on branch `main`
 
 ## Items:
 
-| Iteration / Instructions                                                           | Status  |
-| ---------------------------------------------------------------------------------- | ------- |
-| Iteration: Integrate Code Rendering `./instructions/integrate-code-rendering.md`   | `DONE`  |
-| Iteration: Add Descriptions and Tags `./instructions/add-descriptions-and-tags.md` | `DONE`  |
-| Iteration: Resolve Symbol Links                                                    | `DONE`  |
-| Iteration: Publish Purrtrait Renderers                                             | `DONE`  |
-| Iteration: Consume Purrtrait Releases                                              | `DONE`  |
-| Iteration: Publish Purrfiles Packages                                              | `READY` |
-| Iteration: Retire File Links                                                       | `READY` |
-| Iteration: Move Purrfiles Packages                                                 | `READY` |
-| Iteration: Update Knowledge and Plans                                              | `READY` |
+| Iteration / Instructions                                                           | Status    |
+| ---------------------------------------------------------------------------------- | --------- |
+| Iteration: Integrate Code Rendering `./instructions/integrate-code-rendering.md`   | `DONE`    |
+| Iteration: Add Descriptions and Tags `./instructions/add-descriptions-and-tags.md` | `DONE`    |
+| Iteration: Resolve Symbol Links                                                    | `DONE`    |
+| Iteration: Publish Purrtrait Renderers                                             | `DONE`    |
+| Iteration: Consume Purrtrait Releases                                              | `DONE`    |
+| Iteration: Publish Purrfiles Packages                                              | `WORKING` |
+| Iteration: Retire File Links                                                       | `READY`   |
+| Iteration: Move Purrfiles Packages                                                 | `READY`   |
+| Iteration: Update Knowledge and Plans                                              | `READY`   |
 
 ### Iteration: Integrate Code Rendering
 
@@ -319,7 +319,7 @@ build(art-md-web): Pin the purrtrait renderer releases.
 
 **Id:** `publish-purrfiles-packages`
 
-**Status:** `READY`
+**Status:** `WORKING`
 
 **Purpose:** Publish the meta packages so the last cross-repo link can go.
 
@@ -342,17 +342,28 @@ From `$ART_MD`, bump `libs/purrfiles-entities` first and commit its `release(art
 
 #### Commits:
 
-| ID                           | Repository / Checkout / Branch | Policy   | Hash  | Status     |
-| ---------------------------- | ------------------------------ | -------- | ----- | ---------- |
-| `publish-purrfiles-packages` | Art MD / `$ART_MD` / `main`    | `NOPUSH` | (TBD) | `AUTHORED` |
+| ID                                    | Repository / Checkout / Branch | Policy   | Hash      | Status      |
+| ------------------------------------- | ------------------------------ | -------- | --------- | ----------- |
+| `publish-purrfiles-packages-entities` | Art MD / `$ART_MD` / `main`    | `NOPUSH` | `cc2a0b3` | `COMMITTED` |
+| `publish-purrfiles-packages-extract`  | Art MD / `$ART_MD` / `main`    | `NOPUSH` | (TBD)     | `AUTHORED`  |
 
-##### Commit: `publish-purrfiles-packages`
+##### Commit: `publish-purrfiles-packages-entities`
 
 **Message:**
 
 ```text
-release(art-md): Publish the purrfiles packages.
+release(purrfiles-entities): 0.0.1
 ```
+
+##### Commit: `publish-purrfiles-packages-extract`
+
+**Message:**
+
+```text
+release(purrfiles-extract): 0.0.1
+```
+
+> **Execution note:** both packages are first publishes (npm had neither), so the user decided to keep the manifest versions at `0.0.1` — the entities release commit carries the new `CHANGELOG.md` with no version change, and `cli/purrfiles-extract`'s existing `0.0.1` dependency pin stays valid. This iteration pauses at the user's `npm publish` gate between the two commits.
 
 ### Iteration: Retire File Links
 
@@ -479,7 +490,7 @@ plan(art-md-web): Record the purrtrait docs work and open follow-on plans.
 
 ### Next
 
-Both web iterations have self-contained instructions: `./instructions/integrate-code-rendering.md` and `./instructions/add-descriptions-and-tags.md`; the six operational iterations carry inline instructions. Plan: Add JSDoc Renderer Package and Plan: Astro Components are both `DONE`, so every `PLANNING` iteration is unblocked — delegate in order: ~~`integrate-code-rendering`~~ (`DONE`, `9404085`) → ~~`add-descriptions-and-tags`~~ (`DONE`, `2908387`) → ~~`publish-purrtrait-renderers`~~ (`DONE`, user-executed, `546167c` + `7a51c97`) → ~~`consume-purrtrait-releases`~~ (`DONE`, `472c20c`) → `publish-purrfiles-packages` (user `npm publish` gate) → `retire-file-links` → `move-purrfiles-packages` → `update-knowledge-and-plans`.
+Both web iterations have self-contained instructions: `./instructions/integrate-code-rendering.md` and `./instructions/add-descriptions-and-tags.md`; the six operational iterations carry inline instructions. Plan: Add JSDoc Renderer Package and Plan: Astro Components are both `DONE`, so every `PLANNING` iteration is unblocked — delegate in order: ~~`integrate-code-rendering`~~ (`DONE`, `9404085`) → ~~`add-descriptions-and-tags`~~ (`DONE`, `2908387`) → ~~`publish-purrtrait-renderers`~~ (`DONE`, user-executed, `546167c` + `7a51c97`) → ~~`consume-purrtrait-releases`~~ (`DONE`, `472c20c`) → `publish-purrfiles-packages` (`WORKING`: `release(purrfiles-entities): 0.0.1` committed `cc2a0b3`; **user gate now** — `npm publish libs/purrfiles-entities`, confirm with `npm view`, then the `cli/purrfiles-extract` release commit) → `retire-file-links` → `move-purrfiles-packages` → `update-knowledge-and-plans`.
 
 ### Blockers
 
@@ -548,6 +559,7 @@ npm run lint # prettier check — MUST run AFTER build
 - `add-descriptions-and-tags` (`2908387`) — new `src/lib/meta.ts` resolver glue (`createDocsResolveLink`); `EntitySummary`, `FunctionsSection`, `TypesSection` render descriptions, tags, param/returns entries, and member descriptions through `JsDocBlock.astro`; both pages wire `resolveLink`; all builds/lints and the pre-commit CI pass. `{@link …}` mechanism is wired (entity targets resolve to `/docs/api/...`), but the current data's 8 link targets are declared symbols, which never resolve as entities — they render as plain text pending symbol-level extraction. Report: `./instructions/add-descriptions-and-tags__report.md`.
 - `publish-purrtrait-renderers` (`546167c`, `7a51c97`) — released by the user directly, so no delegation and no worker report file; `@purrtrait/lang-ts@0.0.12` (manifest free of the `git+ssh` defect), `@purrtrait/astro-components@0.0.1`, and `@purrtrait/jsdoc-renderer@0.0.2` each confirmed with `npm view <package> version`.
 - `consume-purrtrait-releases` (`472c20c`) — `@purrtrait/astro-components` `0.0.1` and `@purrtrait/lang-ts` `0.0.12` pinned exact in `apps/art-md-web/package.json`; `npm ls` resolves both from the registry with no link arrows, and the lockfile carries registry `resolved` + integrity for both — the only remaining `file:` link is `@noodlestan/purrfiles-entities` (plus the workspace self-link). `lint:fix`, `astro sync`, `build`, `lint`, and the pre-commit CI all pass. Inlined instructions, so the worker reported in chat — no report file.
+- `publish-purrfiles-packages` (`cc2a0b3`, partial — stopped at the user's publish gate) — `libs/purrfiles-entities/CHANGELOG.md` created with the `0.0.1` first-release entry and no version change (user's decision: keep `0.0.1`, so `cli/purrfiles-extract`'s existing pin holds); `$ART_MD` root `npm run ci` passes (12/12 tasks) and the pre-commit hook re-ran it. `cli/purrfiles-extract` untouched, nothing pushed, no report file (inlined instructions). Pending: `npm publish libs/purrfiles-entities`, `npm view` confirmation, then the extract release commit.
 
 ### Decisions
 
@@ -563,6 +575,7 @@ npm run lint # prettier check — MUST run AFTER build
 - Replace the workspace-relative meta sync (`scripts/sync-meta.mjs`) with the config-pinned endpoint fetcher — Plan: Distribute Meta JSON.
 - Render in-code symbol links once supported by the Astro components.
 - Revisit the `solid-code@0.0.12` manifest: it publishes `@purrtrait/lang-ts` and `@purrtrait/code-renderer` as `*`, the same loose-range defect fixed for `lang-ts` in `ed38271`.
+- `libs/purrfiles-entities/package.json` `files` omits `CHANGELOG.md` while siblings (`cli/bin`, `libs/parser`) include it — add it so the changelog ships in the npm tarball.
 
 ### Feedback
 

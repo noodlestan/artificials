@@ -97,7 +97,7 @@ Executed from `$WORKSPACE/`. Website work happens in `$PROJECT` on branch `main`
 | Iteration / Instructions                                                           | Status  |
 | ---------------------------------------------------------------------------------- | ------- |
 | Iteration: Integrate Code Rendering `./instructions/integrate-code-rendering.md`   | `DONE`  |
-| Iteration: Add Descriptions and Tags `./instructions/add-descriptions-and-tags.md` | `READY` |
+| Iteration: Add Descriptions and Tags `./instructions/add-descriptions-and-tags.md` | `DONE`  |
 | Iteration: Publish Purrtrait Renderers                                             | `READY` |
 | Iteration: Consume Purrtrait Releases                                              | `READY` |
 | Iteration: Publish Purrfiles Packages                                              | `READY` |
@@ -152,7 +152,7 @@ build(art-md-web): Integrate purrtrait code renderer and shiki.
 
 **Id:** `add-descriptions-and-tags`
 
-**Status:** `READY`
+**Status:** `DONE`
 
 **Purpose:** Show descriptions, tags, and links at module, function, and type granularity.
 
@@ -161,6 +161,8 @@ build(art-md-web): Integrate purrtrait code renderer and shiki.
 **Instructions Mode:** `INSTRUCTIONS_SELF_CONTAINED_FILE`
 
 **Instructions:** `./instructions/add-descriptions-and-tags.md`
+
+**Report:** `./instructions/add-descriptions-and-tags__report.md`
 
 **Changes:**
 
@@ -176,9 +178,9 @@ build(art-md-web): Integrate purrtrait code renderer and shiki.
 
 #### Commits:
 
-| ID                          | Repository / Checkout / Branch    | Policy   | Hash  | Status     |
-| --------------------------- | --------------------------------- | -------- | ----- | ---------- |
-| `add-descriptions-and-tags` | Artificials / `$PROJECT` / `main` | `NOPUSH` | (TBD) | `AUTHORED` |
+| ID                          | Repository / Checkout / Branch    | Policy   | Hash      | Status      |
+| --------------------------- | --------------------------------- | -------- | --------- | ----------- |
+| `add-descriptions-and-tags` | Artificials / `$PROJECT` / `main` | `NOPUSH` | `2908387` | `COMMITTED` |
 
 ##### Commit: `add-descriptions-and-tags`
 
@@ -432,7 +434,7 @@ plan(art-md-web): Record the purrtrait docs work and open follow-on plans.
 
 ### Next
 
-Both web iterations have self-contained instructions: `./instructions/integrate-code-rendering.md` and `./instructions/add-descriptions-and-tags.md`; the six operational iterations carry inline instructions. Plan: Add JSDoc Renderer Package and Plan: Astro Components are both `DONE`, so every `PLANNING` iteration is unblocked — delegate in order: ~~`integrate-code-rendering`~~ (`DONE`, `9404085`) → `add-descriptions-and-tags` → `publish-purrtrait-renderers` (user `npm publish` gate) → `consume-purrtrait-releases` → `publish-purrfiles-packages` (user gate) → `retire-file-links` → `move-purrfiles-packages` → `update-knowledge-and-plans`.
+Both web iterations have self-contained instructions: `./instructions/integrate-code-rendering.md` and `./instructions/add-descriptions-and-tags.md`; the six operational iterations carry inline instructions. Plan: Add JSDoc Renderer Package and Plan: Astro Components are both `DONE`, so every `PLANNING` iteration is unblocked — delegate in order: ~~`integrate-code-rendering`~~ (`DONE`, `9404085`) → ~~`add-descriptions-and-tags`~~ (`DONE`, `2908387`) → `publish-purrtrait-renderers` (user `npm publish` gate) → `consume-purrtrait-releases` → `publish-purrfiles-packages` (user gate) → `retire-file-links` → `move-purrfiles-packages` → `update-knowledge-and-plans`.
 
 ### Blockers
 
@@ -498,6 +500,7 @@ npm run lint # prettier check — MUST run AFTER build
 ### Evidence
 
 - `integrate-code-rendering` (`9404085`) — `src/lib/signature.ts` deleted with no remaining references; `FunctionsSection.astro` and `TypesSection.astro` render `CodeBlock.astro` with full declaration wrappers; seven dependencies pinned; `lint:fix`, `astro sync`, `build`, `lint`, and the root pre-commit CI all pass; built module pages contain `pre.shiki` highlighted markup. Report: `./instructions/integrate-code-rendering__report.md`.
+- `add-descriptions-and-tags` (`2908387`) — new `src/lib/meta.ts` resolver glue (`createDocsResolveLink`); `EntitySummary`, `FunctionsSection`, `TypesSection` render descriptions, tags, param/returns entries, and member descriptions through `JsDocBlock.astro`; both pages wire `resolveLink`; all builds/lints and the pre-commit CI pass. `{@link …}` mechanism is wired (entity targets resolve to `/docs/api/...`), but the current data's 8 link targets are declared symbols, which never resolve as entities — they render as plain text pending symbol-level extraction. Report: `./instructions/add-descriptions-and-tags__report.md`.
 
 ### Decisions
 
@@ -518,3 +521,6 @@ npm run lint # prettier check — MUST run AFTER build
 - Step 5's verification `grep -l 'astro-code\|--shiki' …/dist/docs/api/art-md/parser/index.html` targets the package page, which renders no functions/types sections — highlighted markup lives on module pages (e.g. `dist/docs/api/art-md/parser/parse/index.html`); `CodeBlock.astro` emits `pre.shiki` with `--shiki-*` variables, not `astro-code`. Fix the check path in later iterations.
 - The root pre-commit hook (`npm run ci`) lints the whole working tree, so uncommitted `_backlog/` files block commits; keep plan and report files formatted (root `npm run lint:fix`) before committing.
 - The Step 1 dependency table order was superseded by the step's own "alphabetically sorted" rule; applied true alphabetical order — pinned values unchanged.
+- `{@link …}` targets are declared symbols (`ParserConfig`, `BLOCK_TYPES`, …); with `ENTITY_TYPES = ['module']` `createMetaService.resolveLink` returns `undefined` and `JsDocBlock.astro` falls back to plain text (`Could not resolve link for "…"` build logs are expected). Anchors need symbol-level extraction upstream — ties into the in-code symbol links follow-up.
+- Check-path and markup wording in Step 5 remain stale: `dist/docs/api/art-md/parser/index.html` is the package page (module markup lives on `.../parse/index.html` etc.); tags emit `<ul class="tags">`; "the `ParserConfig` type page" does not exist as a route — `ParserConfig` renders on the `config` module page.
+- Verify `{@link …}` as "mechanism resolves entity targets" rather than "all rendered as anchors" until symbol-level entities exist.

@@ -356,6 +356,7 @@ None.
 ### Follow Ups
 
 - Deploy the Art MD Website.
+- Distribute versioned `meta.json` with each `@art-md/parser` release and pin it in consumers — Plan: Distribute Meta JSON.
 
 ### Feedback
 

@@ -8,9 +8,9 @@
 
 **Skill:** `write-plan`
 
-**Purpose:** Ship versioned `meta.json` with every `@art-md/parser` release and consume it as a pinned dependency, retiring the workspace-relative sync script.
+**Purpose:** Ship versioned `meta.json` with every `@art-md/parser` release and consume it at a pinned version fetched from the npm endpoint, retiring the workspace-relative sync script.
 
-**Description:** `meta.json` is already inside the published package (`files` includes `dist`) but its freshness is accidental — nothing regenerates it at pack time, and the Art MD Website does not read it from the registry: `apps/art-md-web/scripts/sync-meta.mjs` copies `../../../art-md/libs/parser/dist/meta.json` by relative path, so builds only work inside the full workspace. This plan guarantees the packaged meta matches the released sources (`prepack`), releases `@art-md/parser@0.0.7` carrying the re-authored `{@link}` targets, and switches `$ART_MD_WEB` to an exact-pinned dependency read straight from `node_modules`, deleting the sync script. The `noodlestan/registry` endpoints will _advertise_ the npm-hosted meta rather than copy it; the registry remains reserved for artifacts that are not published to npm. Every repository keeps producing `dist/meta.json` under that same name for the shared local tool.
+**Description:** `meta.json` is already inside the published package (`files` includes `dist`) but its freshness is accidental — nothing regenerates it at pack time, and the Art MD Website does not consume it from the registry: `apps/art-md-web/scripts/sync-meta.mjs` copies `../../../art-md/libs/parser/dist/meta.json` by relative path, so builds only work inside the full workspace. This plan guarantees the packaged meta matches the released sources (`prepack`), releases `@art-md/parser@0.0.7` carrying the re-authored `{@link}` targets, and replaces the sync script with a zero-dependency fetcher that downloads the pinned `dist/meta.json` from the npm CDN endpoint and merges the entities for the Astro collection — no cross-project dependencies added to the docs project. The `noodlestan/registry` endpoints will _advertise_ the npm-hosted meta rather than copy it; the registry remains reserved for artifacts that are not published to npm. Every repository keeps producing `dist/meta.json` under that same name for the shared local tool.
 
 ## Mandatory Reading
 
@@ -73,31 +73,32 @@ Two repositories: `$ART_MD` publishes, `$PROJECT` consumes. The registry adverti
 
 **Record:** `$ART_MD_WEB/_records/package.art`
 
-**Role:** Consumes the published meta at a pinned version.
+**Role:** Consumes the published meta at pinned versions, fetched from the npm endpoint.
 
 **Changes:**
 
-- Declare `@purrtrait`-style exact pin on `@art-md/parser` (`0.0.7`) in `$ART_MD_WEB/package.json` dependencies.
-- Read the meta from the dependency — `content.config.ts` imports `@art-md/parser/dist/meta.json` directly instead of reading `./data/meta.json`.
-- Delete `scripts/sync-meta.mjs`, the `extract` script, and the `data/` artifact; `dev`, `build`, and `ci` no longer touch sibling checkouts.
-- Verify: clean-clone-equivalent build (`rm -rf` any local data first is unnecessary once the import is in place) — `npx astro sync`, `npm run build`, `npm run lint` green; rendered pages unchanged; `grep -rn sync-meta` empty.
+- Add `meta-docs.config.mts` at the app root: an `endpoint` template (default `https://cdn.jsdelivr.net/npm/{package}@{version}/dist/meta.json`) and a list of `{ package, version }` entries — today one (`@art-md/parser` `0.0.7`); this file is the only place versions are pinned.
+- Replace `scripts/sync-meta.mjs` with `scripts/fetch-meta.mjs`: zero runtime dependencies (built-in `fetch`), downloads each entry's `meta.json` from the endpoint, **merges all `entities` arrays into one collection** (the same operation every future multi-package docs site needs), and writes `src/data/meta.json` — so the build itself stays offline-capable after the fetch.
+- Rewire the npm scripts: `extract` becomes `fetch-meta`; `dev` and `build` run it before Astro; delete `scripts/sync-meta.mjs` and the `src/data/` regeneration it owned (the directory stays gitignored as the fetch cache).
+- **No `@art-md/parser` dependency is added** — the docs project documents packages it does not depend on.
+- Verify: `npm run fetch-meta` downloads and merges; `npx astro sync`, `npm run build`, `npm run lint` green; rendered pages unchanged; `grep -rn sync-meta apps/` empty.
 
 **Dependencies:**
 
-- Iteration: Ship Fresh Meta (the pin must resolve a release that contains the re-authored links).
+- Iteration: Ship Fresh Meta (the pinned version must resolve a release that contains the re-authored links).
 
 ## Execution Context
 
-Executed from `$WORKSPACE/`. Package work happens in `$ART_MD` on branch `main`; consumer work in `$PROJECT` on branch `main`. The two iterations of this plan both touch release/deploy sequencing — execute in order, and serialize against Plan: Integrate Purrtrait and Shiki, whose remaining iterations edit the same `$ART_MD_WEB/package.json` and lockfile.
+Executed from `$WORKSPACE/`. Package work happens in `$ART_MD` on branch `main`; consumer work in `$PROJECT` on branch `main`. `ship-fresh-meta` runs in `$ART_MD` and cannot collide with anything. `fetch-pinned-meta` edits only the app's npm `scripts` block and scripts directory — no dependencies, no lockfile — so its overlap with Plan: Integrate Purrtrait and Shiki is limited to the same `package.json` `scripts` block; still execute the two serially to keep commits legible.
 
 ---
 
 ## Items:
 
-| Iteration / Instructions       | Status  |
-| ------------------------------ | ------- |
-| Iteration: Ship Fresh Meta     | `DRAFT` |
-| Iteration: Consume Pinned Meta | `DRAFT` |
+| Iteration / Instructions     | Status  |
+| ---------------------------- | ------- |
+| Iteration: Ship Fresh Meta   | `DRAFT` |
+| Iteration: Fetch Pinned Meta | `DRAFT` |
 
 ### Iteration: Ship Fresh Meta
 
@@ -135,24 +136,24 @@ Executed from `$WORKSPACE/`. Package work happens in `$ART_MD` on branch `main`;
 release(parser): Regenerate meta on prepack and release 0.0.7.
 ```
 
-### Iteration: Consume Pinned Meta
+### Iteration: Fetch Pinned Meta
 
-**Id:** `consume-pinned-meta`
+**Id:** `fetch-pinned-meta`
 
 **Status:** `DRAFT`
 
-**Purpose:** Read versioned meta from the registry dependency and delete the workspace script.
+**Purpose:** Download versioned meta from the npm endpoint and delete the workspace script.
 
-**Description:** `$ART_MD_WEB` pins `@art-md/parser` exactly, imports the JSON from the package, and never resolves a sibling checkout again.
+**Description:** `$ART_MD_WEB` gets a config-pinned, zero-dependency fetcher: pinned versions live in `meta-docs.config.mts`, the script downloads each `dist/meta.json` from the npm CDN endpoint, merges the entities, and never resolves a sibling checkout again — with no `@art-md/*` dependencies added to the docs project.
 
 **Instructions Mode:** `INSTRUCTIONS_SELF_CONTAINED_FILE`
 
 **Changes:**
 
-- Add `"@art-md/parser": "0.0.7"` to `$ART_MD_WEB/package.json` dependencies (exact, per policy).
-- Rewrite `$ART_MD_WEB/src/content.config.ts` to import `@art-md/parser/dist/meta.json` (the package has no `exports` map, so the subpath resolves) instead of `readFileSync('./data/meta.json')`.
-- Delete `apps/art-md-web/scripts/sync-meta.mjs` and the `extract` script entry; remove `&& npm run extract` from `dev` and `build`; delete `src/data/`.
-- Verify: `npx astro sync`, `npm run build`, `npm run lint` from `$ART_MD_WEB` green; rendered docs unchanged; `grep -rn "sync-meta\|src/data/meta" apps/` empty; `git -C $PROJECT diff` shows no other dependency change.
+- Add `meta-docs.config.mts` to `$ART_MD_WEB`: endpoint template (default `https://cdn.jsdelivr.net/npm/{package}@{version}/dist/meta.json`) plus `[{ package: '@art-md/parser', version: '0.0.7' }]` — the single source of version pins.
+- Add `scripts/fetch-meta.mjs`: built-in `fetch` only (no dependencies), downloads every entry, concatenates the `entities` arrays (one merge path for N packages), writes `src/data/meta.json`.
+- Rewire npm scripts: `extract` → `fetch-meta`, run before `dev`/`build`; delete `scripts/sync-meta.mjs`; `src/data/` stays as the gitignored fetch output; `content.config.ts` keeps reading the merged file.
+- Verify: `npm run fetch-meta` downloads and merges; `npx astro sync`, `npm run build`, `npm run lint` from `$ART_MD_WEB` green; rendered docs unchanged; `grep -rn sync-meta apps/` empty; `git -C $PROJECT diff` shows no dependency change.
 
 **Dependencies:**
 
@@ -160,27 +161,27 @@ release(parser): Regenerate meta on prepack and release 0.0.7.
 
 #### Commits:
 
-| ID                    | Repository / Checkout / Branch    | Policy   | Hash  | Status     |
-| --------------------- | --------------------------------- | -------- | ----- | ---------- |
-| `consume-pinned-meta` | Artificials / `$PROJECT` / `main` | `NOPUSH` | (TBD) | `AUTHORED` |
+| ID                  | Repository / Checkout / Branch    | Policy   | Hash  | Status     |
+| ------------------- | --------------------------------- | -------- | ----- | ---------- |
+| `fetch-pinned-meta` | Artificials / `$PROJECT` / `main` | `NOPUSH` | (TBD) | `AUTHORED` |
 
-##### Commit: `consume-pinned-meta`
+##### Commit: `fetch-pinned-meta`
 
 **Message:**
 
 ```text
-build(art-md-web): Read meta from the pinned `@art-md/parser`.
+build(art-md-web): Fetch pinned meta from the npm endpoint.
 ```
 
 ## Work
 
 ### Next
 
-Draft the two iterations above into instructions once the sequencing window is right: serialize with Plan: Integrate Purrtrait and Shiki (both edit `$ART_MD_WEB/package.json` and the lockfile). The `npm publish` gate sits inside `ship-fresh-meta`.
+Draft the two iterations above into instructions once the sequencing window is right: `ship-fresh-meta` (art-md repo) can run any time; `fetch-pinned-meta` touches only the app's scripts — no dependency or lockfile edits — so its overlap with Plan: Integrate Purrtrait and Shiki shrinks to the same `package.json` `scripts` block. The `npm publish` gate sits inside `ship-fresh-meta`.
 
 ### Blockers
 
-- `@art-md/parser` must publish `0.0.7` (iteration `ship-fresh-meta`) before `consume-pinned-meta` runs — pinning `0.0.6` today would revert the docs to pre-`9feb113` link targets.
+- `@art-md/parser` must publish `0.0.7` (iteration `ship-fresh-meta`) before `fetch-pinned-meta` runs — fetching `0.0.6` today would revert the docs to pre-`9feb113` link targets.
 
 ---
 
@@ -230,12 +231,15 @@ From `$PARSER`: `npm pack --dry-run` lists `dist/meta.json` containing the curre
 
 - **Option A: meta ships inside the npm package** — versioned by semver, served by the registry (and unpkg) as a side effect; no new infrastructure, no duplicated artifact.
 - **The registry advertises, never copies** — endpoints point at the npm-hosted meta; the registry is reserved for artifacts that are not published to npm.
-- **`dist/meta.json` stays the local contract** — same name in every repo, consumed by the shared local tool; the pinned dependency is the distribution contract. Two consumers, one generator.
+- **`dist/meta.json` stays the local contract** — same name in every repo, consumed by the shared local tool; the config's version pins are the distribution contract. Two consumers, one generator.
+- **Fetch from the npm endpoint, no cross-project dependencies** — the docs project documents packages it does not depend on; `meta-docs.config.mts` pins versions instead of `package.json`, and a zero-dependency `fetch()` script downloads and merges — adding five `@art-md/*` dependencies to the site would couple it to code it only reads data from.
+- **The endpoint is a template in the config** — default `https://cdn.jsdelivr.net/npm/{package}@{version}/dist/meta.json`, swappable (unpkg, registry tarball, the registry repo) without touching the script.
 - **Docs document releases** — the site's pin (`0.0.7`) says which API version it renders; a pin bump is a deliberate, reviewable diff.
 - **Freshness by construction** — `prepack` regenerates the meta so a release can never ship stale documentation data.
 
 ### Follow Ups
 
+- **Componentise the fetch script before the next website**: lift `fetch-meta` into a shared tool driven by a `meta-docs.config.mts` — the config becomes the only thing a new docs project (art-js, art-lib) needs — and have the tool hand its merged output straight to the meta service (`createMetaService`) instead of stopping at a JSON file.
 - Registry endpoints advertise `meta.json` (pointer/descriptor to the npm-hosted file) once the registry checkout exists.
 - Registry properly hosts artifacts that are not published to npm (the case that justifies it).
 - art-js and art-lib publish and pin their meta the same way when their extraction lands.

@@ -100,7 +100,7 @@ Executed from `$WORKSPACE/`. Website work happens in `$PROJECT` on branch `main`
 | Iteration: Add Descriptions and Tags `./instructions/add-descriptions-and-tags.md` | `DONE`  |
 | Iteration: Resolve Symbol Links                                                    | `DONE`  |
 | Iteration: Publish Purrtrait Renderers                                             | `DONE`  |
-| Iteration: Consume Purrtrait Releases                                              | `READY` |
+| Iteration: Consume Purrtrait Releases                                              | `DONE`  |
 | Iteration: Publish Purrfiles Packages                                              | `READY` |
 | Iteration: Retire File Links                                                       | `READY` |
 | Iteration: Move Purrfiles Packages                                                 | `READY` |
@@ -279,7 +279,7 @@ release(astro-components): 0.0.1
 
 **Id:** `consume-purrtrait-releases`
 
-**Status:** `READY`
+**Status:** `DONE`
 
 **Purpose:** Replace the renderer `file:` links with exact npm pins.
 
@@ -303,9 +303,9 @@ In `$ART_MD_WEB/package.json`, replace the two remaining renderer `file:` entrie
 
 #### Commits:
 
-| ID                           | Repository / Checkout / Branch    | Policy   | Hash  | Status     |
-| ---------------------------- | --------------------------------- | -------- | ----- | ---------- |
-| `consume-purrtrait-releases` | Artificials / `$PROJECT` / `main` | `NOPUSH` | (TBD) | `AUTHORED` |
+| ID                           | Repository / Checkout / Branch    | Policy   | Hash      | Status      |
+| ---------------------------- | --------------------------------- | -------- | --------- | ----------- |
+| `consume-purrtrait-releases` | Artificials / `$PROJECT` / `main` | `NOPUSH` | `472c20c` | `COMMITTED` |
 
 ##### Commit: `consume-purrtrait-releases`
 
@@ -479,7 +479,7 @@ plan(art-md-web): Record the purrtrait docs work and open follow-on plans.
 
 ### Next
 
-Both web iterations have self-contained instructions: `./instructions/integrate-code-rendering.md` and `./instructions/add-descriptions-and-tags.md`; the six operational iterations carry inline instructions. Plan: Add JSDoc Renderer Package and Plan: Astro Components are both `DONE`, so every `PLANNING` iteration is unblocked — delegate in order: ~~`integrate-code-rendering`~~ (`DONE`, `9404085`) → ~~`add-descriptions-and-tags`~~ (`DONE`, `2908387`) → ~~`publish-purrtrait-renderers`~~ (`DONE`, user-executed, `546167c` + `7a51c97`) → `consume-purrtrait-releases` → `publish-purrfiles-packages` (user gate) → `retire-file-links` → `move-purrfiles-packages` → `update-knowledge-and-plans`.
+Both web iterations have self-contained instructions: `./instructions/integrate-code-rendering.md` and `./instructions/add-descriptions-and-tags.md`; the six operational iterations carry inline instructions. Plan: Add JSDoc Renderer Package and Plan: Astro Components are both `DONE`, so every `PLANNING` iteration is unblocked — delegate in order: ~~`integrate-code-rendering`~~ (`DONE`, `9404085`) → ~~`add-descriptions-and-tags`~~ (`DONE`, `2908387`) → ~~`publish-purrtrait-renderers`~~ (`DONE`, user-executed, `546167c` + `7a51c97`) → ~~`consume-purrtrait-releases`~~ (`DONE`, `472c20c`) → `publish-purrfiles-packages` (user `npm publish` gate) → `retire-file-links` → `move-purrfiles-packages` → `update-knowledge-and-plans`.
 
 ### Blockers
 
@@ -547,6 +547,7 @@ npm run lint # prettier check — MUST run AFTER build
 - `integrate-code-rendering` (`9404085`) — `src/lib/signature.ts` deleted with no remaining references; `FunctionsSection.astro` and `TypesSection.astro` render `CodeBlock.astro` with full declaration wrappers; seven dependencies pinned; `lint:fix`, `astro sync`, `build`, `lint`, and the root pre-commit CI all pass; built module pages contain `pre.shiki` highlighted markup. Report: `./instructions/integrate-code-rendering__report.md`.
 - `add-descriptions-and-tags` (`2908387`) — new `src/lib/meta.ts` resolver glue (`createDocsResolveLink`); `EntitySummary`, `FunctionsSection`, `TypesSection` render descriptions, tags, param/returns entries, and member descriptions through `JsDocBlock.astro`; both pages wire `resolveLink`; all builds/lints and the pre-commit CI pass. `{@link …}` mechanism is wired (entity targets resolve to `/docs/api/...`), but the current data's 8 link targets are declared symbols, which never resolve as entities — they render as plain text pending symbol-level extraction. Report: `./instructions/add-descriptions-and-tags__report.md`.
 - `publish-purrtrait-renderers` (`546167c`, `7a51c97`) — released by the user directly, so no delegation and no worker report file; `@purrtrait/lang-ts@0.0.12` (manifest free of the `git+ssh` defect), `@purrtrait/astro-components@0.0.1`, and `@purrtrait/jsdoc-renderer@0.0.2` each confirmed with `npm view <package> version`.
+- `consume-purrtrait-releases` (`472c20c`) — `@purrtrait/astro-components` `0.0.1` and `@purrtrait/lang-ts` `0.0.12` pinned exact in `apps/art-md-web/package.json`; `npm ls` resolves both from the registry with no link arrows, and the lockfile carries registry `resolved` + integrity for both — the only remaining `file:` link is `@noodlestan/purrfiles-entities` (plus the workspace self-link). `lint:fix`, `astro sync`, `build`, `lint`, and the pre-commit CI all pass. Inlined instructions, so the worker reported in chat — no report file.
 
 ### Decisions
 
@@ -571,3 +572,4 @@ npm run lint # prettier check — MUST run AFTER build
 - `{@link …}` targets are declared symbols (`ParserConfig`, `BLOCK_TYPES`, …); with `ENTITY_TYPES = ['module']` `createMetaService.resolveLink` returns `undefined` and `JsDocBlock.astro` falls back to plain text (`Could not resolve link for "…"` build logs are expected). Anchors need symbol-level extraction upstream — ties into the in-code symbol links follow-up.
 - Check-path and markup wording in Step 5 remain stale: `dist/docs/api/art-md/parser/index.html` is the package page (module markup lives on `.../parse/index.html` etc.); tags emit `<ul class="tags">`; "the `ParserConfig` type page" does not exist as a route — `ParserConfig` renders on the `config` module page.
 - Verify `{@link …}` as "mechanism resolves entity targets" rather than "all rendered as anchors" until symbol-level entities exist.
+- `npm ci` from `$PROJECT` exits 0 even when the manifest and lockfile disagree, silently reinstalling the stale `file:` links, and `npm install` alone keeps them because the local checkout versions satisfy the new specs. Registry resolution required removing the stale symlinks and an explicit `npm install @purrtrait/astro-components@0.0.1 @purrtrait/lang-ts@0.0.12 -w apps/art-md-web --save-exact`; `retire-file-links` should expect the same pattern for `purrfiles-entities`.

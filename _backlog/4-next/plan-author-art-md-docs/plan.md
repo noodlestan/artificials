@@ -1,0 +1,512 @@
+# Plan: Author Art MD Docs
+
+**ID:** `author-art-md-docs`
+
+**Status:** `DRAFT`
+
+**Template:** `$DOMAINS/plans/templates/plan.tart`
+
+**Skill:** `write-plan`
+
+**Purpose:** Author JSDoc-driven documentation for all five public Art MD packages and publish it — including revisiting the already-documented parser once its dependencies can be linked — then extend the Art MD Website to document every package and add the site's root docs.
+
+**Description:** Today only `@art-md/parser` runs extraction, so only `@art-md/parser` is documented. This plan takes the remaining four public packages — `@art-md/primitives`, `@art-md/constructs`, `@art-md/serializer`, `@art-md/codec` — through extraction and authored copy, revisits `parser` third in line (after `primitives` and `constructs` publish, so cross-package `{@link}` targets finally exist to link to, and so the parser's copy can be adjusted against the new rules), refreshes the Art MD Website to render all five packages, and finishes with the site's root docs. Every package iteration ends in a published version with a changelog, a bumped `package.json`, an updated `package-lock.json`, and its dependencies re-pinned to the versions published earlier in this plan. All iterations carry inlined instructions.
+
+## Mandatory Reading
+
+::READ `$DOMAINS/plans/structures/plan.art` (Structure) — Describe the work-item changes through a series of iterations and commits with detailed instructions.
+
+---
+
+## Path Variables
+
+| Variable      | Resolved Path                      | Purpose                                          |
+| ------------- | ---------------------------------- | ------------------------------------------------ |
+| `$WORKSPACE`  | Current working directory          | Workspace root directory.                        |
+| `$PROJECT`    | `$WORKSPACE/checkouts/artificials` | This plan's backlog and the milestone.           |
+| `$ART_MD_WEB` | `$PROJECT/apps/art-md-web`         | The website that documents the packages.         |
+| `$ART_MD`     | `$WORKSPACE/checkouts/art-md`      | Source project — all five packages live here.    |
+| `$PARSER`     | `$ART_MD/libs/parser`              | The extraction script to copy; documented first. |
+
+## Summary
+
+Give every public Art MD package an extraction pass and authored JSDoc, publishing each with fresh versions and updated inter-package pins; then point the Art MD Website at all five metas and write the site's getting-started, usage, and integrations pages.
+
+## Context
+
+### Upstream Work
+
+| Kind      | Path                                                               | Role                                    |
+| --------- | ------------------------------------------------------------------ | --------------------------------------- |
+| Milestone | `$PROJECT/_roadmap/3-now/milestone-art-md-hello-word/milestone.md` | Phase 4 coordination; Follow Ups entry. |
+
+### Knowledge
+
+::READ `$PROJECT/_guide.md` (Guide) — Website setup and verification.
+::READ `$ART_MD/_guide.md` (Guide) — Extraction monorepo layout, setup, and verification.
+::READ `$PARSER/scripts/extract.ts` (Source) — The extraction script every other package copies (`createModuleEntityExtractor`, `ignore: ['private', 'test']`, writes `dist/meta.json`).
+::READ `$ART_MD_WEB/src/content.config.ts` (Source) — Single-meta consumer this plan generalises to five.
+::READ `$WORKSPACE/checkouts/management/_ops/packages/policy.md` (Conventions) — Exact-pin model for every dependency bump.
+::READ `$WORKSPACE/knowledge/conventions/writing-commit-message.art` (Conventions) — Commit message format.
+
+## Authoring Rules
+
+These rules govern every copy change in this plan. They are restated in each iteration's instructions.
+
+- **Docs are based on the parsed JSDoc** — the extractor's output is the starting point; authoring adjusts, never replaces, the data.
+- **Modules with few exports get a one-liner** — a module exporting one or two functions/types does not earn a paragraph.
+- **Module and symbol descriptions never repeat each other** — the module description explains _what these things are for and when to use them_; the function/type description explains _what this one thing is_. Example for art-md: `parse` is the main entry point; the other functions are exposed so consumers can recompose the parser if needed — that "what/when" lives on the module, not restated on every function.
+- **Cross-package links use the qualified form** — once a target package is documented, `{@link pkg:module#Symbol}`; targets with no docs page stay unqualified and render as plain text.
+
+## Scope
+
+Five packages in `$ART_MD` are documented and published; the website in `$PROJECT` consumes them all.
+
+### (Scope) Packages: Art MD Public API
+
+**Record:** `$ART_MD/libs/{package}/_records/package.art` (each)
+
+**Role:** The documented, published API surface.
+
+**Changes:**
+
+- Add the extraction script (copied from `$PARSER/scripts/extract.ts`, `meta.package` set per package) to `primitives`, `constructs`, `serializer`, `codec`.
+- Apply the Authoring Rules to each package's module and symbol JSDoc.
+- Each iteration: new version (next after the previous one: `primitives` `0.0.8`, `constructs` `0.0.8`, `parser` `0.0.8`, `serializer` `0.0.7`, `codec` `0.0.6`), `CHANGELOG.md` entry, `package.json` bump, root `package-lock.json` refreshed, dependencies re-pinned to the versions this plan just published, `npm publish` (user gate).
+- The dependency graph dictates the order and is satisfied by it: `primitives` (no deps) → `constructs` (deps `primitives`) → `parser` (deps `primitives`, `constructs`) → `serializer` (deps `primitives`, `constructs`) → `codec` (deps all four).
+
+**Dependencies:**
+
+- Plan: Distribute Meta JSON — `parser` `0.0.7` with `prepack` must ship first; `parser`'s own revisit here is `0.0.8`.
+
+### (Scope) Application: Art MD Website
+
+**Record:** `$ART_MD_WEB/_records/package.art`
+
+**Role:** Documents all five packages and hosts the site's root docs.
+
+**Changes:**
+
+- Add five entries to `meta-docs.config.mts` (the fetcher from Plan: Distribute Meta JSON) at the versions this plan published; `npm run fetch-meta` downloads and merges all five `entities` arrays into the collection `content.config.ts` already reads.
+- The routing helpers (`packageParts`, `packageHref`, `entityHref`) are already package-aware; no `@art-md/*` dependencies are added to the site.
+- Author `docs/getting-started`, `docs/usage`, `docs/integrations` — the integrations page links `https://github.com/noodlestan/art-js` and `https://github.com/noodlestan/art-lib` by GitHub URL (neither has docs yet).
+
+**Dependencies:**
+
+- All five package iterations.
+
+## Execution Context
+
+Executed from `$WORKSPACE/`. Package work happens in `$ART_MD` on branch `main`; website work in `$PROJECT` on branch `main`. The package iterations live in `$ART_MD` and cannot collide with other plans. The two website iterations edit `meta-docs.config.mts` and pages — no dependencies, no lockfile — so their overlap with Plan: Integrate Purrtrait and Shiki (which edits dependencies) is only commit ordering in the same repo.
+
+---
+
+## Items:
+
+| Iteration / Instructions       | Status  |
+| ------------------------------ | ------- |
+| Iteration: Document Primitives | `DRAFT` |
+| Iteration: Document Constructs | `DRAFT` |
+| Iteration: Revisit Parser      | `DRAFT` |
+| Iteration: Document Serializer | `DRAFT` |
+| Iteration: Document Codec      | `DRAFT` |
+| Iteration: Refresh API Docs    | `DRAFT` |
+| Iteration: Write Root Docs     | `DRAFT` |
+
+### Iteration: Document Primitives
+
+**Id:** `document-primitives`
+
+**Status:** `DRAFT`
+
+**Purpose:** First extraction pass — foundational types become documented.
+
+**Description:** `@art-md/primitives` gains the extraction script and authored copy, then publishes.
+
+**Instructions Mode:** `INSTRUCTIONS_INLINED_IN_ITERATION`
+
+**Instructions:**
+
+Copy `$PARSER/scripts/extract.ts` into `$ART_MD/libs/primitives/scripts/extract.ts` with `meta.package` set to `@art-md/primitives`; add the `extract` script and its dependencies (`@noodlestan/purrfiles-extract` from the workspace, `@purrception/source-fs`, `tsx`) to the package manifest, following how `$PARSER` declares them. Run it and confirm `dist/meta.json` is written. Apply the Authoring Rules to `primitives`' module and symbol JSDoc — foundational packages tend toward the one-liner rule. `primitives` has no Art MD dependencies, so nothing to re-pin. Bump to `0.0.8`, write the `CHANGELOG.md` entry, refresh the root `package-lock.json`, stop and hand the version to the user for `npm publish`, and confirm with `npm view @art-md/primitives version`.
+
+**Changes:**
+
+- Add extract script + `extract` script entry; generate `dist/meta.json`.
+- Author copy per the Authoring Rules.
+- Bump `0.0.8`, changelog, lock; publish (user gate).
+
+**Dependencies:**
+
+- None.
+
+#### Commits:
+
+| ID                   | Repository / Checkout / Branch | Policy   | Hash  | Status     |
+| -------------------- | ------------------------------ | -------- | ----- | ---------- |
+| `author-primitives`  | Art MD / `$ART_MD` / `main`    | `NOPUSH` | (TBD) | `AUTHORED` |
+| `release-primitives` | Art MD / `$ART_MD` / `main`    | `NOPUSH` | (TBD) | `AUTHORED` |
+
+##### Commit: `author-primitives`
+
+**Message:**
+
+```text
+docs(primitives): Add extraction and author module copy.
+```
+
+##### Commit: `release-primitives`
+
+**Message:**
+
+```text
+release(primitives): 0.0.8
+```
+
+### Iteration: Document Constructs
+
+**Id:** `document-constructs`
+
+**Status:** `DRAFT`
+
+**Purpose:** The largest public library gets extraction and authored copy.
+
+**Description:** `@art-md/constructs` (154 source files) follows the same pass, re-pinning its `primitives` dependency.
+
+**Instructions Mode:** `INSTRUCTIONS_INLINED_IN_ITERATION`
+
+**Instructions:**
+
+Copy the extraction script as in the previous iteration with `meta.package` set to `@art-md/constructs`; run it and confirm `dist/meta.json`. Apply the Authoring Rules — with 154 files this is where the module-versus-symbol non-repetition rule earns its keep: module descriptions say what the constructs are for and when to reach for them; individual factory and type descriptions stay on their own behaviour. In the package manifest, re-pin `@art-md/primitives` to `0.0.8` (published in the previous iteration). Bump `constructs` to `0.0.8`, changelog, refresh the root lock, stop for the user's `npm publish`, confirm with `npm view`.
+
+**Changes:**
+
+- Add extract script; generate `dist/meta.json`.
+- Author copy per the Authoring Rules; re-pin `@art-md/primitives` `0.0.8`.
+- Bump `0.0.8`, changelog, lock; publish (user gate).
+
+**Dependencies:**
+
+- Iteration: Document Primitives.
+
+#### Commits:
+
+| ID                   | Repository / Checkout / Branch | Policy   | Hash  | Status     |
+| -------------------- | ------------------------------ | -------- | ----- | ---------- |
+| `author-constructs`  | Art MD / `$ART_MD` / `main`    | `NOPUSH` | (TBD) | `AUTHORED` |
+| `release-constructs` | Art MD / `$ART_MD` / `main`    | `NOPUSH` | (TBD) | `AUTHORED` |
+
+##### Commit: `author-constructs`
+
+**Message:**
+
+```text
+docs(constructs): Add extraction and author module copy.
+```
+
+##### Commit: `release-constructs`
+
+**Message:**
+
+```text
+release(constructs): 0.0.8
+```
+
+### Iteration: Revisit Parser
+
+**Id:** `revisit-parser`
+
+**Status:** `DRAFT`
+
+**Purpose:** Link the parser to its now-documented dependencies and adjust its copy against the Authoring Rules.
+
+**Description:** Third in line by design: `primitives` and `constructs` are published, so the parser's cross-package `{@link}` targets exist, and the parser's own copy can be reconciled with the rules.
+
+**Instructions Mode:** `INSTRUCTIONS_INLINED_IN_ITERATION`
+
+**Instructions:**
+
+Re-author the parser's cross-package links to the qualified form now that targets exist: `{@link ParseContext}` and `{@link ArtDocument}` become `{@link primitives:<owning-module>#ParseContext}`-style targets (discover the owning module from `@art-md/primitives`' `dist/meta.json`; the same for anything living in `constructs`). In-package targets already use `entity#symbol` from the corrective iteration — keep them. Apply the Authoring Rules to the parser's own copy, using the canonical example: the module description carries "what/when" — `parse` is the main entry point, the other functions are exposed so consumers can recompose the parser if needed — and the per-function descriptions do not repeat it. Re-pin `@art-md/primitives` and `@art-md/constructs` to `0.0.8`. Bump `parser` to `0.0.8` (after Distribute Meta JSON's `0.0.7`), changelog, refresh the lock, stop for the user's `npm publish`, confirm with `npm view`, then re-run `npm run extract` so `dist/meta.json` carries the new links.
+
+**Changes:**
+
+- Qualify cross-package `{@link}` targets; adjust copy per the Authoring Rules.
+- Re-pin `primitives` and `constructs` `0.0.8`; regenerate meta.
+- Bump `0.0.8`, changelog, lock; publish (user gate).
+
+**Dependencies:**
+
+- Iteration: Document Constructs.
+- Plan: Distribute Meta JSON (`parser` `0.0.7` shipped with `prepack`).
+
+#### Commits:
+
+| ID               | Repository / Checkout / Branch | Policy   | Hash  | Status     |
+| ---------------- | ------------------------------ | -------- | ----- | ---------- |
+| `revisit-parser` | Art MD / `$ART_MD` / `main`    | `NOPUSH` | (TBD) | `AUTHORED` |
+| `release-parser` | Art MD / `$ART_MD` / `main`    | `NOPUSH` | (TBD) | `AUTHORED` |
+
+##### Commit: `revisit-parser`
+
+**Message:**
+
+```text
+docs(parser): Qualify cross-package links; align copy with authoring rules.
+```
+
+##### Commit: `release-parser`
+
+**Message:**
+
+```text
+release(parser): 0.0.8
+```
+
+### Iteration: Document Serializer
+
+**Id:** `document-serializer`
+
+**Status:** `DRAFT`
+
+**Purpose:** Extraction and authored copy for the AST-to-markdown serializer.
+
+**Description:** `@art-md/serializer` follows the established pass.
+
+**Instructions Mode:** `INSTRUCTIONS_INLINED_IN_ITERATION`
+
+**Instructions:**
+
+Copy the extraction script with `meta.package` set to `@art-md/serializer`; run it. Apply the Authoring Rules — the serializer's modules explain when a consumer serializes back to markdown versus parsing; symbol descriptions stay behavioural. Re-pin `@art-md/primitives` and `@art-md/constructs` to `0.0.8`. Bump to `0.0.7`, changelog, refresh the lock, stop for the user's `npm publish`, confirm with `npm view`.
+
+**Changes:**
+
+- Add extract script; generate `dist/meta.json`.
+- Author copy per the Authoring Rules; re-pin `primitives` and `constructs` `0.0.8`.
+- Bump `0.0.7`, changelog, lock; publish (user gate).
+
+**Dependencies:**
+
+- Iteration: Revisit Parser.
+
+#### Commits:
+
+| ID                   | Repository / Checkout / Branch | Policy   | Hash  | Status     |
+| -------------------- | ------------------------------ | -------- | ----- | ---------- |
+| `author-serializer`  | Art MD / `$ART_MD` / `main`    | `NOPUSH` | (TBD) | `AUTHORED` |
+| `release-serializer` | Art MD / `$ART_MD` / `main`    | `NOPUSH` | (TBD) | `AUTHORED` |
+
+##### Commit: `author-serializer`
+
+**Message:**
+
+```text
+docs(serializer): Add extraction and author module copy.
+```
+
+##### Commit: `release-serializer`
+
+**Message:**
+
+```text
+release(serializer): 0.0.7
+```
+
+### Iteration: Document Codec
+
+**Id:** `document-codec`
+
+**Status:** `DRAFT`
+
+**Purpose:** Extraction and authored copy for the codec, re-pinning every Art MD dependency.
+
+**Description:** `@art-md/codec` depends on all four previously published packages — this iteration re-pins all of them.
+
+**Instructions Mode:** `INSTRUCTIONS_INLINED_IN_ITERATION`
+
+**Instructions:**
+
+Copy the extraction script with `meta.package` set to `@art-md/codec`; run it. Apply the Authoring Rules — the codec's module descriptions explain the parse-and-serialize round trip and when to use it over calling parser and serializer directly. Re-pin all four dependencies to the versions this plan published: `@art-md/primitives` `0.0.8`, `@art-md/constructs` `0.0.8`, `@art-md/parser` `0.0.8`, `@art-md/serializer` `0.0.7`. Bump `codec` to `0.0.6`, changelog, refresh the lock, stop for the user's `npm publish`, confirm with `npm view`.
+
+**Changes:**
+
+- Add extract script; generate `dist/meta.json`.
+- Author copy per the Authoring Rules; re-pin all four Art MD dependencies.
+- Bump `0.0.6`, changelog, lock; publish (user gate).
+
+**Dependencies:**
+
+- Iteration: Document Serializer.
+
+#### Commits:
+
+| ID              | Repository / Checkout / Branch | Policy   | Hash  | Status     |
+| --------------- | ------------------------------ | -------- | ----- | ---------- |
+| `author-codec`  | Art MD / `$ART_MD` / `main`    | `NOPUSH` | (TBD) | `AUTHORED` |
+| `release-codec` | Art MD / `$ART_MD` / `main`    | `NOPUSH` | (TBD) | `AUTHORED` |
+
+##### Commit: `author-codec`
+
+**Message:**
+
+```text
+docs(codec): Add extraction and author module copy.
+```
+
+##### Commit: `release-codec`
+
+**Message:**
+
+```text
+release(codec): 0.0.6
+```
+
+### Iteration: Refresh API Docs
+
+**Id:** `refresh-api-docs`
+
+**Status:** `DRAFT`
+
+**Purpose:** Point the Art MD Website at all five packages' metas.
+
+**Description:** The consumer generalises from one pinned meta to five merged entity arrays.
+
+**Instructions Mode:** `INSTRUCTIONS_INLINED_IN_ITERATION`
+
+**Instructions:**
+
+Add five entries to `$ART_MD_WEB/meta-docs.config.mts` with the versions this plan published (`primitives` `0.0.8`, `constructs` `0.0.8`, `parser` `0.0.8`, `serializer` `0.0.7`, `codec` `0.0.6`) — the fetcher downloads each from the npm endpoint and merges the `entities` arrays, so `content.config.ts` and the collection schema need no change. Run `npm run fetch-meta` and confirm the merged output contains entities from all five packages. Verify package pages render for all five (`/docs/api/art-md/primitives`, `/constructs`, `/serializer`, `/codec`, plus the existing `parser`), cross-package `{@link pkg:module#Symbol}` targets render as anchors, and `npm run build` + `npm run lint` pass. No dependency or lockfile changes; keep commits ordered against the other plans touching this repo.
+
+**Changes:**
+
+- Pin five `@art-md/*` packages; merge five metas in `content.config.ts`.
+- Verify all five package documentations render with working cross-package links.
+
+**Dependencies:**
+
+- Iteration: Document Codec.
+- Plan: Distribute Meta JSON (`fetch-pinned-meta` landed the fetch-and-merge pattern this plan extends to five packages).
+
+#### Commits:
+
+| ID                 | Repository / Checkout / Branch    | Policy   | Hash  | Status     |
+| ------------------ | --------------------------------- | -------- | ----- | ---------- |
+| `refresh-api-docs` | Artificials / `$PROJECT` / `main` | `NOPUSH` | (TBD) | `AUTHORED` |
+
+##### Commit: `refresh-api-docs`
+
+**Message:**
+
+```text
+build(art-md-web): Document all five art-md packages.
+```
+
+### Iteration: Write Root Docs
+
+**Id:** `write-root-docs`
+
+**Status:** `DRAFT`
+
+**Purpose:** Give the site its human-facing docs: getting started, usage, integrations.
+
+**Description:** Three root pages authored alongside the generated API reference.
+
+**Instructions Mode:** `INSTRUCTIONS_INLINED_IN_ITERATION`
+
+**Instructions:**
+
+Author three pages under `$ART_MD_WEB/src/pages/docs/`, following the existing page and layout conventions: `getting-started` (install the packages, first parse), `usage` (parse/serialize round trip, when to use codec versus parser + serializer), and `integrations`. The integrations page links the sibling projects by GitHub URL — `https://github.com/noodlestan/art-js` and `https://github.com/noodlestan/art-lib` — noting that neither has documentation yet. Cross-link each root page to the generated API reference. Verify with the full docs build (`lint:fix` → `astro sync` → `build` → `lint`) and confirm the three routes render.
+
+**Changes:**
+
+- Author `docs/getting-started`, `docs/usage`, `docs/integrations` pages.
+- Link art-js and art-lib by GitHub URL (no docs yet for either).
+
+**Dependencies:**
+
+- Iteration: Refresh API Docs.
+
+#### Commits:
+
+| ID                | Repository / Checkout / Branch    | Policy   | Hash  | Status     |
+| ----------------- | --------------------------------- | -------- | ----- | ---------- |
+| `write-root-docs` | Artificials / `$PROJECT` / `main` | `NOPUSH` | (TBD) | `AUTHORED` |
+
+##### Commit: `write-root-docs`
+
+**Message:**
+
+```text
+docs(art-md-web): Add getting started, usage, and integrations pages.
+```
+
+## Work
+
+### Next
+
+Draft is complete (all iterations inlined). Sequence: Plan: Distribute Meta JSON ships `parser` `0.0.7` first, then this plan runs its seven iterations in order; website iterations serialize against the other plans editing the same manifest.
+
+### Blockers
+
+- Plan: Distribute Meta JSON must land (`parser` `0.0.7` with `prepack`) before `revisit-parser`.
+- Plan: Integrate Purrtrait and Shiki must finish before `refresh-api-docs` and `write-root-docs` (shared manifest and lockfile).
+
+---
+
+## Operating Instructions
+
+### Setting Up
+
+**Purpose:** Prepare the execution environment.
+
+**Instructions:** (From `$ART_MD/_guide.md` and `$PROJECT/_guide.md`)
+
+Run `npm ci` from the `$ART_MD` and `$PROJECT` roots.
+
+### Writing Commit Message
+
+**Purpose:** Write standardized message according to context conventions.
+
+**Instructions:** (From `$WORKSPACE/_guide.md`)
+
+1. Read commit message conventions from `$WORKSPACE/knowledge/conventions/writing-commit-message.art`.
+2. Write the message following the rules defined there.
+
+### Verifying Completion
+
+**Purpose:** Confirm each package publishes with fresh meta and the site renders every package.
+
+**Instructions:** (From `$ART_MD/_guide.md` and `$PROJECT/_guide.md`)
+
+Per package: `npm run ci` from `$ART_MD` passes, `dist/meta.json` exists and contains the authored copy, `npm pack --dry-run` lists it, and `npm view <package> version` resolves after the user's publish. For the website: `npx astro sync` → `npm run build` → `npm run lint` from `$ART_MD_WEB`, with all five package routes rendering and cross-package links resolving.
+
+---
+
+## Coordination
+
+### Not In Scope
+
+- **`@art-md/bin`** — a CLI; `--help` is its documentation, not meta.
+- **`@noodlestan/purrfiles-*`** — extraction infrastructure, not Art MD API surface.
+- **`libs/codec-tests`** — test scaffold without a manifest.
+- **art-js and art-lib documentation** — linked by URL only; their docs are their own projects.
+
+### Evidence
+
+- None yet.
+
+### Decisions
+
+- **Order is dependency-driven** — `primitives` → `constructs` → `parser` → `serializer` → `codec` means every iteration only re-pins versions that earlier iterations published; `codec` sits last because it depends on all four.
+- **Parser is revisited third, not last** — cross-package links need `primitives` and `constructs` live, and the copy rules should be applied to the flagship package before the remaining ones set precedent.
+- **All instructions inlined** — the iterations are short, ordered, release-shaped sequences; separate files would add ceremony without adding delegation value.
+- **Two commits per package iteration** — the authored docs land separately from the release commit, so `release(pkg): X` always contains exactly the version bump, changelog, and lock refresh.
+- **Docs document releases** — every website pin names the exact version whose meta it renders.
+
+### Follow Ups
+
+- art-js and art-lib get their own documentation projects (linked from `docs/integrations`).
+- Registry endpoints advertise the published metas (carried from Plan: Distribute Meta JSON).
+- Consider an API-surface diff (consecutive metas) as a release check.
+
+### Feedback
+
+- None yet.

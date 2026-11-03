@@ -547,6 +547,7 @@ npm run lint # prettier check — MUST run AFTER build
 
 ### Follow Ups
 
+- Replace the workspace-relative meta sync (`scripts/sync-meta.mjs`) with the config-pinned endpoint fetcher — Plan: Distribute Meta JSON.
 - Render in-code symbol links once supported by the Astro components.
 - Revisit the `solid-code@0.0.12` manifest: it publishes `@purrtrait/lang-ts` and `@purrtrait/code-renderer` as `*`, the same loose-range defect fixed for `lang-ts` in `ed38271`.
 

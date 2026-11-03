@@ -99,7 +99,7 @@ Executed from `$WORKSPACE/`. Website work happens in `$PROJECT` on branch `main`
 | Iteration: Integrate Code Rendering `./instructions/integrate-code-rendering.md`   | `DONE`  |
 | Iteration: Add Descriptions and Tags `./instructions/add-descriptions-and-tags.md` | `DONE`  |
 | Iteration: Resolve Symbol Links                                                    | `DONE`  |
-| Iteration: Publish Purrtrait Renderers                                             | `READY` |
+| Iteration: Publish Purrtrait Renderers                                             | `DONE`  |
 | Iteration: Consume Purrtrait Releases                                              | `READY` |
 | Iteration: Publish Purrfiles Packages                                              | `READY` |
 | Iteration: Retire File Links                                                       | `READY` |
@@ -228,7 +228,7 @@ From `$ART_MD`: re-authored seven `{@link}` targets across `libs/parser/src` as 
 
 **Id:** `publish-purrtrait-renderers`
 
-**Status:** `READY`
+**Status:** `DONE`
 
 **Purpose:** Put the rendering packages on npm so the website can stop linking across checkouts.
 
@@ -252,17 +252,28 @@ From `$PURRTRAIT`, release in dependency order: verify `jsdoc-renderer@0.0.2` al
 
 #### Commits:
 
-| ID                            | Repository / Checkout / Branch    | Policy   | Hash  | Status     |
-| ----------------------------- | --------------------------------- | -------- | ----- | ---------- |
-| `publish-purrtrait-renderers` | Purrtrait / `$PURRTRAIT` / `main` | `NOPUSH` | (TBD) | `AUTHORED` |
+| ID                                             | Repository / Checkout / Branch    | Policy   | Hash      | Status      |
+| ---------------------------------------------- | --------------------------------- | -------- | --------- | ----------- |
+| `publish-purrtrait-renderers-lang-ts`          | Purrtrait / `$PURRTRAIT` / `main` | `NOPUSH` | `546167c` | `COMMITTED` |
+| `publish-purrtrait-renderers-astro-components` | Purrtrait / `$PURRTRAIT` / `main` | `NOPUSH` | `7a51c97` | `COMMITTED` |
 
-##### Commit: `publish-purrtrait-renderers`
+##### Commit: `publish-purrtrait-renderers-lang-ts`
 
 **Message:**
 
 ```text
-release(purrtrait): Publish the renderer packages.
+release(lang-ts): 0.0.12
 ```
+
+##### Commit: `publish-purrtrait-renderers-astro-components`
+
+**Message:**
+
+```text
+release(astro-components): 0.0.1
+```
+
+> **Execution note:** this iteration was executed directly by the user, not delegated — there is no worker report file. `@purrtrait/jsdoc-renderer@0.0.2` was already published by its own plan and is verified, not released here. The originally reported hashes `2b8cea3` / `e92ce97` were rewritten by a rebase on pull; the recorded hashes are their identical-patch counterparts now on `main`.
 
 ### Iteration: Consume Purrtrait Releases
 
@@ -468,11 +479,11 @@ plan(art-md-web): Record the purrtrait docs work and open follow-on plans.
 
 ### Next
 
-Both web iterations have self-contained instructions: `./instructions/integrate-code-rendering.md` and `./instructions/add-descriptions-and-tags.md`; the six operational iterations carry inline instructions. Plan: Add JSDoc Renderer Package and Plan: Astro Components are both `DONE`, so every `PLANNING` iteration is unblocked — delegate in order: ~~`integrate-code-rendering`~~ (`DONE`, `9404085`) → ~~`add-descriptions-and-tags`~~ (`DONE`, `2908387`) → `publish-purrtrait-renderers` (user `npm publish` gate) → `consume-purrtrait-releases` → `publish-purrfiles-packages` (user gate) → `retire-file-links` → `move-purrfiles-packages` → `update-knowledge-and-plans`.
+Both web iterations have self-contained instructions: `./instructions/integrate-code-rendering.md` and `./instructions/add-descriptions-and-tags.md`; the six operational iterations carry inline instructions. Plan: Add JSDoc Renderer Package and Plan: Astro Components are both `DONE`, so every `PLANNING` iteration is unblocked — delegate in order: ~~`integrate-code-rendering`~~ (`DONE`, `9404085`) → ~~`add-descriptions-and-tags`~~ (`DONE`, `2908387`) → ~~`publish-purrtrait-renderers`~~ (`DONE`, user-executed, `546167c` + `7a51c97`) → `consume-purrtrait-releases` → `publish-purrfiles-packages` (user gate) → `retire-file-links` → `move-purrfiles-packages` → `update-knowledge-and-plans`.
 
 ### Blockers
 
-- None — the former blockers (Plan: Astro Components, Plan: Add JSDoc Renderer Package) are both `DONE`; `@purrtrait/jsdoc-renderer@0.0.2` is published and `@purrtrait/astro-components` is built, awaiting its publish in `publish-purrtrait-renderers`.
+- None — the former blockers (Plan: Astro Components, Plan: Add JSDoc Renderer Package) are both `DONE`; `@purrtrait/jsdoc-renderer@0.0.2`, `@purrtrait/astro-components@0.0.1`, and `@purrtrait/lang-ts@0.0.12` all resolve from npm.
 
 ---
 
@@ -535,6 +546,7 @@ npm run lint # prettier check — MUST run AFTER build
 
 - `integrate-code-rendering` (`9404085`) — `src/lib/signature.ts` deleted with no remaining references; `FunctionsSection.astro` and `TypesSection.astro` render `CodeBlock.astro` with full declaration wrappers; seven dependencies pinned; `lint:fix`, `astro sync`, `build`, `lint`, and the root pre-commit CI all pass; built module pages contain `pre.shiki` highlighted markup. Report: `./instructions/integrate-code-rendering__report.md`.
 - `add-descriptions-and-tags` (`2908387`) — new `src/lib/meta.ts` resolver glue (`createDocsResolveLink`); `EntitySummary`, `FunctionsSection`, `TypesSection` render descriptions, tags, param/returns entries, and member descriptions through `JsDocBlock.astro`; both pages wire `resolveLink`; all builds/lints and the pre-commit CI pass. `{@link …}` mechanism is wired (entity targets resolve to `/docs/api/...`), but the current data's 8 link targets are declared symbols, which never resolve as entities — they render as plain text pending symbol-level extraction. Report: `./instructions/add-descriptions-and-tags__report.md`.
+- `publish-purrtrait-renderers` (`546167c`, `7a51c97`) — released by the user directly, so no delegation and no worker report file; `@purrtrait/lang-ts@0.0.12` (manifest free of the `git+ssh` defect), `@purrtrait/astro-components@0.0.1`, and `@purrtrait/jsdoc-renderer@0.0.2` each confirmed with `npm view <package> version`.
 
 ### Decisions
 

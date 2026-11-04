@@ -103,7 +103,7 @@ Executed from `$WORKSPACE/`. Website work happens in `$PROJECT` on branch `main`
 | Iteration: Consume Purrtrait Releases                                              | `DONE`  |
 | Iteration: Publish Purrfiles Packages                                              | `DONE`  |
 | Iteration: Retire File Links                                                       | `DONE`  |
-| Iteration: Move Purrfiles Packages                                                 | `READY` |
+| Iteration: Move Purrfiles Packages                                                 | `DONE`  |
 | Iteration: Update Knowledge and Plans                                              | `READY` |
 
 ### Iteration: Integrate Code Rendering
@@ -413,7 +413,7 @@ build(art-md-web): Pin purrfiles-entities and retire file links.
 
 **Id:** `move-purrfiles-packages`
 
-**Status:** `READY`
+**Status:** `DONE`
 
 **Purpose:** Give the purrfiles packages their own repository and workspace records.
 
@@ -437,9 +437,11 @@ Add `purrfiles` to the workspace manifest and `_records/repositories/`, clone it
 
 #### Commits:
 
-| ID                        | Repository / Checkout / Branch    | Policy   | Hash  | Status     |
-| ------------------------- | --------------------------------- | -------- | ----- | ---------- |
-| `move-purrfiles-packages` | Purrfiles / `$PURRFILES` / `main` | `NOPUSH` | (TBD) | `AUTHORED` |
+| ID                                  | Repository / Checkout / Branch    | Policy   | Hash      | Status      |
+| ----------------------------------- | --------------------------------- | -------- | --------- | ----------- |
+| `move-purrfiles-packages`           | Purrfiles / `$PURRFILES` / `main` | `NOPUSH` | `22b4c9d` | `COMMITTED` |
+| `move-purrfiles-packages-art-md`    | Art MD / `$ART_MD` / `main`       | `NOPUSH` | `af97cc0` | `COMMITTED` |
+| `move-purrfiles-packages-workspace` | Workspace / `$WORKSPACE` / `main` | `NOPUSH` | `17ca8eb` | `COMMITTED` |
 
 ##### Commit: `move-purrfiles-packages`
 
@@ -447,6 +449,22 @@ Add `purrfiles` to the workspace manifest and `_records/repositories/`, clone it
 
 ```text
 records(purrfiles): Move the purrfiles packages to their repository.
+```
+
+##### Commit: `move-purrfiles-packages-art-md`
+
+**Message:**
+
+```text
+migrate(art-md): Move the purrfiles packages to the purrfiles repository.
+```
+
+##### Commit: `move-purrfiles-packages-workspace`
+
+**Message:**
+
+```text
+records(purrfiles): Add the purrfiles repository record.
 ```
 
 ### Iteration: Update Knowledge and Plans
@@ -493,7 +511,7 @@ plan(art-md-web): Record the purrtrait docs work and open follow-on plans.
 
 ### Next
 
-Both web iterations have self-contained instructions: `./instructions/integrate-code-rendering.md` and `./instructions/add-descriptions-and-tags.md`; the six operational iterations carry inline instructions. Plan: Add JSDoc Renderer Package and Plan: Astro Components are both `DONE`, so every `PLANNING` iteration is unblocked — delegate in order: ~~`integrate-code-rendering`~~ (`DONE`, `c6a7f8c`) → ~~`add-descriptions-and-tags`~~ (`DONE`, `563dee6`) → ~~`publish-purrtrait-renderers`~~ (`DONE`, user-executed, `546167c` + `7a51c97`) → ~~`consume-purrtrait-releases`~~ (`DONE`, `ee1e661`) → ~~`publish-purrfiles-packages`~~ (`DONE`, `cc2a0b3` + `2498f16`, both `0.0.1` published) → ~~`retire-file-links`~~ (`DONE`, `841336f` + `de9c6ed`, `file:` sweep = 0) → `move-purrfiles-packages` → `update-knowledge-and-plans`.
+Both web iterations have self-contained instructions: `./instructions/integrate-code-rendering.md` and `./instructions/add-descriptions-and-tags.md`; the six operational iterations carry inline instructions. Plan: Add JSDoc Renderer Package and Plan: Astro Components are both `DONE`, so every `PLANNING` iteration is unblocked — delegate in order: ~~`integrate-code-rendering`~~ (`DONE`, `c6a7f8c`) → ~~`add-descriptions-and-tags`~~ (`DONE`, `563dee6`) → ~~`publish-purrtrait-renderers`~~ (`DONE`, user-executed, `546167c` + `7a51c97`) → ~~`consume-purrtrait-releases`~~ (`DONE`, `ee1e661`) → ~~`publish-purrfiles-packages`~~ (`DONE`, `cc2a0b3` + `2498f16`, both `0.0.1` published) → ~~`retire-file-links`~~ (`DONE`, `841336f` + `de9c6ed`, `file:` sweep = 0) → ~~`move-purrfiles-packages`~~ (`DONE`, `22b4c9d` + `af97cc0` + `17ca8eb`) → `update-knowledge-and-plans`.
 
 ### Blockers
 
@@ -564,6 +582,7 @@ npm run lint # prettier check — MUST run AFTER build
 - `consume-purrtrait-releases` (`ee1e661`) — `@purrtrait/astro-components` `0.0.1` and `@purrtrait/lang-ts` `0.0.12` pinned exact in `apps/art-md-web/package.json`; `npm ls` resolves both from the registry with no link arrows, and the lockfile carries registry `resolved` + integrity for both — the only remaining `file:` link is `@noodlestan/purrfiles-entities` (plus the workspace self-link). `lint:fix`, `astro sync`, `build`, `lint`, and the pre-commit CI all pass. Inlined instructions, so the worker reported in chat — no report file.
 - `publish-purrfiles-packages` (`cc2a0b3`, `2498f16`) — `libs/purrfiles-entities/CHANGELOG.md` and `cli/purrfiles-extract/CHANGELOG.md` created with `0.0.1` first-release entries and no version changes (user's decision: keep `0.0.1`, so extract's existing pin holds); both `$ART_MD` root `npm run ci` runs pass (12/12 tasks) and the pre-commit hook re-ran them. Both packages published and confirmed: `npm view` → `0.0.1` each; `npm ls @noodlestan/purrfiles-entities` inside `$ART_MD` reports `@noodlestan/purrfiles-entities@0.0.1` (it still prints the `-> ./libs/…` arrow — it stays a workspace member, so `npm view` is the registry check that matters). Nothing pushed, no report file (inlined instructions).
 - `retire-file-links` (`841336f`, `de9c6ed`) — `@noodlestan/purrfiles-entities` pinned exact `0.0.1`, lockfile registry-resolved, `npm ls` shows no link arrows, and the workspace-wide sweep reports **0** `file:` entries across 82 manifests. The physical install externalized the raw-TS chain and broke `astro sync` / `build` (worker BLOCKER); `de9c6ed` forces `@noodlestan/purrfiles-entities` through Vite's `noExternal` in the `ssr`, `astro`, and `prerender` environments — build green (15 pages). Temporary-exception decisions dropped in this plan and in Plan: Art MD Docs. Report: `./instructions/retire-file-links__report.md`.
+- `move-purrfiles-packages` (`22b4c9d`, `af97cc0`, `17ca8eb`) — both packages moved to `$PURRFILES` with `_records/` and knowledge intact; workspace repository record committed; `$ART_MD` lockfile re-resolves `libs/parser`'s `@noodlestan/purrfiles-extract` from the registry (no link arrow). `npm pack` sha256 before/after the move is **byte-identical** for both tarballs — the published-content invariant held (only change: the extract test's `rootDir` re-point, test-only, not in the tarball). `npm run ci` green in `$ART_MD` (8/8) and `$PURRFILES` (2/2); `$PROJECT` + `$ART_MD_WEB` (sync, build 15 pages, lint) unaffected; `npm view` → `0.0.1` both. Inlined instructions — chat report, no report file.
 
 ### Decisions
 
@@ -580,6 +599,8 @@ npm run lint # prettier check — MUST run AFTER build
 - Render in-code symbol links once supported by the Astro components.
 - Revisit the `solid-code@0.0.12` manifest: it publishes `@purrtrait/lang-ts` and `@purrtrait/code-renderer` as `*`, the same loose-range defect fixed for `lang-ts` in `ed38271`.
 - `libs/purrfiles-entities/package.json` `files` omits `CHANGELOG.md` while siblings (`cli/bin`, `libs/parser`) include it — add it so the changelog ships in the npm tarball.
+- Both moved packages still declare `repository.url` `github.com/noodlestan/art-md.git` with `directory: libs/…` — stale after the move, but fixing it changes published content, so correct it at their next release (needs a version bump + republish).
+- Vendor a fixture for `createModuleEntityExtractor.test.ts` (or skip when `$ART_MD/libs/parser/src` is absent) so a purrfiles-only clone passes `npm run ci`.
 
 ### Feedback
 
@@ -591,4 +612,7 @@ npm run lint # prettier check — MUST run AFTER build
 - Verify `{@link …}` as "mechanism resolves entity targets" rather than "all rendered as anchors" until symbol-level entities exist.
 - `npm ci` from `$PROJECT` exits 0 even when the manifest and lockfile disagree, silently reinstalling the stale `file:` links, and `npm install` alone keeps them because the local checkout versions satisfy the new specs. Registry resolution required removing the stale symlinks and an explicit `npm install @purrtrait/astro-components@0.0.1 @purrtrait/lang-ts@0.0.12 -w apps/art-md-web --save-exact`; `retire-file-links` should expect the same pattern for `purrfiles-entities`.
 - My `npm publish libs/purrfiles-entities --dry-run` failed on `git ls-remote ssh://git@github.com/libs/purrfiles-entities.git` (`Repository not found`) — a bogus URL no manifest or lockfile declares (`grep` for `git+|github:|ssh://` finds nothing, `npm whoami` was fine) — yet the user's real publish later succeeded with no manifest change. Unexplained; if it recurs on `cli/purrfiles-extract` or the moved packages, capture the npm debug log before changing anything.
+- Removing a workspace member does not clean up after itself: `npm install` (and `--package-lock-only`) left the stale lockfile keys and the dangling `node_modules/@noodlestan/purrfiles-*` symlinks behind (`npm ls` said `invalid`). Fix required removing the symlinks + `node_modules/.package-lock.json`, deleting the four lockfile keys by hand, then `npm install` to re-resolve from the registry — extends the stale-link pitfall already recorded for `retire-file-links`.
+- `@noodlestan/purrfiles-extract`'s test suite now reaches `$ART_MD/libs/parser/src` through a cross-checkout relative path, so a purrfiles-only clone fails that one test — see Follow Ups.
+- `$ART_MD/turbo.json`'s `extract` pipeline lost its two `pkg#build` `dependsOn` entries (the members are no longer in-workspace): art-md now consumes the registry-published dist, so purrfiles rebuilds are invisible to it until a republish.
 - Rebase pulls keep rewriting commit hashes: every tracked hash was rebound to its identical-patch counterpart now on `main` (`9404085`→`c6a7f8c`, `2908387`→`563dee6`, `58105ca`→`e40b703`, `9feb113`→`9b065e3`, `472c20c`→`ee1e661`); `purrtrait` and the two `0.0.1` release commits in `$ART_MD` were untouched. Re-verify hashes against `git log` after any pull before citing them.

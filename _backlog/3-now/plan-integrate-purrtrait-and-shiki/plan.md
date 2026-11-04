@@ -66,17 +66,17 @@ The website work in `$PROJECT` ships the rendering. Getting there and then off t
 
 - Add the dependencies below to `$ART_MD_WEB/package.json`, exact-pinned per `$WORKSPACE/checkouts/ops/knowledge/design/manifest-policy.md`. Pin from npm wherever the package is published; keep a `file:` link only where it is not yet published, and declare each linked package directly because cross-repo `file:` links do not resolve transitive workspace deps:
 
-  | Dependency                    | Version                                         | Why                                                                                                                              |
-  | ----------------------------- | ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-  | `@purrtrait/astro-components` | `file:../../../purrtrait/libs/astro-components` | Delivered by Plan: Astro Components but not yet published; `file:` until `publish-purrtrait-renderers` retires it.               |
-  | `@purrtrait/jsdoc-renderer`   | `0.0.2` (npm)                                   | Published by Plan: Add JSDoc Renderer Package — pinned exact from npm on day one, never linked.                                  |
-  | `@purrtrait/lang-ts`          | `file:../../../purrtrait/libs/lang-ts`          | Published `0.0.11` ships a `git+ssh://…#main` dependency; the local manifest is correct, so link it until purrtrait republishes. |
-  | `@purrtrait/code-renderer`    | `0.0.11` (npm)                                  | Published with no dependencies — safe to pin.                                                                                    |
-  | `@purrception/lang-ts`        | `0.1.1` (npm)                                   | Already pinned exact elsewhere in the workspace.                                                                                 |
-  | `shiki`                       | `4.5.0` (npm)                                   | Installed transitively via `astro` today; declared directly because `CodeBlock.astro` imports it.                                |
-  | `marked`                      | `18.1.2` (npm)                                  | Descriptions render as markdown.                                                                                                 |
+  | Dependency                    | Version        | Why                                                                                                                                  |
+  | ----------------------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+  | `@purrtrait/astro-components` | `0.0.1` (npm)  | Delivered by Plan: Astro Components; was `file:` until `publish-purrtrait-renderers` published it and `retire-file-links` pinned it. |
+  | `@purrtrait/jsdoc-renderer`   | `0.0.2` (npm)  | Published by Plan: Add JSDoc Renderer Package — pinned exact from npm on day one, never linked.                                      |
+  | `@purrtrait/lang-ts`          | `0.0.12` (npm) | Published `0.0.11` shipped a `git+ssh://…#main` dependency; `publish-purrtrait-renderers` republished it clean, now pinned exact.    |
+  | `@purrtrait/code-renderer`    | `0.0.11` (npm) | Published with no dependencies — safe to pin.                                                                                        |
+  | `@purrception/lang-ts`        | `0.1.1` (npm)  | Already pinned exact elsewhere in the workspace.                                                                                     |
+  | `shiki`                       | `4.5.0` (npm)  | Installed transitively via `astro` today; declared directly because `CodeBlock.astro` imports it.                                    |
+  | `marked`                      | `18.1.2` (npm) | Descriptions render as markdown.                                                                                                     |
 
-  This leaves three `file:` links to retire later in this plan (astro-components, `lang-ts`, and the pre-existing `purrfiles-entities`), rather than the five the `file:`-everywhere approach would have added.
+  This plan carried three `file:` links (astro-components, `lang-ts`, and the pre-existing `purrfiles-entities`); all three are retired — `retire-file-links` sweeps the workspace to zero.
 
 - Delete `src/lib/signature.ts` — every local signature helper goes; typed symbol access uses the canonical `getEntityTypes` / `getEntityFunctions` helpers from `@noodlestan/purrfiles-entities`, which the docs pages already consume.
 - Rework `FunctionsSection.astro` and `TypesSection.astro` to render declaration code blocks through `CodeBlock.astro`, and descriptions, tags, and links through `JsDocBlock.astro`.
@@ -102,7 +102,7 @@ Executed from `$WORKSPACE/`. Website work happens in `$PROJECT` on branch `main`
 | Iteration: Publish Purrtrait Renderers                                             | `DONE`  |
 | Iteration: Consume Purrtrait Releases                                              | `DONE`  |
 | Iteration: Publish Purrfiles Packages                                              | `DONE`  |
-| Iteration: Retire File Links                                                       | `READY` |
+| Iteration: Retire File Links                                                       | `DONE`  |
 | Iteration: Move Purrfiles Packages                                                 | `READY` |
 | Iteration: Update Knowledge and Plans                                              | `READY` |
 
@@ -369,7 +369,7 @@ release(purrfiles-extract): 0.0.1
 
 **Id:** `retire-file-links`
 
-**Status:** `READY`
+**Status:** `DONE`
 
 **Purpose:** Finish with no `file:` dependency left anywhere in the workspace.
 
@@ -380,6 +380,8 @@ release(purrfiles-extract): 0.0.1
 **Instructions:**
 
 Replace the `file:../../../art-md/libs/purrfiles-entities` entry in `$ART_MD_WEB/package.json` with an exact version, then `npm ci` from `$PROJECT`. Sweep all manifests under `$WORKSPACE/checkouts/*/` for `file:` entries and confirm the count is zero. Where a decision recorded the exception as temporary, remove it and note the replacement in Decisions.
+
+**Report:** `./instructions/retire-file-links__report.md`
 
 **Changes:**
 
@@ -491,7 +493,7 @@ plan(art-md-web): Record the purrtrait docs work and open follow-on plans.
 
 ### Next
 
-Both web iterations have self-contained instructions: `./instructions/integrate-code-rendering.md` and `./instructions/add-descriptions-and-tags.md`; the six operational iterations carry inline instructions. Plan: Add JSDoc Renderer Package and Plan: Astro Components are both `DONE`, so every `PLANNING` iteration is unblocked — delegate in order: ~~`integrate-code-rendering`~~ (`DONE`, `c6a7f8c`) → ~~`add-descriptions-and-tags`~~ (`DONE`, `563dee6`) → ~~`publish-purrtrait-renderers`~~ (`DONE`, user-executed, `546167c` + `7a51c97`) → ~~`consume-purrtrait-releases`~~ (`DONE`, `ee1e661`) → ~~`publish-purrfiles-packages`~~ (`DONE`, `cc2a0b3` + `2498f16`, both `0.0.1` published) → `retire-file-links` → `move-purrfiles-packages` → `update-knowledge-and-plans`.
+Both web iterations have self-contained instructions: `./instructions/integrate-code-rendering.md` and `./instructions/add-descriptions-and-tags.md`; the six operational iterations carry inline instructions. Plan: Add JSDoc Renderer Package and Plan: Astro Components are both `DONE`, so every `PLANNING` iteration is unblocked — delegate in order: ~~`integrate-code-rendering`~~ (`DONE`, `c6a7f8c`) → ~~`add-descriptions-and-tags`~~ (`DONE`, `563dee6`) → ~~`publish-purrtrait-renderers`~~ (`DONE`, user-executed, `546167c` + `7a51c97`) → ~~`consume-purrtrait-releases`~~ (`DONE`, `ee1e661`) → ~~`publish-purrfiles-packages`~~ (`DONE`, `cc2a0b3` + `2498f16`, both `0.0.1` published) → ~~`retire-file-links`~~ (`DONE`, `841336f` + `de9c6ed`, `file:` sweep = 0) → `move-purrfiles-packages` → `update-knowledge-and-plans`.
 
 ### Blockers
 
@@ -552,7 +554,7 @@ npm run lint # prettier check — MUST run AFTER build
 - **`components` and `props` entities** — only `module` entities render in v1.
 - **In-code symbol links** — token links inside serialized code deferred with Plan: Astro Components.
 - **Search and sidebar** — already tracked as follow-ups of Plan: Art MD Docs.
-- **Publishing** — no npm release in the rendering iterations. Releases happen in their own iterations: `publish-purrtrait-renderers` and `publish-purrfiles-packages`. The `file:` exception stands until those and `retire-file-links` land.
+- **Publishing** — no npm release in the rendering iterations. Releases happen in their own iterations: `publish-purrtrait-renderers` and `publish-purrfiles-packages`. Both have landed, and with `retire-file-links` no `file:` dependency remains anywhere in the workspace (sweep: 0 across 82 manifests).
 
 ### Evidence
 
@@ -561,6 +563,7 @@ npm run lint # prettier check — MUST run AFTER build
 - `publish-purrtrait-renderers` (`546167c`, `7a51c97`) — released by the user directly, so no delegation and no worker report file; `@purrtrait/lang-ts@0.0.12` (manifest free of the `git+ssh` defect), `@purrtrait/astro-components@0.0.1`, and `@purrtrait/jsdoc-renderer@0.0.2` each confirmed with `npm view <package> version`.
 - `consume-purrtrait-releases` (`ee1e661`) — `@purrtrait/astro-components` `0.0.1` and `@purrtrait/lang-ts` `0.0.12` pinned exact in `apps/art-md-web/package.json`; `npm ls` resolves both from the registry with no link arrows, and the lockfile carries registry `resolved` + integrity for both — the only remaining `file:` link is `@noodlestan/purrfiles-entities` (plus the workspace self-link). `lint:fix`, `astro sync`, `build`, `lint`, and the pre-commit CI all pass. Inlined instructions, so the worker reported in chat — no report file.
 - `publish-purrfiles-packages` (`cc2a0b3`, `2498f16`) — `libs/purrfiles-entities/CHANGELOG.md` and `cli/purrfiles-extract/CHANGELOG.md` created with `0.0.1` first-release entries and no version changes (user's decision: keep `0.0.1`, so extract's existing pin holds); both `$ART_MD` root `npm run ci` runs pass (12/12 tasks) and the pre-commit hook re-ran them. Both packages published and confirmed: `npm view` → `0.0.1` each; `npm ls @noodlestan/purrfiles-entities` inside `$ART_MD` reports `@noodlestan/purrfiles-entities@0.0.1` (it still prints the `-> ./libs/…` arrow — it stays a workspace member, so `npm view` is the registry check that matters). Nothing pushed, no report file (inlined instructions).
+- `retire-file-links` (`841336f`, `de9c6ed`) — `@noodlestan/purrfiles-entities` pinned exact `0.0.1`, lockfile registry-resolved, `npm ls` shows no link arrows, and the workspace-wide sweep reports **0** `file:` entries across 82 manifests. The physical install externalized the raw-TS chain and broke `astro sync` / `build` (worker BLOCKER); `de9c6ed` forces `@noodlestan/purrfiles-entities` through Vite's `noExternal` in the `ssr`, `astro`, and `prerender` environments — build green (15 pages). Temporary-exception decisions dropped in this plan and in Plan: Art MD Docs. Report: `./instructions/retire-file-links__report.md`.
 
 ### Decisions
 
@@ -568,7 +571,7 @@ npm run lint # prettier check — MUST run AFTER build
 - **Canonical helpers own typed access** — `getEntityTypes` / `getEntityFunctions` from `@noodlestan/purrfiles-entities` filter on `kind`; no local narrowing anywhere.
 - **Routes live under `/docs/api`** — `DOCS_ROOT = '/docs/api'` (`Nest Docs Under API`, `c4a6859`) is this plan's route ground truth; `resolveLink` anchors target `/docs/api/...`.
 - **Gaps belong upstream** — if tag, description, param, or member rendering is missing while porting the ApiScreen sections, the fix lands in the purrtrait plans, not in `$ART_MD_WEB`.
-- **Declare every dependency directly; prefer npm pins over `file:` links** — cross-repo `file:` links do not resolve transitive workspace deps, so `$ART_MD_WEB` declares each package itself (precedent: `@noodlestan/purrfiles-entities`). Where the package is already published, use an exact npm version instead of a link; `file:` is reserved for packages that do not exist on npm yet, and every remaining link is on the path to being retired.
+- **Declare every dependency directly; prefer npm pins over `file:` links** — cross-repo `file:` links do not resolve transitive workspace deps, so `$ART_MD_WEB` declares each package itself (precedent: `@noodlestan/purrfiles-entities`). Where the package is already published, use an exact npm version instead of a link; `file:` is reserved for packages that do not exist on npm yet. _Replacement recorded by `retire-file-links`: the exception is retired — all eight dependencies are now exact npm pins (`astro-components` `0.0.1`, `jsdoc-renderer` `0.0.2`, `lang-ts` `0.0.12`, `code-renderer` `0.0.11`, `purrfiles-entities` `0.0.1`, `@purrception/lang-ts` `0.1.1`, `shiki` `4.5.0`, `marked` `18.1.2`) and the workspace `file:` sweep is zero._
 - **Descriptions render as markdown** — the reference app renders them as plain text; Astro renders markdown so resolver-produced links become real anchors.
 
 ### Follow Ups

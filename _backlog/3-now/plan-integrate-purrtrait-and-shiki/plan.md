@@ -386,6 +386,7 @@ Replace the `file:../../../art-md/libs/purrfiles-entities` entry in `$ART_MD_WEB
 - Pin `@noodlestan/purrfiles-entities` in `apps/art-md-web/package.json`.
 - Workspace-wide `file:` sweep reporting zero, from a clean install.
 - Drop the `file:` exception decisions in this plan and in Plan: Art MD Docs.
+- Extend `apps/art-md-web/astro.config.mjs` `vite.ssr.noExternal` with `@noodlestan/purrfiles-entities` and mirror it onto the `astro` and `prerender` environments: the physical npm install externalizes the raw-TS chain and Node refuses to type-strip `.ts` under `node_modules` (worker BLOCKER; fixed outside the worker's scope in `de9c6ed`, build verified green).
 
 **Dependencies:**
 
@@ -394,9 +395,9 @@ Replace the `file:../../../art-md/libs/purrfiles-entities` entry in `$ART_MD_WEB
 
 #### Commits:
 
-| ID                  | Repository / Checkout / Branch    | Policy   | Hash  | Status     |
-| ------------------- | --------------------------------- | -------- | ----- | ---------- |
-| `retire-file-links` | Artificials / `$PROJECT` / `main` | `NOPUSH` | (TBD) | `AUTHORED` |
+| ID                  | Repository / Checkout / Branch    | Policy   | Hash      | Status      |
+| ------------------- | --------------------------------- | -------- | --------- | ----------- |
+| `retire-file-links` | Artificials / `$PROJECT` / `main` | `NOPUSH` | `841336f` | `COMMITTED` |
 
 ##### Commit: `retire-file-links`
 

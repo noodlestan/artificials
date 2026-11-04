@@ -94,17 +94,17 @@ Executed from `$WORKSPACE/`. Website work happens in `$PROJECT` on branch `main`
 
 ## Items:
 
-| Iteration / Instructions                                                           | Status    |
-| ---------------------------------------------------------------------------------- | --------- |
-| Iteration: Integrate Code Rendering `./instructions/integrate-code-rendering.md`   | `DONE`    |
-| Iteration: Add Descriptions and Tags `./instructions/add-descriptions-and-tags.md` | `DONE`    |
-| Iteration: Resolve Symbol Links                                                    | `DONE`    |
-| Iteration: Publish Purrtrait Renderers                                             | `DONE`    |
-| Iteration: Consume Purrtrait Releases                                              | `DONE`    |
-| Iteration: Publish Purrfiles Packages                                              | `WORKING` |
-| Iteration: Retire File Links                                                       | `READY`   |
-| Iteration: Move Purrfiles Packages                                                 | `READY`   |
-| Iteration: Update Knowledge and Plans                                              | `READY`   |
+| Iteration / Instructions                                                           | Status  |
+| ---------------------------------------------------------------------------------- | ------- |
+| Iteration: Integrate Code Rendering `./instructions/integrate-code-rendering.md`   | `DONE`  |
+| Iteration: Add Descriptions and Tags `./instructions/add-descriptions-and-tags.md` | `DONE`  |
+| Iteration: Resolve Symbol Links                                                    | `DONE`  |
+| Iteration: Publish Purrtrait Renderers                                             | `DONE`  |
+| Iteration: Consume Purrtrait Releases                                              | `DONE`  |
+| Iteration: Publish Purrfiles Packages                                              | `DONE`  |
+| Iteration: Retire File Links                                                       | `READY` |
+| Iteration: Move Purrfiles Packages                                                 | `READY` |
+| Iteration: Update Knowledge and Plans                                              | `READY` |
 
 ### Iteration: Integrate Code Rendering
 
@@ -319,7 +319,7 @@ build(art-md-web): Pin the purrtrait renderer releases.
 
 **Id:** `publish-purrfiles-packages`
 
-**Status:** `WORKING`
+**Status:** `DONE`
 
 **Purpose:** Publish the meta packages so the last cross-repo link can go.
 
@@ -363,7 +363,7 @@ release(purrfiles-entities): 0.0.1
 release(purrfiles-extract): 0.0.1
 ```
 
-> **Execution note:** both packages are first publishes (npm had neither), so the user decided to keep the manifest versions at `0.0.1` — the entities release commit carries the new `CHANGELOG.md` with no version change, and `cli/purrfiles-extract`'s existing `0.0.1` dependency pin stays valid. This iteration pauses at the user's `npm publish` gate between the two commits.
+> **Execution note:** both packages are first publishes (npm had neither), so the user decided to keep the manifest versions at `0.0.1` — the entities release commit carries the new `CHANGELOG.md` with no version change, and `cli/purrfiles-extract`'s existing `0.0.1` dependency pin stayed valid. The iteration paused at the user's `npm publish` gate between the two commits; both are now published and confirmed.
 
 ### Iteration: Retire File Links
 
@@ -490,7 +490,7 @@ plan(art-md-web): Record the purrtrait docs work and open follow-on plans.
 
 ### Next
 
-Both web iterations have self-contained instructions: `./instructions/integrate-code-rendering.md` and `./instructions/add-descriptions-and-tags.md`; the six operational iterations carry inline instructions. Plan: Add JSDoc Renderer Package and Plan: Astro Components are both `DONE`, so every `PLANNING` iteration is unblocked — delegate in order: ~~`integrate-code-rendering`~~ (`DONE`, `c6a7f8c`) → ~~`add-descriptions-and-tags`~~ (`DONE`, `563dee6`) → ~~`publish-purrtrait-renderers`~~ (`DONE`, user-executed, `546167c` + `7a51c97`) → ~~`consume-purrtrait-releases`~~ (`DONE`, `ee1e661`) → `publish-purrfiles-packages` (`WORKING`: both release commits landed — `cc2a0b3` entities, `2498f16` extract; entities published `0.0.1` and confirmed; **user gate now** — `npm publish cli/purrfiles-extract`, confirm with `npm view`) → `retire-file-links` → `move-purrfiles-packages` → `update-knowledge-and-plans`.
+Both web iterations have self-contained instructions: `./instructions/integrate-code-rendering.md` and `./instructions/add-descriptions-and-tags.md`; the six operational iterations carry inline instructions. Plan: Add JSDoc Renderer Package and Plan: Astro Components are both `DONE`, so every `PLANNING` iteration is unblocked — delegate in order: ~~`integrate-code-rendering`~~ (`DONE`, `c6a7f8c`) → ~~`add-descriptions-and-tags`~~ (`DONE`, `563dee6`) → ~~`publish-purrtrait-renderers`~~ (`DONE`, user-executed, `546167c` + `7a51c97`) → ~~`consume-purrtrait-releases`~~ (`DONE`, `ee1e661`) → ~~`publish-purrfiles-packages`~~ (`DONE`, `cc2a0b3` + `2498f16`, both `0.0.1` published) → `retire-file-links` → `move-purrfiles-packages` → `update-knowledge-and-plans`.
 
 ### Blockers
 
@@ -559,7 +559,7 @@ npm run lint # prettier check — MUST run AFTER build
 - `add-descriptions-and-tags` (`563dee6`) — new `src/lib/meta.ts` resolver glue (`createDocsResolveLink`); `EntitySummary`, `FunctionsSection`, `TypesSection` render descriptions, tags, param/returns entries, and member descriptions through `JsDocBlock.astro`; both pages wire `resolveLink`; all builds/lints and the pre-commit CI pass. `{@link …}` mechanism is wired (entity targets resolve to `/docs/api/...`), but the current data's 8 link targets are declared symbols, which never resolve as entities — they render as plain text pending symbol-level extraction. Report: `./instructions/add-descriptions-and-tags__report.md`.
 - `publish-purrtrait-renderers` (`546167c`, `7a51c97`) — released by the user directly, so no delegation and no worker report file; `@purrtrait/lang-ts@0.0.12` (manifest free of the `git+ssh` defect), `@purrtrait/astro-components@0.0.1`, and `@purrtrait/jsdoc-renderer@0.0.2` each confirmed with `npm view <package> version`.
 - `consume-purrtrait-releases` (`ee1e661`) — `@purrtrait/astro-components` `0.0.1` and `@purrtrait/lang-ts` `0.0.12` pinned exact in `apps/art-md-web/package.json`; `npm ls` resolves both from the registry with no link arrows, and the lockfile carries registry `resolved` + integrity for both — the only remaining `file:` link is `@noodlestan/purrfiles-entities` (plus the workspace self-link). `lint:fix`, `astro sync`, `build`, `lint`, and the pre-commit CI all pass. Inlined instructions, so the worker reported in chat — no report file.
-- `publish-purrfiles-packages` (`cc2a0b3`, `2498f16`, release commits done — stopped at the user's publish gate for the cli) — `libs/purrfiles-entities/CHANGELOG.md` and `cli/purrfiles-extract/CHANGELOG.md` created with `0.0.1` first-release entries and no version changes (user's decision: keep `0.0.1`, so extract's existing pin holds); both `$ART_MD` root `npm run ci` runs pass (12/12 tasks) and the pre-commit hook re-ran them. Entities is published and confirmed (`npm view` → `0.0.1`); `npm ls @noodlestan/purrfiles-entities` reports `@noodlestan/purrfiles-entities@0.0.1` (still printing the `-> ./libs/…` arrow — it stays a workspace member, so `npm view` is the registry check that matters). Nothing pushed, no report file (inlined instructions). Pending: `npm publish cli/purrfiles-extract`.
+- `publish-purrfiles-packages` (`cc2a0b3`, `2498f16`) — `libs/purrfiles-entities/CHANGELOG.md` and `cli/purrfiles-extract/CHANGELOG.md` created with `0.0.1` first-release entries and no version changes (user's decision: keep `0.0.1`, so extract's existing pin holds); both `$ART_MD` root `npm run ci` runs pass (12/12 tasks) and the pre-commit hook re-ran them. Both packages published and confirmed: `npm view` → `0.0.1` each; `npm ls @noodlestan/purrfiles-entities` inside `$ART_MD` reports `@noodlestan/purrfiles-entities@0.0.1` (it still prints the `-> ./libs/…` arrow — it stays a workspace member, so `npm view` is the registry check that matters). Nothing pushed, no report file (inlined instructions).
 
 ### Decisions
 

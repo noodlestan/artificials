@@ -27,3 +27,21 @@
 - agent-workflows
 - delegation
 - agent-instructions
+
+**Dependencies:**
+
+- Runtime:
+  - `@art-md/codec` @ `0.0.3` — Codec demo.
+  - `@astrojs/mdx` @ `8.1.1` — MDX pages.
+  - `@astrojs/solid-js` @ `7.1.1` — SolidJS integration for the interactive demos.
+  - `@noodlestan/astro-components` @ `0.1.2` — Shared site chrome (`SiteFooter`, `SiteLinks`, global styles).
+  - `@noodlestan/purrfiles-entities` @ `0.0.1` — Entity types, meta service, canonical `getEntityTypes` / `getEntityFunctions`.
+  - `@purrception/lang-ts` @ `0.1.1` — Declaration and JSDoc node types (raw TypeScript, `noExternal`).
+  - `@purrtrait/astro-components` @ `0.0.1` — `CodeBlock.astro` and `JsDocBlock.astro` docs renderers.
+  - `@purrtrait/code-renderer` @ `0.0.11` — Declaration serialization behind `CodeBlock.astro`.
+  - `@purrtrait/jsdoc-renderer` @ `0.0.2` — JSDoc descriptions, tags, params, and returns.
+  - `@purrtrait/lang-ts` @ `0.0.12` — TypeScript layout and language id for the renderers.
+  - `astro` @ `7.4.2` — Website framework.
+  - `marked` @ `18.1.2` — Descriptions render as markdown.
+  - `shiki` @ `4.5.0` — Build-time syntax highlighting.
+  - `solid-js` @ `1.9.17` — Interactive demos.

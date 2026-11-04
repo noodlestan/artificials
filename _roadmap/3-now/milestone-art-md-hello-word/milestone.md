@@ -228,8 +228,12 @@ Execution is coordinated from `$WORKSPACE`. The implementation target is `$PROJE
 | 4     | Plan: Art MD Docs `$PROJECT/_backlog/1-done/plan-art-md-docs/plan.md`                                    | `DONE`  |
 | 4     | Plan: Add JSDoc Renderer Package `$PURRTRAIT/_backlog/1-done/plan-add-jsdoc-renderer-package/plan.md`    | `DONE`  |
 | 4     | Plan: Astro Components `$PURRTRAIT/_backlog/1-done/plan-astro-components/plan.md`                        | `DONE`  |
-| 4     | Plan: Integrate Purrtrait and Shiki `$PROJECT/_backlog/3-now/plan-integrate-purrtrait-and-shiki/plan.md` | `READY` |
+| 4     | Plan: Integrate Purrtrait and Shiki `$PROJECT/_backlog/3-now/plan-integrate-purrtrait-and-shiki/plan.md` | `DONE`  |
 | 4     | Plan: Componentize Docs `$PROJECT/_backlog/4-next/plan-componentize-docs/plan.md`                        | `DRAFT` |
+| 4     | Plan: Docs Search `$PROJECT/_backlog/4-next/plan-docs-search/plan.md`                                    | `DRAFT` |
+| 4     | Plan: Docs Sidebar `$PROJECT/_backlog/4-next/plan-docs-sidebar/plan.md`                                  | `DRAFT` |
+| 4     | Plan: In-Code Symbol Links `$PROJECT/_backlog/4-next/plan-in-code-symbol-links/plan.md`                  | `DRAFT` |
+| 4     | Plan: Non-Module Entities `$PROJECT/_backlog/4-next/plan-non-module-entities/plan.md`                    | `DRAFT` |
 
 The following items are not yet captured in a work item document.
 
@@ -287,7 +291,7 @@ The following items are not yet captured in a work item document.
 
 ### Next
 
-All Phase 2 plans DONE. Plan: Art MD Docs DONE (integrated as `00c5b97` in `$PROJECT`, not pushed). Plan: Add JSDoc Renderer Package DONE (integrated as `097ea8b` in `$PURRTRAIT`, not pushed; `@purrtrait/jsdoc-renderer@0.0.2` and `@purrtrait/solid-code@0.0.13` published; no-comply migrated as `878cd46`, not pushed). Plan: Astro Components DONE (integrated as `8d4a6bc` in `$PURRTRAIT`, not pushed; `@purrtrait/astro-components` 0.0.1 with `CodeBlock.astro` and `JsDocBlock.astro`, unpublished). Phase 4 continues with the remaining planned successors: integrate both packages into the Art MD Website — eliminating `apps/art-md-web/src/lib/signature.ts` — plus the draft Plan: Componentize Docs to DRY docs rendering across Noodlestan Astro sites.
+All Phase 2 plans DONE. Plan: Art MD Docs DONE (integrated as `00c5b97` in `$PROJECT`, not pushed). Plan: Add JSDoc Renderer Package DONE (integrated as `097ea8b` in `$PURRTRAIT`, not pushed; `@purrtrait/jsdoc-renderer@0.0.2` and `@purrtrait/solid-code@0.0.13` published; no-comply migrated as `878cd46`, not pushed). Plan: Astro Components DONE (integrated as `8d4a6bc` in `$PURRTRAIT`, not pushed; `@purrtrait/astro-components` 0.0.1 published with `CodeBlock.astro` and `JsDocBlock.astro`). Plan: Integrate Purrtrait and Shiki DONE — the renderers and the purrfiles packages are published and pinned exact in `apps/art-md-web/package.json` (zero `file:` links workspace-wide), `apps/art-md-web/src/lib/signature.ts` is deleted, and the docs render highlighted declarations plus JSDoc descriptions and tags at module, function, and type granularity. Phase 4 continues with the draft successors: Plan: Componentize Docs to DRY docs rendering across Noodlestan Astro sites, plus the follow-ons opened with this plan — Plan: Docs Search, Plan: Docs Sidebar, Plan: In-Code Symbol Links, and Plan: Non-Module Entities.
 
 ### Blockers
 

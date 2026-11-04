@@ -12,13 +12,56 @@ Agents SHOULD scan these files for definitions and resource locations when faced
 ## Package Layout
 
 ```
+astro.config.mjs      — Astro config; `NO_EXTERNAL` for the raw-TypeScript docs chain.
 public/               — Public assets
+scripts/              — `sync-meta.mjs` — copies `$ART_MD/libs/parser/dist/meta.json` into `src/data/`.
 src/
 - assets/             — Importable assets.
 - components/
+  - docs/             — Docs sections: `DocsBreadcrumbs`, `EntitiesSection`, `EntitySummary`, `FunctionsSection`, `TypesSection`.
+  - demos/, pages/, site/
+- content.config.ts   — Collection fed by `src/data/meta.json`.
+- data/               — `meta.json` — synced extraction output (gitignored).
+- lib/                — `routes.ts` route helpers; `meta.ts` `{@link …}` resolver.
 - layouts/
 - pages/
+- styles/             — Purrtrait consumer styles (`.shiki` mapping, `.code-block`, `.jsdoc-*`, `.tags`).
 ```
+
+## Documentation Rendering
+
+The API reference under `/docs/api` (`DOCS_ROOT` in `src/lib/routes.ts`) renders through the
+Purrtrait stack. Every dependency below is an exact npm pin — no `file:` links remain in
+`package.json`:
+
+| Dependency                       | Version  | Role                                                                                          |
+| -------------------------------- | -------- | --------------------------------------------------------------------------------------------- |
+| `@purrtrait/astro-components`    | `0.0.1`  | `CodeBlock.astro` (highlighted declaration code) and `JsDocBlock.astro` (descriptions).       |
+| `@purrtrait/code-renderer`       | `0.0.11` | Declaration serialization behind `CodeBlock.astro`.                                           |
+| `@purrtrait/jsdoc-renderer`      | `0.0.2`  | JSDoc descriptions, tags, params, and returns behind `JsDocBlock.astro`.                      |
+| `@purrtrait/lang-ts`             | `0.0.12` | TypeScript layout and language id for the renderers.                                          |
+| `@noodlestan/purrfiles-entities` | `0.0.1`  | Entity types, `createMetaService`, and the canonical `getEntityTypes` / `getEntityFunctions`. |
+| `@purrception/lang-ts`           | `0.1.1`  | Declaration and JSDoc node types (raw TypeScript).                                            |
+| `shiki`                          | `4.5.0`  | Build-time syntax highlighting.                                                               |
+| `marked`                         | `18.1.2` | Descriptions render as markdown.                                                              |
+
+- `EntitySummary.astro`, `FunctionsSection.astro`, and `TypesSection.astro` import
+  `@purrtrait/astro-components/components/CodeBlock.astro` and `.../JsDocBlock.astro`
+  directly; JSDoc rendering is never reimplemented locally.
+- `src/lib/signature.ts` is deleted — there is no local signature helper. Typed symbol
+  access uses `getEntityTypes` / `getEntityFunctions` from `@noodlestan/purrfiles-entities`.
+- `src/lib/meta.ts` exports `createDocsResolveLink`, which wires
+  `createMetaService(...).resolveLink` so `{@link …}` targets become `/docs/api/...` anchors.
+  Targets naming declared symbols render as plain text until symbol-level entities exist.
+- **`astro.config.mjs` `noExternal` rule:** the packages above ship raw TypeScript with
+  bundler-style imports, which the Node ESM loader rejects under `node_modules`.
+  `NO_EXTERNAL = [/^@purrtrait\//, '@noodlestan/purrfiles-entities', '@purrception/lang-ts']`
+  is therefore applied in `vite.ssr.noExternal`, `vite.environments.astro.resolve.noExternal`,
+  and `vite.environments.prerender.resolve.noExternal` — `astro sync` runs in `astro` and
+  static route generation runs in `prerender`; neither inherits the top-level `ssr` block.
+  Any new raw-TS dependency must be added to `NO_EXTERNAL`, not per-environment.
+- Only `module` entities render; `components` and `props` entities, in-code symbol links,
+  docs search, and the docs sidebar are follow-on plans in `$PROJECT/_backlog/4-next/`.
 
 ## Records Management
 

@@ -139,7 +139,7 @@ Executed from `$WORKSPACE/`. Website work happens in `$PROJECT` on branch `main`
 
 | ID                         | Repository / Checkout / Branch    | Policy   | Hash      | Status      |
 | -------------------------- | --------------------------------- | -------- | --------- | ----------- |
-| `integrate-code-rendering` | Artificials / `$PROJECT` / `main` | `NOPUSH` | `9404085` | `COMMITTED` |
+| `integrate-code-rendering` | Artificials / `$PROJECT` / `main` | `NOPUSH` | `c6a7f8c` | `COMMITTED` |
 
 ##### Commit: `integrate-code-rendering`
 
@@ -181,7 +181,7 @@ build(art-md-web): Integrate purrtrait code renderer and shiki.
 
 | ID                          | Repository / Checkout / Branch    | Policy   | Hash      | Status      |
 | --------------------------- | --------------------------------- | -------- | --------- | ----------- |
-| `add-descriptions-and-tags` | Artificials / `$PROJECT` / `main` | `NOPUSH` | `2908387` | `COMMITTED` |
+| `add-descriptions-and-tags` | Artificials / `$PROJECT` / `main` | `NOPUSH` | `563dee6` | `COMMITTED` |
 
 ##### Commit: `add-descriptions-and-tags`
 
@@ -221,8 +221,8 @@ From `$ART_MD`: re-authored seven `{@link}` targets across `libs/parser/src` as 
 
 | ID                     | Repository / Checkout / Branch    | Policy   | Hash      | Status      |
 | ---------------------- | --------------------------------- | -------- | --------- | ----------- |
-| `resolve-symbol-links` | Art MD / `$ART_MD` / `main`       | `NOPUSH` | `9feb113` | `COMMITTED` |
-| `resolve-symbol-links` | Artificials / `$PROJECT` / `main` | `NOPUSH` | `58105ca` | `COMMITTED` |
+| `resolve-symbol-links` | Art MD / `$ART_MD` / `main`       | `NOPUSH` | `9b065e3` | `COMMITTED` |
+| `resolve-symbol-links` | Artificials / `$PROJECT` / `main` | `NOPUSH` | `e40b703` | `COMMITTED` |
 
 ### Iteration: Publish Purrtrait Renderers
 
@@ -305,7 +305,7 @@ In `$ART_MD_WEB/package.json`, replace the two remaining renderer `file:` entrie
 
 | ID                           | Repository / Checkout / Branch    | Policy   | Hash      | Status      |
 | ---------------------------- | --------------------------------- | -------- | --------- | ----------- |
-| `consume-purrtrait-releases` | Artificials / `$PROJECT` / `main` | `NOPUSH` | `472c20c` | `COMMITTED` |
+| `consume-purrtrait-releases` | Artificials / `$PROJECT` / `main` | `NOPUSH` | `ee1e661` | `COMMITTED` |
 
 ##### Commit: `consume-purrtrait-releases`
 
@@ -490,7 +490,7 @@ plan(art-md-web): Record the purrtrait docs work and open follow-on plans.
 
 ### Next
 
-Both web iterations have self-contained instructions: `./instructions/integrate-code-rendering.md` and `./instructions/add-descriptions-and-tags.md`; the six operational iterations carry inline instructions. Plan: Add JSDoc Renderer Package and Plan: Astro Components are both `DONE`, so every `PLANNING` iteration is unblocked — delegate in order: ~~`integrate-code-rendering`~~ (`DONE`, `9404085`) → ~~`add-descriptions-and-tags`~~ (`DONE`, `2908387`) → ~~`publish-purrtrait-renderers`~~ (`DONE`, user-executed, `546167c` + `7a51c97`) → ~~`consume-purrtrait-releases`~~ (`DONE`, `472c20c`) → `publish-purrfiles-packages` (`WORKING`: both release commits landed — `cc2a0b3` entities, `2498f16` extract; entities published `0.0.1` and confirmed; **user gate now** — `npm publish cli/purrfiles-extract`, confirm with `npm view`) → `retire-file-links` → `move-purrfiles-packages` → `update-knowledge-and-plans`.
+Both web iterations have self-contained instructions: `./instructions/integrate-code-rendering.md` and `./instructions/add-descriptions-and-tags.md`; the six operational iterations carry inline instructions. Plan: Add JSDoc Renderer Package and Plan: Astro Components are both `DONE`, so every `PLANNING` iteration is unblocked — delegate in order: ~~`integrate-code-rendering`~~ (`DONE`, `c6a7f8c`) → ~~`add-descriptions-and-tags`~~ (`DONE`, `563dee6`) → ~~`publish-purrtrait-renderers`~~ (`DONE`, user-executed, `546167c` + `7a51c97`) → ~~`consume-purrtrait-releases`~~ (`DONE`, `ee1e661`) → `publish-purrfiles-packages` (`WORKING`: both release commits landed — `cc2a0b3` entities, `2498f16` extract; entities published `0.0.1` and confirmed; **user gate now** — `npm publish cli/purrfiles-extract`, confirm with `npm view`) → `retire-file-links` → `move-purrfiles-packages` → `update-knowledge-and-plans`.
 
 ### Blockers
 
@@ -555,10 +555,10 @@ npm run lint # prettier check — MUST run AFTER build
 
 ### Evidence
 
-- `integrate-code-rendering` (`9404085`) — `src/lib/signature.ts` deleted with no remaining references; `FunctionsSection.astro` and `TypesSection.astro` render `CodeBlock.astro` with full declaration wrappers; seven dependencies pinned; `lint:fix`, `astro sync`, `build`, `lint`, and the root pre-commit CI all pass; built module pages contain `pre.shiki` highlighted markup. Report: `./instructions/integrate-code-rendering__report.md`.
-- `add-descriptions-and-tags` (`2908387`) — new `src/lib/meta.ts` resolver glue (`createDocsResolveLink`); `EntitySummary`, `FunctionsSection`, `TypesSection` render descriptions, tags, param/returns entries, and member descriptions through `JsDocBlock.astro`; both pages wire `resolveLink`; all builds/lints and the pre-commit CI pass. `{@link …}` mechanism is wired (entity targets resolve to `/docs/api/...`), but the current data's 8 link targets are declared symbols, which never resolve as entities — they render as plain text pending symbol-level extraction. Report: `./instructions/add-descriptions-and-tags__report.md`.
+- `integrate-code-rendering` (`c6a7f8c`) — `src/lib/signature.ts` deleted with no remaining references; `FunctionsSection.astro` and `TypesSection.astro` render `CodeBlock.astro` with full declaration wrappers; seven dependencies pinned; `lint:fix`, `astro sync`, `build`, `lint`, and the root pre-commit CI all pass; built module pages contain `pre.shiki` highlighted markup. Report: `./instructions/integrate-code-rendering__report.md`.
+- `add-descriptions-and-tags` (`563dee6`) — new `src/lib/meta.ts` resolver glue (`createDocsResolveLink`); `EntitySummary`, `FunctionsSection`, `TypesSection` render descriptions, tags, param/returns entries, and member descriptions through `JsDocBlock.astro`; both pages wire `resolveLink`; all builds/lints and the pre-commit CI pass. `{@link …}` mechanism is wired (entity targets resolve to `/docs/api/...`), but the current data's 8 link targets are declared symbols, which never resolve as entities — they render as plain text pending symbol-level extraction. Report: `./instructions/add-descriptions-and-tags__report.md`.
 - `publish-purrtrait-renderers` (`546167c`, `7a51c97`) — released by the user directly, so no delegation and no worker report file; `@purrtrait/lang-ts@0.0.12` (manifest free of the `git+ssh` defect), `@purrtrait/astro-components@0.0.1`, and `@purrtrait/jsdoc-renderer@0.0.2` each confirmed with `npm view <package> version`.
-- `consume-purrtrait-releases` (`472c20c`) — `@purrtrait/astro-components` `0.0.1` and `@purrtrait/lang-ts` `0.0.12` pinned exact in `apps/art-md-web/package.json`; `npm ls` resolves both from the registry with no link arrows, and the lockfile carries registry `resolved` + integrity for both — the only remaining `file:` link is `@noodlestan/purrfiles-entities` (plus the workspace self-link). `lint:fix`, `astro sync`, `build`, `lint`, and the pre-commit CI all pass. Inlined instructions, so the worker reported in chat — no report file.
+- `consume-purrtrait-releases` (`ee1e661`) — `@purrtrait/astro-components` `0.0.1` and `@purrtrait/lang-ts` `0.0.12` pinned exact in `apps/art-md-web/package.json`; `npm ls` resolves both from the registry with no link arrows, and the lockfile carries registry `resolved` + integrity for both — the only remaining `file:` link is `@noodlestan/purrfiles-entities` (plus the workspace self-link). `lint:fix`, `astro sync`, `build`, `lint`, and the pre-commit CI all pass. Inlined instructions, so the worker reported in chat — no report file.
 - `publish-purrfiles-packages` (`cc2a0b3`, `2498f16`, release commits done — stopped at the user's publish gate for the cli) — `libs/purrfiles-entities/CHANGELOG.md` and `cli/purrfiles-extract/CHANGELOG.md` created with `0.0.1` first-release entries and no version changes (user's decision: keep `0.0.1`, so extract's existing pin holds); both `$ART_MD` root `npm run ci` runs pass (12/12 tasks) and the pre-commit hook re-ran them. Entities is published and confirmed (`npm view` → `0.0.1`); `npm ls @noodlestan/purrfiles-entities` reports `@noodlestan/purrfiles-entities@0.0.1` (still printing the `-> ./libs/…` arrow — it stays a workspace member, so `npm view` is the registry check that matters). Nothing pushed, no report file (inlined instructions). Pending: `npm publish cli/purrfiles-extract`.
 
 ### Decisions
@@ -587,3 +587,4 @@ npm run lint # prettier check — MUST run AFTER build
 - Verify `{@link …}` as "mechanism resolves entity targets" rather than "all rendered as anchors" until symbol-level entities exist.
 - `npm ci` from `$PROJECT` exits 0 even when the manifest and lockfile disagree, silently reinstalling the stale `file:` links, and `npm install` alone keeps them because the local checkout versions satisfy the new specs. Registry resolution required removing the stale symlinks and an explicit `npm install @purrtrait/astro-components@0.0.1 @purrtrait/lang-ts@0.0.12 -w apps/art-md-web --save-exact`; `retire-file-links` should expect the same pattern for `purrfiles-entities`.
 - My `npm publish libs/purrfiles-entities --dry-run` failed on `git ls-remote ssh://git@github.com/libs/purrfiles-entities.git` (`Repository not found`) — a bogus URL no manifest or lockfile declares (`grep` for `git+|github:|ssh://` finds nothing, `npm whoami` was fine) — yet the user's real publish later succeeded with no manifest change. Unexplained; if it recurs on `cli/purrfiles-extract` or the moved packages, capture the npm debug log before changing anything.
+- Rebase pulls keep rewriting commit hashes: every tracked hash was rebound to its identical-patch counterpart now on `main` (`9404085`→`c6a7f8c`, `2908387`→`563dee6`, `58105ca`→`e40b703`, `9feb113`→`9b065e3`, `472c20c`→`ee1e661`); `purrtrait` and the two `0.0.1` release commits in `$ART_MD` were untouched. Re-verify hashes against `git log` after any pull before citing them.

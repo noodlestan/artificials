@@ -64,7 +64,7 @@ The website work in `$PROJECT` ships the rendering. Getting there and then off t
 
 **Changes:**
 
-- Add the dependencies below to `$ART_MD_WEB/package.json`, exact-pinned per `_ops/packages/policy.md`. Pin from npm wherever the package is published; keep a `file:` link only where it is not yet published, and declare each linked package directly because cross-repo `file:` links do not resolve transitive workspace deps:
+- Add the dependencies below to `$ART_MD_WEB/package.json`, exact-pinned per `$WORKSPACE/checkouts/ops/knowledge/design/manifest-policy.md`. Pin from npm wherever the package is published; keep a `file:` link only where it is not yet published, and declare each linked package directly because cross-repo `file:` links do not resolve transitive workspace deps:
 
   | Dependency                    | Version                                         | Why                                                                                                                              |
   | ----------------------------- | ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |

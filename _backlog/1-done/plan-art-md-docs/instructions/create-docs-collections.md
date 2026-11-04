@@ -61,7 +61,7 @@ The `entities` collection holds one entry per extracted entity, identified as `{
 - `$META` — extracted metadata; run `npm run extract` from `$ART_MD` first if the file is missing or stale.
 - `$ARTIFICIALS/node_modules/astro/dist/content/config.d.ts` — `defineCollection` and the accepted loader forms.
 - `$ARTIFICIALS/node_modules/astro/dist/content/loaders/types.d.ts` — `Loader` contract.
-- `$WORKSPACE/checkouts/management/_ops/packages/policy.md` — dependency pinning model; read the exception notice in Step 1.
+- `$WORKSPACE/checkouts/ops/knowledge/design/manifest-policy.md` — dependency pinning model; read the exception notice in Step 1.
 - `$ARTIFICIALS/node_modules/@noodlestan/conventions-typescript/art/index.md` — TypeScript conventions.
 
 - RULE: You MUST follow any links under `## Mandatory Reading` sections found in the listed files.
@@ -134,7 +134,7 @@ Wire the synced metadata into the Astro content layer and expose route helpers f
 
 ### Step `1 / 6` — Add the `@noodlestan/purrfiles-entities` dependency
 
-The app runs from a different repository than `$ENTITIES`, so npm workspaces cannot resolve it by name. Link the package from its checkout. This is an explicit, temporary exception to the exact-version rule in `_ops/packages/policy.md`; both purrfiles packages move to the `noodlestan/purrfiles` repository later.
+The app runs from a different repository than `$ENTITIES`, so npm workspaces cannot resolve it by name. Link the package from its checkout. This is an explicit, temporary exception to the exact-version rule in `$WORKSPACE/checkouts/ops/knowledge/design/manifest-policy.md`; both purrfiles packages move to the `noodlestan/purrfiles` repository later.
 
 In `$ART_MD_WEB/package.json`, add to `dependencies`, keeping keys sorted:
 

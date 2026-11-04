@@ -2,7 +2,7 @@
 
 **ID:** `integrate-purrtrait-and-shiki`
 
-**Status:** `WORKING`
+**Status:** `DONE`
 
 **Template:** `$DOMAINS/plans/templates/plan.tart`
 
@@ -94,17 +94,17 @@ Executed from `$WORKSPACE/`. Website work happens in `$PROJECT` on branch `main`
 
 ## Items:
 
-| Iteration / Instructions                                                           | Status  |
-| ---------------------------------------------------------------------------------- | ------- |
-| Iteration: Integrate Code Rendering `./instructions/integrate-code-rendering.md`   | `DONE`  |
-| Iteration: Add Descriptions and Tags `./instructions/add-descriptions-and-tags.md` | `DONE`  |
-| Iteration: Resolve Symbol Links                                                    | `DONE`  |
-| Iteration: Publish Purrtrait Renderers                                             | `DONE`  |
-| Iteration: Consume Purrtrait Releases                                              | `DONE`  |
-| Iteration: Publish Purrfiles Packages                                              | `DONE`  |
-| Iteration: Retire File Links                                                       | `DONE`  |
-| Iteration: Move Purrfiles Packages                                                 | `DONE`  |
-| Iteration: Update Knowledge and Plans                                              | `READY` |
+| Iteration / Instructions                                                           | Status |
+| ---------------------------------------------------------------------------------- | ------ |
+| Iteration: Integrate Code Rendering `./instructions/integrate-code-rendering.md`   | `DONE` |
+| Iteration: Add Descriptions and Tags `./instructions/add-descriptions-and-tags.md` | `DONE` |
+| Iteration: Resolve Symbol Links                                                    | `DONE` |
+| Iteration: Publish Purrtrait Renderers                                             | `DONE` |
+| Iteration: Consume Purrtrait Releases                                              | `DONE` |
+| Iteration: Publish Purrfiles Packages                                              | `DONE` |
+| Iteration: Retire File Links                                                       | `DONE` |
+| Iteration: Move Purrfiles Packages                                                 | `DONE` |
+| Iteration: Update Knowledge and Plans                                              | `DONE` |
 
 ### Iteration: Integrate Code Rendering
 
@@ -471,7 +471,7 @@ records(purrfiles): Add the purrfiles repository record.
 
 **Id:** `update-knowledge-and-plans`
 
-**Status:** `READY`
+**Status:** `DONE`
 
 **Purpose:** Record what changed and queue what comes next.
 
@@ -495,9 +495,10 @@ Update `$ART_MD_WEB/_guide.md` and the affected `_records/` for the new renderin
 
 #### Commits:
 
-| ID                           | Repository / Checkout / Branch    | Policy   | Hash  | Status     |
-| ---------------------------- | --------------------------------- | -------- | ----- | ---------- |
-| `update-knowledge-and-plans` | Artificials / `$PROJECT` / `main` | `NOPUSH` | (TBD) | `AUTHORED` |
+| ID                                   | Repository / Checkout / Branch    | Policy   | Hash      | Status      |
+| ------------------------------------ | --------------------------------- | -------- | --------- | ----------- |
+| `update-knowledge-and-plans`         | Artificials / `$PROJECT` / `main` | `NOPUSH` | `576e694` | `COMMITTED` |
+| `update-knowledge-and-plans-records` | Purrfiles / `$PURRFILES` / `main` | `NOPUSH` | `ae5ed53` | `COMMITTED` |
 
 ##### Commit: `update-knowledge-and-plans`
 
@@ -507,11 +508,19 @@ Update `$ART_MD_WEB/_guide.md` and the affected `_records/` for the new renderin
 plan(art-md-web): Record the purrtrait docs work and open follow-on plans.
 ```
 
+##### Commit: `update-knowledge-and-plans-records`
+
+**Message:**
+
+```text
+records(purrfiles): Repoint package records to their new home.
+```
+
 ## Work
 
 ### Next
 
-Both web iterations have self-contained instructions: `./instructions/integrate-code-rendering.md` and `./instructions/add-descriptions-and-tags.md`; the six operational iterations carry inline instructions. Plan: Add JSDoc Renderer Package and Plan: Astro Components are both `DONE`, so every `PLANNING` iteration is unblocked — delegate in order: ~~`integrate-code-rendering`~~ (`DONE`, `c6a7f8c`) → ~~`add-descriptions-and-tags`~~ (`DONE`, `563dee6`) → ~~`publish-purrtrait-renderers`~~ (`DONE`, user-executed, `546167c` + `7a51c97`) → ~~`consume-purrtrait-releases`~~ (`DONE`, `ee1e661`) → ~~`publish-purrfiles-packages`~~ (`DONE`, `cc2a0b3` + `2498f16`, both `0.0.1` published) → ~~`retire-file-links`~~ (`DONE`, `841336f` + `de9c6ed`, `file:` sweep = 0) → ~~`move-purrfiles-packages`~~ (`DONE`, `22b4c9d` + `af97cc0` + `17ca8eb`) → `update-knowledge-and-plans`.
+Both web iterations have self-contained instructions: `./instructions/integrate-code-rendering.md` and `./instructions/add-descriptions-and-tags.md`; the six operational iterations carry inline instructions. **All nine iterations are `DONE`** — plan complete, ready for the milestone reflection: ~~`integrate-code-rendering`~~ (`c6a7f8c`) → ~~`add-descriptions-and-tags`~~ (`563dee6`) → ~~`resolve-symbol-links`~~ (`9b065e3` + `e40b703`) → ~~`publish-purrtrait-renderers`~~ (user-executed, `546167c` + `7a51c97`) → ~~`consume-purrtrait-releases`~~ (`ee1e661`) → ~~`publish-purrfiles-packages`~~ (`cc2a0b3` + `2498f16`, both `0.0.1` published) → ~~`retire-file-links`~~ (`841336f` + `de9c6ed`, `file:` sweep = 0) → ~~`move-purrfiles-packages`~~ (`22b4c9d` + `af97cc0` + `17ca8eb`) → ~~`update-knowledge-and-plans`~~ (`576e694` + `ae5ed53`).
 
 ### Blockers
 
@@ -583,6 +592,7 @@ npm run lint # prettier check — MUST run AFTER build
 - `publish-purrfiles-packages` (`cc2a0b3`, `2498f16`) — `libs/purrfiles-entities/CHANGELOG.md` and `cli/purrfiles-extract/CHANGELOG.md` created with `0.0.1` first-release entries and no version changes (user's decision: keep `0.0.1`, so extract's existing pin holds); both `$ART_MD` root `npm run ci` runs pass (12/12 tasks) and the pre-commit hook re-ran them. Both packages published and confirmed: `npm view` → `0.0.1` each; `npm ls @noodlestan/purrfiles-entities` inside `$ART_MD` reports `@noodlestan/purrfiles-entities@0.0.1` (it still prints the `-> ./libs/…` arrow — it stays a workspace member, so `npm view` is the registry check that matters). Nothing pushed, no report file (inlined instructions).
 - `retire-file-links` (`841336f`, `de9c6ed`) — `@noodlestan/purrfiles-entities` pinned exact `0.0.1`, lockfile registry-resolved, `npm ls` shows no link arrows, and the workspace-wide sweep reports **0** `file:` entries across 82 manifests. The physical install externalized the raw-TS chain and broke `astro sync` / `build` (worker BLOCKER); `de9c6ed` forces `@noodlestan/purrfiles-entities` through Vite's `noExternal` in the `ssr`, `astro`, and `prerender` environments — build green (15 pages). Temporary-exception decisions dropped in this plan and in Plan: Art MD Docs. Report: `./instructions/retire-file-links__report.md`.
 - `move-purrfiles-packages` (`22b4c9d`, `af97cc0`, `17ca8eb`) — both packages moved to `$PURRFILES` with `_records/` and knowledge intact; workspace repository record committed; `$ART_MD` lockfile re-resolves `libs/parser`'s `@noodlestan/purrfiles-extract` from the registry (no link arrow). `npm pack` sha256 before/after the move is **byte-identical** for both tarballs — the published-content invariant held (only change: the extract test's `rootDir` re-point, test-only, not in the tarball). `npm run ci` green in `$ART_MD` (8/8) and `$PURRFILES` (2/2); `$PROJECT` + `$ART_MD_WEB` (sync, build 15 pages, lint) unaffected; `npm view` → `0.0.1` both. Inlined instructions — chat report, no report file.
+- `update-knowledge-and-plans` (`576e694`, `ae5ed53`) — `$ART_MD_WEB/_guide.md` now documents the delivered stack (8 exact pins, zero `file:` links, the `noExternal` raw-TS rule, deleted `src/lib/signature.ts`), each claim code-checked before writing; the package record gained all 14 runtime pins; milestone Phase 4 rows refreshed (this plan → `DONE`) and four follow-on drafts opened in `4-next/` (`plan-docs-search`, `plan-docs-sidebar`, `plan-in-code-symbol-links`, `plan-non-module-entities`, all `DRAFT`, no iterations yet); parking lot unchanged (nothing of this plan's was ever parked there); purrfiles package records repointed (`Owner: Project: Purrfiles`, `Published: true`, `Status: DEPLOYED`). Inlined instructions — chat report.
 
 ### Decisions
 
@@ -615,4 +625,7 @@ npm run lint # prettier check — MUST run AFTER build
 - Removing a workspace member does not clean up after itself: `npm install` (and `--package-lock-only`) left the stale lockfile keys and the dangling `node_modules/@noodlestan/purrfiles-*` symlinks behind (`npm ls` said `invalid`). Fix required removing the symlinks + `node_modules/.package-lock.json`, deleting the four lockfile keys by hand, then `npm install` to re-resolve from the registry — extends the stale-link pitfall already recorded for `retire-file-links`.
 - `@noodlestan/purrfiles-extract`'s test suite now reaches `$ART_MD/libs/parser/src` through a cross-checkout relative path, so a purrfiles-only clone fails that one test — see Follow Ups.
 - `$ART_MD/turbo.json`'s `extract` pipeline lost its two `pkg#build` `dependsOn` entries (the members are no longer in-workspace): art-md now consumes the registry-published dist, so purrfiles rebuilds are invisible to it until a republish.
+- "Move resolved items off the parking lot" was a no-op — this plan never parked anything there; future plans should name the concrete items or drop the step.
+- No `$PROJECT` record named the rendering stack and the package record had no `Dependencies:` field, so the worker added all 14 runtime pins from `package.json` rather than only the 8 rendering-stack ones (partial records drift fastest).
+- Pre-existing inconsistencies surfaced but left untouched (out of this iteration's scope): `plan-componentize-docs` and `plan-author-art-md-docs` still carry `READY`/blocker wording against this plan (now `DONE`); the milestone `Phases` table indexes Docs as `#3` while its section is `Phase: 4`; `$PURRTRAIT/libs/astro-components/_records/package.art` still says `Published: false` though `0.0.1` ships.
 - Rebase pulls keep rewriting commit hashes: every tracked hash was rebound to its identical-patch counterpart now on `main` (`9404085`→`c6a7f8c`, `2908387`→`563dee6`, `58105ca`→`e40b703`, `9feb113`→`9b065e3`, `472c20c`→`ee1e661`); `purrtrait` and the two `0.0.1` release commits in `$ART_MD` were untouched. Re-verify hashes against `git log` after any pull before citing them.

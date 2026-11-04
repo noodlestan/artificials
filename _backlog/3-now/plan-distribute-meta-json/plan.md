@@ -2,7 +2,7 @@
 
 **ID:** `distribute-meta-json`
 
-**Status:** `DRAFT`
+**Status:** `READY`
 
 **Template:** `$DOMAINS/plans/templates/plan.tart`
 
@@ -63,7 +63,7 @@ Two repositories: `$ART_MD` publishes, `$PROJECT` consumes. The registry adverti
 **Changes:**
 
 - Add a `prepack` script running `npm run extract` so the packed `dist/meta.json` is always regenerated from the sources being released — freshness by construction, not by habit.
-- Release `@art-md/parser@0.0.7` (user `npm publish` gate) carrying the re-authored `{@link}` targets integrated in `9feb113`.
+- Release `@art-md/parser@0.0.7` (user `npm publish` gate) carrying the re-authored `{@link}` targets integrated in `9b065e3`.
 
 **Dependencies:**
 
@@ -95,22 +95,24 @@ Executed from `$WORKSPACE/`. Package work happens in `$ART_MD` on branch `main`;
 
 ## Items:
 
-| Iteration / Instructions     | Status  |
-| ---------------------------- | ------- |
-| Iteration: Ship Fresh Meta   | `DRAFT` |
-| Iteration: Fetch Pinned Meta | `DRAFT` |
+| Iteration / Instructions                                           | Status  |
+| ------------------------------------------------------------------ | ------- |
+| Iteration: Ship Fresh Meta `./instructions/ship-fresh-meta.md`     | `READY` |
+| Iteration: Fetch Pinned Meta `./instructions/fetch-pinned-meta.md` | `READY` |
 
 ### Iteration: Ship Fresh Meta
 
 **Id:** `ship-fresh-meta`
 
-**Status:** `DRAFT`
+**Status:** `READY`
 
 **Purpose:** Make the published `meta.json` provably match the released sources.
 
 **Description:** `prepack` regenerates the meta at pack time, and the release carrying the re-authored `{@link}` targets goes out as `0.0.7`.
 
 **Instructions Mode:** `INSTRUCTIONS_SELF_CONTAINED_FILE`
+
+**Instructions:** `./instructions/ship-fresh-meta.md`
 
 **Changes:**
 
@@ -140,13 +142,15 @@ release(parser): Regenerate meta on prepack and release 0.0.7.
 
 **Id:** `fetch-pinned-meta`
 
-**Status:** `DRAFT`
+**Status:** `READY`
 
 **Purpose:** Download versioned meta from the npm endpoint and delete the workspace script.
 
 **Description:** `$ART_MD_WEB` gets a config-pinned, zero-dependency fetcher: pinned versions live in `meta-docs.config.mts`, the script downloads each `dist/meta.json` from the npm CDN endpoint, merges the entities, and never resolves a sibling checkout again — with no `@art-md/*` dependencies added to the docs project.
 
 **Instructions Mode:** `INSTRUCTIONS_SELF_CONTAINED_FILE`
+
+**Instructions:** `./instructions/fetch-pinned-meta.md`
 
 **Changes:**
 
@@ -177,11 +181,11 @@ build(art-md-web): Fetch pinned meta from the npm endpoint.
 
 ### Next
 
-Draft the two iterations above into instructions once the sequencing window is right: `ship-fresh-meta` (art-md repo) can run any time; `fetch-pinned-meta` touches only the app's scripts — no dependency or lockfile edits — so its overlap with Plan: Integrate Purrtrait and Shiki shrinks to the same `package.json` `scripts` block. The `npm publish` gate sits inside `ship-fresh-meta`.
+Both iterations are `READY` with self-contained instructions: `./instructions/ship-fresh-meta.md` and `./instructions/fetch-pinned-meta.md`. Execution order: `ship-fresh-meta` (art-md repo — runs any time, pauses at the user's `npm publish` for `0.0.7`), then `fetch-pinned-meta` (needs that release on the registry; touches only the app's scripts block — no dependency or lockfile edits, so its overlap with Plan: Integrate Purrtrait and Shiki is one `package.json` section). Delegate via the delegator.
 
 ### Blockers
 
-- `@art-md/parser` must publish `0.0.7` (iteration `ship-fresh-meta`) before `fetch-pinned-meta` runs — fetching `0.0.6` today would revert the docs to pre-`9feb113` link targets.
+- `@art-md/parser` must publish `0.0.7` (iteration `ship-fresh-meta`) before `fetch-pinned-meta` runs — fetching `0.0.6` today would revert the docs to pre-`9b065e3` link targets.
 
 ---
 

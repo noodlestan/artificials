@@ -35,10 +35,10 @@ Add a docs sidebar component rendered from the entity collection, wire it into t
 
 ### Upstream Work
 
-| Kind      | Path                                                                 | Role                                                                                            |
-| --------- | -------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| Milestone | `$PROJECT/_roadmap/3-now/milestone-art-md-hello-word/milestone.md`   | Phase 4 (Docs) coordinates this plan.                                                           |
-| Plan      | `$PROJECT/_backlog/3-now/plan-integrate-purrtrait-and-shiki/plan.md` | Delivered the rendering stack and route helpers the sidebar navigates; navigation was deferred. |
+| Kind      | Path                                                                  | Role                                                                                            |
+| --------- | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| Milestone | `$PROJECT/_roadmap/3-now/milestone-art-md-hello-word/milestone.md`    | Phase 4 (Docs) coordinates this plan.                                                           |
+| Plan      | `$PROJECT/_backlog/1-done/plan-integrate-purrtrait-and-shiki/plan.md` | Delivered the rendering stack and route helpers the sidebar navigates; navigation was deferred. |
 
 ### Knowledge
 

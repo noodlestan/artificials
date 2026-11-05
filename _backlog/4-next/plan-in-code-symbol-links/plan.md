@@ -36,10 +36,10 @@ Resolve identifiers inside rendered declaration code to documented symbols and e
 
 ### Upstream Work
 
-| Kind      | Path                                                                 | Role                                                                                           |
-| --------- | -------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| Milestone | `$PROJECT/_roadmap/3-now/milestone-art-md-hello-word/milestone.md`   | Phase 4 (Docs) coordinates this plan.                                                          |
-| Plan      | `$PROJECT/_backlog/3-now/plan-integrate-purrtrait-and-shiki/plan.md` | Delivered `CodeBlock.astro`, the resolver, and `#symbol` anchors; deferred in-code links here. |
+| Kind      | Path                                                                  | Role                                                                                           |
+| --------- | --------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| Milestone | `$PROJECT/_roadmap/3-now/milestone-art-md-hello-word/milestone.md`    | Phase 4 (Docs) coordinates this plan.                                                          |
+| Plan      | `$PROJECT/_backlog/1-done/plan-integrate-purrtrait-and-shiki/plan.md` | Delivered `CodeBlock.astro`, the resolver, and `#symbol` anchors; deferred in-code links here. |
 
 ### Knowledge
 

@@ -36,10 +36,10 @@ Add entity search to the docs index and the `/docs/api` pages, filtering the shi
 
 ### Upstream Work
 
-| Kind      | Path                                                                 | Role                                                                                     |
-| --------- | -------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| Milestone | `$PROJECT/_roadmap/3-now/milestone-art-md-hello-word/milestone.md`   | Phase 4 (Docs) coordinates this plan.                                                    |
-| Plan      | `$PROJECT/_backlog/3-now/plan-integrate-purrtrait-and-shiki/plan.md` | Delivered the rendering stack and meta queries this plan builds on; search was deferred. |
+| Kind      | Path                                                                  | Role                                                                                     |
+| --------- | --------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| Milestone | `$PROJECT/_roadmap/3-now/milestone-art-md-hello-word/milestone.md`    | Phase 4 (Docs) coordinates this plan.                                                    |
+| Plan      | `$PROJECT/_backlog/1-done/plan-integrate-purrtrait-and-shiki/plan.md` | Delivered the rendering stack and meta queries this plan builds on; search was deferred. |
 
 ### Knowledge
 

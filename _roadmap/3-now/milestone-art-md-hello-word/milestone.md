@@ -212,28 +212,28 @@ Execution is coordinated from `$WORKSPACE`. The implementation target is `$PROJE
 
 ## Items:
 
-| Phase | Resource / Record                                                                                        | Status  |
-| ----- | -------------------------------------------------------------------------------------------------------- | ------- |
-| 1     | Plan: Scaffold Art MD Website `$PROJECT/_backlog/1-done/plan-scaffold-art-md-website/plan.md`            | `DONE`  |
-| 1     | Plan: Home content and about page `$PROJECT/_backlog/1-done/plan-home-content-and-about-page/plan.md`    | `DONE`  |
-| -     |                                                                                                          |         |
-| 2     | Plan: Code Demo POC SolidJS `$PROJECT/_backlog/1-done/plan-code-demo-poc-solidjs/plan.md`                | `DONE`  |
-| 2     | Plan: Decompose Codec Demo `$PROJECT/_backlog/1-done/plan-decompose-codec-demo/plan.md`                  | `DONE`  |
-| 2     | Plan: Design POC `$PROJECT/_backlog/1-done/plan-design-poc/plan.md`                                      | `DONE`  |
-| 2     | Plan: Decompose Style Elements                                                                           | -       |
-| 2     | Plan: Demo Interactions POC                                                                              | -       |
-| -     |                                                                                                          |         |
-| 3     | Plan: Integrate Records in Demo                                                                          | -       |
-| -     |                                                                                                          |         |
-| 4     | Plan: Art MD Docs `$PROJECT/_backlog/1-done/plan-art-md-docs/plan.md`                                    | `DONE`  |
-| 4     | Plan: Add JSDoc Renderer Package `$PURRTRAIT/_backlog/1-done/plan-add-jsdoc-renderer-package/plan.md`    | `DONE`  |
-| 4     | Plan: Astro Components `$PURRTRAIT/_backlog/1-done/plan-astro-components/plan.md`                        | `DONE`  |
-| 4     | Plan: Integrate Purrtrait and Shiki `$PROJECT/_backlog/3-now/plan-integrate-purrtrait-and-shiki/plan.md` | `DONE`  |
-| 4     | Plan: Componentize Docs `$PROJECT/_backlog/3-now/plan-componentize-docs/plan.md`                         | `READY` |
-| 4     | Plan: Docs Search `$PROJECT/_backlog/4-next/plan-docs-search/plan.md`                                    | `DRAFT` |
-| 4     | Plan: Docs Sidebar `$PROJECT/_backlog/4-next/plan-docs-sidebar/plan.md`                                  | `DRAFT` |
-| 4     | Plan: In-Code Symbol Links `$PROJECT/_backlog/4-next/plan-in-code-symbol-links/plan.md`                  | `DRAFT` |
-| 4     | Plan: Non-Module Entities `$PROJECT/_backlog/4-next/plan-non-module-entities/plan.md`                    | `DRAFT` |
+| Phase | Resource / Record                                                                                         | Status  |
+| ----- | --------------------------------------------------------------------------------------------------------- | ------- |
+| 1     | Plan: Scaffold Art MD Website `$PROJECT/_backlog/1-done/plan-scaffold-art-md-website/plan.md`             | `DONE`  |
+| 1     | Plan: Home content and about page `$PROJECT/_backlog/1-done/plan-home-content-and-about-page/plan.md`     | `DONE`  |
+| -     |                                                                                                           |         |
+| 2     | Plan: Code Demo POC SolidJS `$PROJECT/_backlog/1-done/plan-code-demo-poc-solidjs/plan.md`                 | `DONE`  |
+| 2     | Plan: Decompose Codec Demo `$PROJECT/_backlog/1-done/plan-decompose-codec-demo/plan.md`                   | `DONE`  |
+| 2     | Plan: Design POC `$PROJECT/_backlog/1-done/plan-design-poc/plan.md`                                       | `DONE`  |
+| 2     | Plan: Decompose Style Elements                                                                            | -       |
+| 2     | Plan: Demo Interactions POC                                                                               | -       |
+| -     |                                                                                                           |         |
+| 3     | Plan: Integrate Records in Demo                                                                           | -       |
+| -     |                                                                                                           |         |
+| 4     | Plan: Art MD Docs `$PROJECT/_backlog/1-done/plan-art-md-docs/plan.md`                                     | `DONE`  |
+| 4     | Plan: Add JSDoc Renderer Package `$PURRTRAIT/_backlog/1-done/plan-add-jsdoc-renderer-package/plan.md`     | `DONE`  |
+| 4     | Plan: Astro Components `$PURRTRAIT/_backlog/1-done/plan-astro-components/plan.md`                         | `DONE`  |
+| 4     | Plan: Integrate Purrtrait and Shiki `$PROJECT/_backlog/1-done/plan-integrate-purrtrait-and-shiki/plan.md` | `DONE`  |
+| 4     | Plan: Componentize Docs `$PROJECT/_backlog/3-now/plan-componentize-docs/plan.md`                          | `READY` |
+| 4     | Plan: Docs Search `$PROJECT/_backlog/4-next/plan-docs-search/plan.md`                                     | `DRAFT` |
+| 4     | Plan: Docs Sidebar `$PROJECT/_backlog/4-next/plan-docs-sidebar/plan.md`                                   | `DRAFT` |
+| 4     | Plan: In-Code Symbol Links `$PROJECT/_backlog/4-next/plan-in-code-symbol-links/plan.md`                   | `DRAFT` |
+| 4     | Plan: Non-Module Entities `$PROJECT/_backlog/4-next/plan-non-module-entities/plan.md`                     | `DRAFT` |
 
 The following items are not yet captured in a work item document.
 

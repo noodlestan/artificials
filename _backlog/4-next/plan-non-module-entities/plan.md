@@ -39,10 +39,10 @@ Add `components` and `props` entity kinds to the purrfiles model and extractors,
 
 ### Upstream Work
 
-| Kind      | Path                                                                 | Role                                                                                                |
-| --------- | -------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| Milestone | `$PROJECT/_roadmap/3-now/milestone-art-md-hello-word/milestone.md`   | Phase 4 (Docs) coordinates this plan.                                                               |
-| Plan      | `$PROJECT/_backlog/3-now/plan-integrate-purrtrait-and-shiki/plan.md` | Delivered the rendering stack; recorded `components` and `props` as deliberately out of scope (v1). |
+| Kind      | Path                                                                  | Role                                                                                                |
+| --------- | --------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| Milestone | `$PROJECT/_roadmap/3-now/milestone-art-md-hello-word/milestone.md`    | Phase 4 (Docs) coordinates this plan.                                                               |
+| Plan      | `$PROJECT/_backlog/1-done/plan-integrate-purrtrait-and-shiki/plan.md` | Delivered the rendering stack; recorded `components` and `props` as deliberately out of scope (v1). |
 
 ### Knowledge
 

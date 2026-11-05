@@ -14,7 +14,7 @@ Agents SHOULD scan these files for definitions and resource locations when faced
 ```
 astro.config.mjs      — Astro config; `NO_EXTERNAL` for the raw-TypeScript docs chain.
 public/               — Public assets
-scripts/              — `sync-meta.mjs` — copies `$ART_MD/libs/parser/dist/meta.json` into `src/data/`.
+scripts/              — `fetch-meta.mjs` — downloads the pinned `dist/meta.json` from the npm endpoint into `src/data/`.
 src/
 - assets/             — Importable assets.
 - components/

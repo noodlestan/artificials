@@ -234,6 +234,7 @@ Execution is coordinated from `$WORKSPACE`. The implementation target is `$PROJE
 | 4     | Plan: Docs Sidebar `$PROJECT/_backlog/4-next/plan-docs-sidebar/plan.md`                                   | `DRAFT` |
 | 4     | Plan: In-Code Symbol Links `$PROJECT/_backlog/4-next/plan-in-code-symbol-links/plan.md`                   | `DRAFT` |
 | 4     | Plan: Non-Module Entities `$PROJECT/_backlog/4-next/plan-non-module-entities/plan.md`                     | `DRAFT` |
+| 4     | Plan: Distribute Meta JSON `$PROJECT/_backlog/3-now/plan-distribute-meta-json/plan.md`                    | `DONE`  |
 
 The following items are not yet captured in a work item document.
 

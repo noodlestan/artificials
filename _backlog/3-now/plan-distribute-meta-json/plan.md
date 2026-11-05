@@ -2,7 +2,7 @@
 
 **ID:** `distribute-meta-json`
 
-**Status:** `READY`
+**Status:** `DONE`
 
 **Template:** `$DOMAINS/plans/templates/plan.tart`
 
@@ -95,10 +95,10 @@ Executed from `$WORKSPACE/`. Package work happens in `$ART_MD` on branch `main`;
 
 ## Items:
 
-| Iteration / Instructions                                           | Status  |
-| ------------------------------------------------------------------ | ------- |
-| Iteration: Ship Fresh Meta `./instructions/ship-fresh-meta.md`     | `DONE`  |
-| Iteration: Fetch Pinned Meta `./instructions/fetch-pinned-meta.md` | `READY` |
+| Iteration / Instructions                                           | Status |
+| ------------------------------------------------------------------ | ------ |
+| Iteration: Ship Fresh Meta `./instructions/ship-fresh-meta.md`     | `DONE` |
+| Iteration: Fetch Pinned Meta `./instructions/fetch-pinned-meta.md` | `DONE` |
 
 ### Iteration: Ship Fresh Meta
 
@@ -113,6 +113,8 @@ Executed from `$WORKSPACE/`. Package work happens in `$ART_MD` on branch `main`;
 **Instructions Mode:** `INSTRUCTIONS_SELF_CONTAINED_FILE`
 
 **Instructions:** `./instructions/ship-fresh-meta.md`
+
+**Report:** `./instructions/ship-fresh-meta__report.md`
 
 **Changes:**
 
@@ -144,7 +146,7 @@ release(parser): 0.0.7.
 
 **Id:** `fetch-pinned-meta`
 
-**Status:** `READY`
+**Status:** `DONE`
 
 **Purpose:** Download versioned meta from the npm endpoint and delete the workspace script.
 
@@ -153,6 +155,8 @@ release(parser): 0.0.7.
 **Instructions Mode:** `INSTRUCTIONS_SELF_CONTAINED_FILE`
 
 **Instructions:** `./instructions/fetch-pinned-meta.md`
+
+**Report:** `./instructions/fetch-pinned-meta__report.md`
 
 **Changes:**
 
@@ -167,9 +171,9 @@ release(parser): 0.0.7.
 
 #### Commits:
 
-| ID                  | Repository / Checkout / Branch    | Policy   | Hash  | Status     |
-| ------------------- | --------------------------------- | -------- | ----- | ---------- |
-| `fetch-pinned-meta` | Artificials / `$PROJECT` / `main` | `NOPUSH` | (TBD) | `AUTHORED` |
+| ID                  | Repository / Checkout / Branch    | Policy   | Hash      | Status      |
+| ------------------- | --------------------------------- | -------- | --------- | ----------- |
+| `fetch-pinned-meta` | Artificials / `$PROJECT` / `main` | `NOPUSH` | `d128ff8` | `COMMITTED` |
 
 ##### Commit: `fetch-pinned-meta`
 
@@ -183,7 +187,7 @@ build(art-md-web): Fetch pinned meta from the npm endpoint.
 
 ### Next
 
-Both iterations are self-contained instruction files. Execution order: ~~`ship-fresh-meta`~~ (`DONE`, `6502b22`, `@art-md/parser@0.0.7` published and tarball-verified) → `fetch-pinned-meta` (`READY` — touches only the app's scripts block, no dependency or lockfile edits; delegate next via the delegator).
+Both iterations are `DONE` — plan complete: ~~`ship-fresh-meta`~~ (`6502b22`, `@art-md/parser@0.0.7` published and tarball-verified) → ~~`fetch-pinned-meta`~~ (`d128ff8`, guide line folded into `6457d2d`).
 
 ### Blockers
 
@@ -232,6 +236,7 @@ From `$PARSER`: `npm pack --dry-run` lists `dist/meta.json` containing the curre
 ### Evidence
 
 - `ship-fresh-meta` (`6502b22`) — `prepack: npm run extract` added to `$PARSER/package.json` right after `extract`; `npm pack --dry-run` fires `prepack` (extract runs, `dist/meta.json` listed, 3× `config#ParserConfig`); `$ART_MD` `npm run ci` 8/8 green; after the user's publish the registry checks pass — `npm view @art-md/parser version` → `0.0.7`, and the **published** tarball's `dist/meta.json` contains 3 `config#ParserConfig` targets, so the artifact on npm carries the re-authored links. Report: `./instructions/ship-fresh-meta__report.md`.
+- `fetch-pinned-meta` (`d128ff8`, guide line in `6457d2d`) — `meta-docs.config.mts` added (endpoint template + the single `@art-md/parser` `0.0.7` pin, the only place versions are pinned), `scripts/fetch-meta.mjs` added (built-in `fetch`, merges every entry's `entities`, writes `src/data/meta.json`), `scripts/sync-meta.mjs` deleted, `extract` rewired to `fetch-meta` ahead of `dev`/`build`. Fetch merges 4 entities (17 362 B); `npx astro sync`, `npm run build` (15 pages), `npm run lint` green; `grep -rn sync-meta apps/` empty; `package.json` diff is the `scripts` block only — no dependency or lockfile change. Report: `./instructions/fetch-pinned-meta__report.md`.
 
 ### Decisions
 
@@ -253,4 +258,5 @@ From `$PARSER`: `npm pack --dry-run` lists `dist/meta.json` containing the curre
 
 ### Feedback
 
-- None yet.
+- The `fetch-pinned-meta` staging rule collided with its own verification: `grep -rn sync-meta apps/` empty required updating the `_guide.md` layout line, yet only four files could be staged. The worker made the one-line doc fix, left it uncommitted (formatted, grep-clean), and the integrator folded it into `docs(art-md-web): Document the fetch-meta script in the guide.` (`6457d2d`) — future instructions should name the guide line in their staging set.
+- `ship-fresh-meta`'s commit landed outside the delegation with the shorter message `release(parser): 0.0.7.` instead of the blueprint text, and was pushed externally; content matched the instructions exactly, so only the recorded message differs.

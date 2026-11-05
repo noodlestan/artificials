@@ -61,7 +61,7 @@ This section lists the documentation and reference files the sub-agent needs to 
 - ::READ `$ART_MD_WEB/src/components/docs/FunctionsSection.astro`, `$ART_MD_WEB/src/components/docs/TypesSection.astro` (Source) — The sections being rewritten. Relevant for Steps 2 and 3.
 - ::READ `$ART_MD_WEB/src/pages/docs/api/[ns]/[pkg]/[mod].astro`, `$ART_MD_WEB/src/pages/docs/api/[ns]/[pkg]/[mod]/[type]/[ent].astro` (Source) — The pages importing `signature` types. Relevant for Step 4.
 - ::READ `$PURRTRAIT/libs/astro-components/package.json`, `$PURRTRAIT/libs/astro-components/src/components/CodeBlock.astro` (Source) — The consumed component and its `exports` map (`@purrtrait/astro-components/components/*`). Relevant for Steps 2 and 3.
-- ::READ `$WORKSPACE/checkouts/management/_ops/packages/policy.md` (Conventions) — Manifest pinning model: exact `dependencies`, caret `peerDependencies`. Relevant for Step 1.
+- ::READ `$WORKSPACE/checkouts/ops/knowledge/design/manifest-policy.md` (Conventions) — Manifest pinning model: exact `dependencies`, caret `peerDependencies`. Relevant for Step 1.
 - ::READ `$WORKSPACE/knowledge/conventions/writing-commit-message.art` (Conventions) — Allowed commit types, scopes, and message format. Relevant for the commit step.
 - RULE: You MUST follow any links under `## Mandatory Reading` sections found in the listed files.
 - RULE: If you are unable to read a file linked under `## Mandatory Reading` you must stop and REPORT A BLOCKER.

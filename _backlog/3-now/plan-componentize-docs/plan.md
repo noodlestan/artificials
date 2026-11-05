@@ -2,7 +2,7 @@
 
 **ID:** `componentize-docs`
 
-**Status:** `DRAFT`
+**Status:** `READY`
 
 **Template:** `$DOMAINS/plans/templates/plan.tart`
 
@@ -45,7 +45,7 @@ Extract the docs section components from `$ART_MD_WEB` into a new shared Astro d
 
 ::READ `$NOODLESTAN_WEB/packages/astro-components/` (Reference) — Package structure, exports map (`.` and `./global.css`), and conventions to replicate.
 ::READ `$ART_MD_WEB/src/components/docs/` (Source) — The docs sections to extract: `DocsBreadcrumbs`, `EntitiesSection`, `EntitySummary`, `FunctionsSection`, `TypesSection`.
-::READ `$ART_MD_WEB/src/styles/global.css` (Source) — The Purrtrait consumer styles (`.shiki` variable mapping, `.code-block`, `.jsdoc-*`, `.tags`) that move into the package.
+::READ `$ART_MD_WEB/src/styles/global.css` (Source) — The Purrtrait consumer styles (`.shiki` variable mapping, `.code-block`, `.jsdoc-*`, `.tags`) that get copied into the package.
 ::READ `$ART_MD_WEB/src/lib/routes.ts` (Source) — The route helpers the breadcrumbs consume and the parameterisation contract replaces.
 ::READ `$PURRTRAIT/libs/astro-components/` (Source) — `CodeBlock.astro` / `JsDocBlock.astro` consumed through the shared package.
 ::READ `$PROJECT/_guide.md` (Guide) — Website setup and verification.
@@ -76,7 +76,7 @@ Package work happens in `$NOODLESTAN_WEB`; the consumer migration happens in `$P
 
 - Create `$NOODLESTAN_WEB/packages/astro-docs` (`@noodlestan/astro-docs`) modeled on `$ASTRO_COMPONENTS` (raw-TS `main`, exports map `.` + `./global.css`, peer `astro`, dependency on `@purrtrait/astro-components`).
 - Move the five docs sections from `$ART_MD_WEB/src/components/docs/` into it; `DocsBreadcrumbs` receives route helpers as props (`docsRoot`, `apiRoot`, `packageHref`, `moduleHref`) so no `/docs` literal survives in the package.
-- Move the Purrtrait consumer styles (`.shiki` light/dark variable mapping, `.code-block`, `.jsdoc-*`, `.tags`) into the package `styles/global.css`.
+- Copy the Purrtrait consumer styles (`.shiki` light/dark variable mapping, `.code-block`, `.jsdoc-*`, `.tags`) into the package `styles/global.css`; the app drops its copy only when it re-points, so styling is never in flux between commits.
 - **JSDoc rendering is preserved for every rendered entity**: module summaries keep description and tags, every function keeps its description plus `@param` / `@returns` entries, every type keeps its description, tags, and member descriptions. The shared package renders `JsDocBlock.astro` for each — no entity renders bare.
 - Re-point `$ART_MD_WEB` at the package, passing its route helpers; rendered output stays byte-identical to the pre-extraction build.
 
@@ -93,17 +93,17 @@ Executed from `$WORKSPACE/`. Package work happens in `$NOODLESTAN_WEB` on branch
 
 ## Items:
 
-| Iteration / Instructions         | Status  |
-| -------------------------------- | ------- |
-| Iteration: Scaffold Astro Docs   | `DRAFT` |
-| Iteration: Extract Docs Sections | `DRAFT` |
-| Iteration: Record Astro Docs     | `DRAFT` |
+| Iteration / Instructions                                                   | Status  |
+| -------------------------------------------------------------------------- | ------- |
+| Iteration: Scaffold Astro Docs `./instructions/scaffold-astro-docs.md`     | `READY` |
+| Iteration: Extract Docs Sections `./instructions/extract-docs-sections.md` | `READY` |
+| Iteration: Record Astro Docs `./instructions/record-astro-docs.md`         | `READY` |
 
 ### Iteration: Scaffold Astro Docs
 
 **Id:** `scaffold-astro-docs`
 
-**Status:** `DRAFT`
+**Status:** `READY`
 
 **Purpose:** Create the shared package skeleton with the Purrtrait consumer styles.
 
@@ -111,10 +111,12 @@ Executed from `$WORKSPACE/`. Package work happens in `$NOODLESTAN_WEB` on branch
 
 **Instructions Mode:** `INSTRUCTIONS_SELF_CONTAINED_FILE`
 
+**Instructions:** `./instructions/scaffold-astro-docs.md`
+
 **Changes:**
 
-- Create `package.json` mirroring `$ASTRO_COMPONENTS` (raw-TS `main: ./src/index.ts`, exports map `.` → `./src/index.ts` and `./global.css` → `./src/styles/global.css`, peer `astro` `^7.4.2`, dependency `@purrtrait/astro-components` as a `file:` link — unpublished), plus the sibling tsconfig/vite/ignore files.
-- Add `src/styles/global.css` with the Purrtrait consumer styles moved verbatim from `$ART_MD_WEB/src/styles/global.css` (`.shiki` light/dark variable mapping, `.code-block`, `.jsdoc-*`, `.tags`).
+- Create `package.json` mirroring `$ASTRO_COMPONENTS` (raw-TS `main: ./src/index.ts`, exports map `.` → `./src/index.ts` and `./global.css` → `./src/styles/global.css`, peer `astro` `^7.4.2`, exact npm dependency `@purrtrait/astro-components` `0.0.1` — published, never a `file:` link — plus the sibling config and ignore files and the type-only `@purrception/lang-ts` devDependency the extracted components need).
+- Add `src/styles/global.css` with the Purrtrait consumer styles **copied** verbatim from `$ART_MD_WEB/src/styles/global.css` (the app keeps its copy until the extraction iteration removes it, so the docs stay styled between commits) (`.shiki` light/dark variable mapping, `.code-block`, `.jsdoc-*`, `.tags`).
 - Add empty `src/components/` barrels and `src/index.ts`, `_records/package.art`, `README.md`.
 - Run `npm ci` and `npm run ci` from `$NOODLESTAN_WEB`.
 
@@ -140,13 +142,15 @@ build(astro-docs): Scaffold the docs components package.
 
 **Id:** `extract-docs-sections`
 
-**Status:** `DRAFT`
+**Status:** `READY`
 
 **Purpose:** Move the five docs sections into the shared package and re-point the Art MD Website with byte-identical output.
 
 **Description:** Components move with their JSDoc surface intact; `DocsBreadcrumbs` becomes route-injected; the consumer loses its local docs components and style block.
 
 **Instructions Mode:** `INSTRUCTIONS_SELF_CONTAINED_FILE`
+
+**Instructions:** `./instructions/extract-docs-sections.md`
 
 **Changes:**
 
@@ -189,13 +193,15 @@ refactor(art-md-web): Consume `@noodlestan/astro-docs`.
 
 **Id:** `record-astro-docs`
 
-**Status:** `DRAFT`
+**Status:** `READY`
 
 **Purpose:** Register the new package and close the coordination loop.
 
 **Description:** Records, guides, and roadmap rows follow the extraction.
 
 **Instructions Mode:** `INSTRUCTIONS_SELF_CONTAINED_FILE`
+
+**Instructions:** `./instructions/record-astro-docs.md`
 
 **Changes:**
 
@@ -234,11 +240,11 @@ roadmap(art-md-hello-world): Move `componentize-docs` forward; reflected upstrea
 
 ### Next
 
-Iterations drafted (`DRAFT`): `scaffold-astro-docs` → `extract-docs-sections` → `record-astro-docs`. Blocked until Plan: Integrate Purrtrait and Shiki finishes its first two iterations; then write instructions and delegate.
+All three iterations are `READY` with self-contained instructions: `./instructions/scaffold-astro-docs.md`, `./instructions/extract-docs-sections.md`, `./instructions/record-astro-docs.md`. Plan: Integrate Purrtrait and Shiki is complete and the tree is clean — delegate in order; serialize iteration 2's consumer commit against Plan: Distribute Meta JSON's app-side edits (both touch `$ART_MD_WEB/package.json`, different sections).
 
 ### Blockers
 
-- **Plan: Integrate Purrtrait and Shiki** — iteration `add-descriptions-and-tags` is `READY` but not executed; extracting before it lands would move the pre-JSDoc component shape into the shared package.
+- None — the former blocker (Plan: Integrate Purrtrait and Shiki, iterations 1–2) is resolved: both are `DONE`, the integrate plan completed all 9 iterations, and Plan: Distribute Meta JSON's fetcher owns `meta.json` production.
 
 ---
 
@@ -300,7 +306,7 @@ Then confirm the JSDoc surface survived the extraction — for every rendered en
 
 ### Follow Ups
 
-- Meta availability moves to a pinned `@art-md/parser` dependency (Plan: Distribute Meta JSON); coverage checks read it from `node_modules`, not `src/data`.
+- Meta availability comes from Plan: Distribute Meta JSON's fetcher (`meta-docs.config.mts` + `fetch-meta.mjs`); coverage checks read `src/data/meta.json`, the gitignored fetch cache — not `node_modules`.
 - Migrate other Noodlestan Astro sites to the shared package.
 
 ### Feedback

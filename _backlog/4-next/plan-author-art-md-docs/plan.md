@@ -46,7 +46,7 @@ Give every public Art MD package an extraction pass and authored JSDoc, publishi
 ::READ `$ART_MD/_guide.md` (Guide) — Extraction monorepo layout, setup, and verification.
 ::READ `$PARSER/scripts/extract.ts` (Source) — The extraction script every other package copies (`createModuleEntityExtractor`, `ignore: ['private', 'test']`, writes `dist/meta.json`).
 ::READ `$ART_MD_WEB/src/content.config.ts` (Source) — Single-meta consumer this plan generalises to five.
-::READ `$WORKSPACE/checkouts/management/_ops/packages/policy.md` (Conventions) — Exact-pin model for every dependency bump.
+::READ `$WORKSPACE/checkouts/ops/knowledge/design/manifest-policy.md` (Conventions) — Exact-pin model for every dependency bump.
 ::READ `$WORKSPACE/knowledge/conventions/writing-commit-message.art` (Conventions) — Commit message format.
 
 ## Authoring Rules

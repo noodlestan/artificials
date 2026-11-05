@@ -56,7 +56,7 @@ This section lists the documentation and reference files the sub-agent needs to 
 - ::READ `$PARSER/scripts/extract.ts` (Source) — What `prepack` will invoke; writes `./dist/meta.json` as `{ entities }`. Relevant for Steps 1–2.
 - ::READ `$ART_MD_WEB/scripts/sync-meta.mjs` (Source) — The consumer-side copy this plan later deletes; the freshness guarantee replaces its sibling-checkout dependency. Context only. Relevant for orientation.
 - ::READ `$ART_MD_WEB/src/content.config.ts` (Source) — Reads the synced `meta.json`; confirms the shape the release must carry. Context only. Relevant for orientation.
-- ::READ `$WORKSPACE/checkouts/management/_ops/packages/policy.md` (Conventions) — Manifest field rules; the edit touches `scripts` and `version` only, keeping field order intact. Relevant for Step 3.
+- ::READ `$WORKSPACE/checkouts/ops/knowledge/design/manifest-policy.md` (Conventions) — Manifest field rules; the edit touches `scripts` and `version` only, keeping field order intact. Relevant for Step 3.
 - ::READ `$WORKSPACE/knowledge/conventions/writing-commit-message.art` (Conventions) — Allowed commit types, scopes, and message format. Relevant for the commit step.
 - RULE: You MUST follow any links under `## Mandatory Reading` sections found in the listed files.
 - RULE: If you are unable to read a file linked under `## Mandatory Reading` you must stop and REPORT A BLOCKER.

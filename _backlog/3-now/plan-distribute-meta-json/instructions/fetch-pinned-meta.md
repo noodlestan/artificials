@@ -56,7 +56,7 @@ This section lists the documentation and reference files the sub-agent needs to 
 - ::READ `$ART_MD_WEB/scripts/sync-meta.mjs` (Source) — The script being deleted; its output path (`src/data/meta.json`), logging style, and `{ entities }` shape are the contract the fetcher must keep. Relevant for Steps 2–3.
 - ::READ `$ART_MD_WEB/src/content.config.ts` (Source) — The unchanged consumer: reads `./data/meta.json` as `{ entities }`. Relevant for Steps 2 and 4.
 - ::READ `$PARSER/package.json` (Source) — Confirms the pinned version the config must name (`0.0.7`, from the previous iteration). Relevant for Step 1.
-- ::READ `$WORKSPACE/checkouts/management/_ops/packages/policy.md` (Conventions) — Manifest rules; the edit touches the `scripts` block only, keeping field order intact — no dependencies change. Relevant for Step 3.
+- ::READ `$WORKSPACE/checkouts/ops/knowledge/design/manifest-policy.md` (Conventions) — Manifest rules; the edit touches the `scripts` block only, keeping field order intact — no dependencies change. Relevant for Step 3.
 - ::READ `$WORKSPACE/knowledge/conventions/writing-commit-message.art` (Conventions) — Allowed commit types, scopes, and message format. Relevant for the commit step.
 - RULE: You MUST follow any links under `## Mandatory Reading` sections found in the listed files.
 - RULE: If you are unable to read a file linked under `## Mandatory Reading` you must stop and REPORT A BLOCKER.

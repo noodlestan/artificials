@@ -47,7 +47,7 @@ Guarantee `@art-md/parser` publishes a fresh `dist/meta.json`, release it, and m
 ::READ `$ART_MD_WEB/scripts/sync-meta.mjs` (Source) — The throwaway sync this plan deletes.
 ::READ `$ART_MD_WEB/src/content.config.ts` (Source) — Where `meta.json` is read today.
 ::READ `$PARSER/package.json` (Source) — `files` (already includes `dist`) and the scripts needing `prepack`.
-::READ `$WORKSPACE/checkouts/management/_ops/packages/policy.md` (Conventions) — Exact-pin model; the consumer pin follows it.
+::READ `$WORKSPACE/checkouts/ops/knowledge/design/manifest-policy.md` (Conventions) — Exact-pin model; the consumer pin follows it.
 ::READ `$WORKSPACE/knowledge/conventions/writing-commit-message.art` (Conventions) — Commit message format.
 
 ## Scope

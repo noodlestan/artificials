@@ -2,7 +2,7 @@
 
 **ID:** `art-md-hello-world`
 
-**Status:** `PLANNING`
+**Status:** `WORKING`
 
 **Template:** `$DOMAINS/milestones/templates/milestone.tart`
 
@@ -10,7 +10,7 @@
 
 **Purpose:** Coordinate the Art MD Website from hello world through POC demos to record integration.
 
-**Description:** Milestone with 3 phases (hello world, poc, integrate records) and 8 plans, coordinated across `$PROJECT`, `$ART_MD`, and `$ART_JS`.
+**Description:** Phases group the plans that carry the Art MD Website from its scaffold to published API documentation, coordinated across the workspace checkouts that contribute to it; statuses are kept current as each plan lands.
 
 ## Mandatory Reading
 
@@ -153,12 +153,12 @@ Execution is coordinated from `$WORKSPACE`. The implementation target is `$PROJE
 
 ## Phases
 
-| Index | Name         | Status  |
-| ----- | ------------ | ------- |
-| #1    | Hello World  | `DONE`  |
-| #2    | POC          | `DONE`  |
-| #3    | Records Demo | `DRAFT` |
-| #3    | Docs         | `DRAFT` |
+| Index | Name         | Status    |
+| ----- | ------------ | --------- |
+| #1    | Hello World  | `DONE`    |
+| #2    | POC          | `DONE`    |
+| #3    | Records Demo | `DRAFT`   |
+| #4    | Docs         | `WORKING` |
 
 ### Phase: 1 — Hello World
 
@@ -202,7 +202,7 @@ Execution is coordinated from `$WORKSPACE`. The implementation target is `$PROJE
 
 **Description:** Extract and publish meta with `@purrception` and the new `@noodlestan/purrfiles-*` packages. Publish in Art MD with Astro collections and components, along with usage pages authored in MDX.
 
-**Status:** `PLANNING`
+**Status:** `WORKING`
 
 **Dependencies:**
 

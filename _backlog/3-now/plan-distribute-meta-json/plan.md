@@ -97,14 +97,14 @@ Executed from `$WORKSPACE/`. Package work happens in `$ART_MD` on branch `main`;
 
 | Iteration / Instructions                                           | Status  |
 | ------------------------------------------------------------------ | ------- |
-| Iteration: Ship Fresh Meta `./instructions/ship-fresh-meta.md`     | `READY` |
+| Iteration: Ship Fresh Meta `./instructions/ship-fresh-meta.md`     | `DONE`  |
 | Iteration: Fetch Pinned Meta `./instructions/fetch-pinned-meta.md` | `READY` |
 
 ### Iteration: Ship Fresh Meta
 
 **Id:** `ship-fresh-meta`
 
-**Status:** `READY`
+**Status:** `DONE`
 
 **Purpose:** Make the published `meta.json` provably match the released sources.
 
@@ -126,17 +126,19 @@ Executed from `$WORKSPACE/`. Package work happens in `$ART_MD` on branch `main`;
 
 #### Commits:
 
-| ID                | Repository / Checkout / Branch | Policy   | Hash  | Status     |
-| ----------------- | ------------------------------ | -------- | ----- | ---------- |
-| `ship-fresh-meta` | Art MD / `$ART_MD` / `main`    | `NOPUSH` | (TBD) | `AUTHORED` |
+| ID                | Repository / Checkout / Branch | Policy   | Hash      | Status      |
+| ----------------- | ------------------------------ | -------- | --------- | ----------- |
+| `ship-fresh-meta` | Art MD / `$ART_MD` / `main`    | `NOPUSH` | `6502b22` | `COMMITTED` |
 
 ##### Commit: `ship-fresh-meta`
 
 **Message:**
 
 ```text
-release(parser): Regenerate meta on prepack and release 0.0.7.
+release(parser): 0.0.7.
 ```
+
+> **Execution note:** the commit was created outside the delegation (by the user/another session) with the shorter message above instead of the blueprint's `release(parser): Regenerate meta on prepack and release 0.0.7.`, and it is on `origin/main` (pushed externally — the delegation itself pushed nothing). The worker verified the delivered content matches the instructions exactly: `prepack` added, changelog section, version bump, lock refresh.
 
 ### Iteration: Fetch Pinned Meta
 
@@ -181,11 +183,11 @@ build(art-md-web): Fetch pinned meta from the npm endpoint.
 
 ### Next
 
-Both iterations are `READY` with self-contained instructions: `./instructions/ship-fresh-meta.md` and `./instructions/fetch-pinned-meta.md`. Execution order: `ship-fresh-meta` (art-md repo — runs any time, pauses at the user's `npm publish` for `0.0.7`), then `fetch-pinned-meta` (needs that release on the registry; touches only the app's scripts block — no dependency or lockfile edits, so its overlap with Plan: Integrate Purrtrait and Shiki is one `package.json` section). Delegate via the delegator.
+Both iterations are self-contained instruction files. Execution order: ~~`ship-fresh-meta`~~ (`DONE`, `6502b22`, `@art-md/parser@0.0.7` published and tarball-verified) → `fetch-pinned-meta` (`READY` — touches only the app's scripts block, no dependency or lockfile edits; delegate next via the delegator).
 
 ### Blockers
 
-- `@art-md/parser` must publish `0.0.7` (iteration `ship-fresh-meta`) before `fetch-pinned-meta` runs — fetching `0.0.6` today would revert the docs to pre-`9b065e3` link targets.
+- None — `@art-md/parser@0.0.7` is published and verified (Evidence above); `fetch-pinned-meta` is unblocked.
 
 ---
 
@@ -229,7 +231,7 @@ From `$PARSER`: `npm pack --dry-run` lists `dist/meta.json` containing the curre
 
 ### Evidence
 
-- None yet.
+- `ship-fresh-meta` (`6502b22`) — `prepack: npm run extract` added to `$PARSER/package.json` right after `extract`; `npm pack --dry-run` fires `prepack` (extract runs, `dist/meta.json` listed, 3× `config#ParserConfig`); `$ART_MD` `npm run ci` 8/8 green; after the user's publish the registry checks pass — `npm view @art-md/parser version` → `0.0.7`, and the **published** tarball's `dist/meta.json` contains 3 `config#ParserConfig` targets, so the artifact on npm carries the re-authored links. Report: `./instructions/ship-fresh-meta__report.md`.
 
 ### Decisions
 

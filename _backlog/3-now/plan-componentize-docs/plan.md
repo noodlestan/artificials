@@ -95,7 +95,7 @@ Executed from `$WORKSPACE/`. Package work happens in `$NOODLESTAN_WEB` on branch
 
 | Iteration / Instructions                                                   | Status  |
 | -------------------------------------------------------------------------- | ------- |
-| Iteration: Scaffold Astro Docs `./instructions/scaffold-astro-docs.md`     | `READY` |
+| Iteration: Scaffold Astro Docs `./instructions/scaffold-astro-docs.md`     | `DONE`  |
 | Iteration: Extract Docs Sections `./instructions/extract-docs-sections.md` | `READY` |
 | Iteration: Record Astro Docs `./instructions/record-astro-docs.md`         | `READY` |
 
@@ -103,7 +103,7 @@ Executed from `$WORKSPACE/`. Package work happens in `$NOODLESTAN_WEB` on branch
 
 **Id:** `scaffold-astro-docs`
 
-**Status:** `READY`
+**Status:** `DONE`
 
 **Purpose:** Create the shared package skeleton with the Purrtrait consumer styles.
 
@@ -112,6 +112,8 @@ Executed from `$WORKSPACE/`. Package work happens in `$NOODLESTAN_WEB` on branch
 **Instructions Mode:** `INSTRUCTIONS_SELF_CONTAINED_FILE`
 
 **Instructions:** `./instructions/scaffold-astro-docs.md`
+
+**Report:** `./instructions/scaffold-astro-docs__report.md`
 
 **Changes:**
 
@@ -126,9 +128,9 @@ Executed from `$WORKSPACE/`. Package work happens in `$NOODLESTAN_WEB` on branch
 
 #### Commits:
 
-| ID                    | Repository / Checkout / Branch              | Policy   | Hash  | Status     |
-| --------------------- | ------------------------------------------- | -------- | ----- | ---------- |
-| `scaffold-astro-docs` | Noodlestan Web / `$NOODLESTAN_WEB` / `main` | `NOPUSH` | (TBD) | `AUTHORED` |
+| ID                    | Repository / Checkout / Branch              | Policy   | Hash      | Status      |
+| --------------------- | ------------------------------------------- | -------- | --------- | ----------- |
+| `scaffold-astro-docs` | Noodlestan Web / `$NOODLESTAN_WEB` / `main` | `NOPUSH` | `077f840` | `COMMITTED` |
 
 ##### Commit: `scaffold-astro-docs`
 
@@ -294,7 +296,7 @@ Then confirm the JSDoc surface survived the extraction — for every rendered en
 
 ### Evidence
 
-- None yet.
+- `scaffold-astro-docs` (`077f840`) — `@noodlestan/astro-docs` scaffolded as a sibling of `@noodlestan/astro-components`: manifest (raw-TS `main`, exports `.` + `./global.css`, peer `astro ^7.4.2`, exact npm pin `@purrtrait/astro-components@0.0.1`, type-only `@purrception/lang-ts` devDependency), the Purrtrait consumer styles copied verbatim (`shiki-light` ×5), empty component barrel + `src/index.ts`, a minimal fixture proving the `.astro` graph and styles build, `_records/package.art`, README, CHANGELOG. `npm ci` + `npm run ci` green (3/3 turbo tasks including the model package); `$ART_MD_WEB` untouched. Report: `./instructions/scaffold-astro-docs__report.md`.
 
 ### Decisions
 
@@ -311,4 +313,4 @@ Then confirm the JSDoc surface survived the extraction — for every rendered en
 
 ### Feedback
 
-- None yet.
+- First delegation of `scaffold-astro-docs` BLOCKED on an internal contradiction: Step 3's fixture had to render `DocsBreadcrumbs`/`EntitiesSection` that do not exist until iteration 2 (whose `git mv` also forbids pre-created placeholders), while Step 5 demanded all-green CI. The worker reported the blocker without touching either tree; with the user's approval the delegator applied Fix (a) — the iteration-1 fixture now imports only the package entry and copied styles, and `extract-docs-sections.md` explicitly takes over the component renders — then re-delegated to the same session, which completed first try. Lesson for instruction writing: a step must not require artefacts the same instruction defers.

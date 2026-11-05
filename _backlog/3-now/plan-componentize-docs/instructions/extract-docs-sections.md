@@ -57,7 +57,7 @@ This section lists the documentation and reference files the sub-agent needs to 
 - ::READ `$ART_MD_WEB/src/lib/routes.ts` (Source) — The route helpers the breadcrumbs receive as props; `DOCS_ROOT = '/docs/api'`. Relevant for Steps 1–2.
 - ::READ `$ART_MD_WEB/src/lib/meta.ts` (Source) — Defines `DocsResolveLink`, the type the sections import; the package must define it locally because this file stays in the app. Relevant for Step 1.
 - ::READ `$ART_MD_WEB/src/styles/global.css` (Source) — The block deleted from the app after the package's copy takes over. Relevant for Step 2.
-- ::READ `$PACKAGE/src/index.ts` and `$PACKAGE/test/astro/` (Source) — The barrel and fixture from the previous iteration; extend the fixture if useful. Relevant for Step 1.
+- ::READ `$PACKAGE/src/index.ts` and `$PACKAGE/test/astro/` (Source) — The barrel and fixture from the previous iteration; extend the fixture to render `DocsBreadcrumbs` (with sample route-helper props) and `EntitiesSection` (one dummy `{ href, label }` entry), which this iteration brings into the package. Relevant for Step 1.
 - ::READ `../plan.md` (Structure) — Scope, component inventory, and the byte-identical and JSDoc-coverage validation contract. Relevant for verification.
 - ::READ `$WORKSPACE/checkouts/ops/knowledge/design/manifest-policy.md` (Conventions) — The `file:` link for the unpublished package is the policy-compliant form. Relevant for Step 2.
 - ::READ `$WORKSPACE/knowledge/conventions/writing-commit-message.art` (Conventions) — Allowed commit types, scopes, and message format. Relevant for both commits.

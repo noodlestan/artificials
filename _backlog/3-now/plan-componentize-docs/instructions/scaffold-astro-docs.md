@@ -141,7 +141,7 @@ RULE: this is a **copy** — `$ART_MD_WEB/src/styles/global.css` must be byte-un
 
 1. `src/components/index.ts` — placeholder barrel (empty export list with a comment that the docs sections land in the next iteration).
 2. `src/index.ts` — `export * from './components';` (the model's barrel shape).
-3. `test/astro/` — a minimal self-contained fixture the `build` script can run: `src/pages/index.astro` that imports the package's components **by relative path** (`../../../../src/components/…`, the model's pattern) and renders `DocsBreadcrumbs` with sample `pkg`/`mod` props plus `EntitiesSection` with one dummy `{ href, label }` entry (the sections from the next iteration are not present yet — the fixture proves the `.astro` graph builds, nothing more). No layout file, no content collections, no copied model pages. Do not copy the model's `dist/`, `.astro/`, or `node_modules/` artifacts.
+3. `test/astro/` — a minimal self-contained fixture the `build` script can run: `src/pages/index.astro` imports the package entry **by relative path** (`../../../../src/index.ts`, the model's pattern) and the copied `../../../../src/styles/global.css`, rendering a trivial page — this iteration's proof is that the `.astro` graph and the styles build. Do NOT import or render `DocsBreadcrumbs` or `EntitiesSection`: those sections do not exist until iteration `extract-docs-sections`, which extends this fixture to render them once they land (its `::READ` of `$PACKAGE/test/astro/` says so). No layout file, no content collections, no copied model pages. Do not copy the model's `dist/`, `.astro/`, or `node_modules/` artifacts.
 
 ### Step `4 / 5` — Records, README, CHANGELOG
 

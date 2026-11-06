@@ -93,12 +93,12 @@ Executed from `$WORKSPACE/`. Package work happens in `$NOODLESTAN_WEB` on branch
 
 ## Items:
 
-| Iteration / Instructions                                                   | Status  |
-| -------------------------------------------------------------------------- | ------- |
-| Iteration: Scaffold Astro Docs `./instructions/scaffold-astro-docs.md`     | `DONE`  |
-| Iteration: Extract Docs Sections `./instructions/extract-docs-sections.md` | `DONE`  |
-| Iteration: Record Astro Docs `./instructions/record-astro-docs.md`         | `DONE`  |
-| Iteration: Publish Astro Docs                                              | `READY` |
+| Iteration / Instructions                                                   | Status |
+| -------------------------------------------------------------------------- | ------ |
+| Iteration: Scaffold Astro Docs `./instructions/scaffold-astro-docs.md`     | `DONE` |
+| Iteration: Extract Docs Sections `./instructions/extract-docs-sections.md` | `DONE` |
+| Iteration: Record Astro Docs `./instructions/record-astro-docs.md`         | `DONE` |
+| Iteration: Publish Astro Docs                                              | `DONE` |
 
 ### Iteration: Scaffold Astro Docs
 
@@ -247,7 +247,7 @@ roadmap(art-md-hello-world): Move `componentize-docs` forward; reflected upstrea
 
 **Id:** `publish-astro-docs`
 
-**Status:** `READY`
+**Status:** `DONE`
 
 **Purpose:** Retire the plan's one remaining `file:` link by publishing the package and pinning it exact.
 
@@ -258,6 +258,8 @@ roadmap(art-md-hello-world): Move `componentize-docs` forward; reflected upstrea
 **Instructions:**
 
 From `$NOODLESTAN_WEB`: copy `$ASTRO_COMPONENTS/LICENSE-MIT` into `$PACKAGE/` if absent (the `files` array requires it and the scaffold did not copy it), then in `$PACKAGE/_records/package.art` set `Published` to `true` and add the `Deployment` entry mirroring the model's record. Run `npm pack --dry-run` from `packages/astro-docs` and verify the file list contains only `src`, `LICENSE-MIT`, `README.md`, `CHANGELOG.md` — no `test/` and no fixture artifacts. STOP and hand `@noodlestan/astro-docs@0.0.1` to the user for `npm publish`; confirm with `npm view @noodlestan/astro-docs version`. From `$PROJECT`: replace the `file:../../../noodlestan-web/packages/astro-docs` entry in `apps/art-md-web/package.json` with the exact pin `0.0.1`, run `npm install`, and verify: `node_modules/@noodlestan/astro-docs` is not a symlink, `npm ls @noodlestan/astro-docs` resolves from the registry, the workspace-wide `file:` sweep across all manifests returns zero, and the docs build is green (`lint:fix` then `astro sync` then `build` then `lint`). Finally remove the parking-lot item about publishing `@noodlestan/astro-docs` from `$PROJECT/_backlog/_parking-lot.md`, since this iteration discharges it.
+
+**Report:** `./instructions/publish-astro-docs__report.md`
 
 **Changes:**
 
@@ -273,10 +275,10 @@ From `$NOODLESTAN_WEB`: copy `$ASTRO_COMPONENTS/LICENSE-MIT` into `$PACKAGE/` if
 
 #### Commits:
 
-| ID                   | Repository / Checkout / Branch              | Policy   | Hash  | Status     |
-| -------------------- | ------------------------------------------- | -------- | ----- | ---------- |
-| `release-astro-docs` | Noodlestan Web / `$NOODLESTAN_WEB` / `main` | `NOPUSH` | (TBD) | `AUTHORED` |
-| `pin-astro-docs`     | Artificials / `$PROJECT` / `main`           | `NOPUSH` | (TBD) | `AUTHORED` |
+| ID                   | Repository / Checkout / Branch              | Policy   | Hash      | Status      |
+| -------------------- | ------------------------------------------- | -------- | --------- | ----------- |
+| `release-astro-docs` | Noodlestan Web / `$NOODLESTAN_WEB` / `main` | `NOPUSH` | `6763271` | `COMMITTED` |
+| `pin-astro-docs`     | Artificials / `$PROJECT` / `main`           | `NOPUSH` | `ca59d55` | `COMMITTED` |
 
 ##### Commit: `release-astro-docs`
 
@@ -298,7 +300,7 @@ build(art-md-web): Pin @noodlestan/astro-docs from npm.
 
 ### Next
 
-Iterations 1-3 are `DONE` (`077f840`, `a406701` + `03b51d1`, `9f6613e` + `09de76e`). One iteration remains: `publish-astro-docs` (`READY`, inlined) — it retires the plan's single `file:` link and the parking-lot item logged by `record-astro-docs`. Delegate it when the window is right; its only gate is the user's `npm publish` of `@noodlestan/astro-docs@0.0.1`.
+Iterations 1-3 are `DONE` (`077f840`, `a406701` + `03b51d1`, `9f6613e` + `09de76e`), and `publish-astro-docs` is now `DONE` too (`6763271` + `b2a0a79` in `$NOODLESTAN_WEB`, `ca59d55` here): `@noodlestan/astro-docs@0.0.1` is published and pinned exact, the workspace `file:` sweep is zero, and the parking-lot publish item is discharged. All four iterations complete — plan status and the milestone row are the architect's call.
 
 ### Blockers
 
@@ -355,6 +357,7 @@ Then confirm the JSDoc surface survived the extraction — for every rendered en
 - `scaffold-astro-docs` (`077f840`) — `@noodlestan/astro-docs` scaffolded as a sibling of `@noodlestan/astro-components`: manifest (raw-TS `main`, exports `.` + `./global.css`, peer `astro ^7.4.2`, exact npm pin `@purrtrait/astro-components@0.0.1`, type-only `@purrception/lang-ts` devDependency), the Purrtrait consumer styles copied verbatim (`shiki-light` ×5), empty component barrel + `src/index.ts`, a minimal fixture proving the `.astro` graph and styles build, `_records/package.art`, README, CHANGELOG. `npm ci` + `npm run ci` green (3/3 turbo tasks including the model package); `$ART_MD_WEB` untouched. Report: `./instructions/scaffold-astro-docs__report.md`.
 - `extract-docs-sections` (`a406701`, `03b51d1`) — the five docs sections moved into `packages/astro-docs/src/components/` with a barrel and a `DocsResolveLink` of identical shape to the app's; `DocsBreadcrumbs` route-injected (`docsRoot="/docs"`, `apiRoot="/docs/api"`, `packageHref`, `moduleHref`); the app pages/layouts import from `@noodlestan/astro-docs`, `PageLayout` pulls the package's `./global.css`, and the local `src/components/docs/` plus the Purrtrait style block are gone (−57 lines); the fixture now renders breadcrumbs and entities. Gate: normalized HTML diff **0/15 — byte-identical visible markup**, empty under the ratified waiver of the three move-inherent classes (path-derived `data-astro-cid-*`, dotted asset-hash normalization defect, inline-vs-external style emission); coverage parity: functions carrying `paramTags` vs rendered `jsdoc-params` blocks = 3 functions × 2 render sites = 6, `ParserConfig` 2 member descriptions, `{@link ParserConfig}` → `/docs/api/...` anchor; both greps empty; `$NOODLESTAN_WEB` and app CI green. Report: `./instructions/extract-docs-sections__report.md`.
 - `record-astro-docs` (`9f6613e`, `09de76e`) — package registered: `## Packages` row in `$NOODLESTAN_WEB/_guide.md`, `_records/package.art` verified against the manifest with no drift; this plan moved to `_backlog/1-done/` with status `DONE` and all iterations `DONE`; the milestone Phase 4 row repointed to `1-done/plan-componentize-docs/plan.md` + `DONE`; the parking lot gains only the genuinely-new follow-ups (publish `@noodlestan/astro-docs`, migrate other Astro sites — cross-checked against Follow Ups so nothing is duplicated). `$NOODLESTAN_WEB` `npm run ci` green (3/3), docs build (`lint:fix` → `sync` → `build` 15 pages → `lint`) green, every cited path resolves, no `None yet` left. Report: `./instructions/record-astro-docs__report.md`.
+- `publish-astro-docs` (`6763271` + `b2a0a79` in `$NOODLESTAN_WEB`, `ca59d55` here) — `LICENSE-MIT` added, `_records/package.art` flipped to `Published: true` with a `Deployment:` entry (its `Files:` list and `npm-deployment.art` completed by `b2a0a79`); `npm pack --dry-run` file list exactly `src` + `LICENSE-MIT` + `README.md` + `CHANGELOG.md` (+ npm's `package.json`), no `test/` or fixture artifacts; published `@noodlestan/astro-docs@0.0.1`, `npm view`-confirmed. Consumer swapped `file:` → exact `0.0.1`: real directory (not a symlink), `npm ls` resolves from the registry with tarball `resolved` + `integrity` in the lock, workspace `file:` sweep = **0** across 83 manifests, docs build green (`lint:fix` → `sync` → `build` 15 pages → `lint`), and the parking-lot publish item cleared (section reads `- None current.`). Report: `./instructions/publish-astro-docs__report.md`.
 
 ### Decisions
 
@@ -375,3 +378,4 @@ Then confirm the JSDoc surface survived the extraction — for every rendered en
 - The literal byte-identical contract could not hold for a component move: Astro's `data-astro-cid-*` scope id is filename-derived, the gate's `sed` pattern stopped at the dot (could not match `name.HASH.ext`), and moving the stylesheet import shifts emission between the external chunk and inline `<style>`. Ratified by the user — those three classes normalize away (visible markup 0/15 identical) — and the amended Step 5 now carries the fixed pattern and the waiver so the next reader is not blocked by a dead rule.
 - Step 4.2's `apiRoot={DOCS_ROOT}` was unsatisfiable (`DOCS_ROOT` declared without `export`, `src/lib/routes.ts` frozen by the same step); ratified to the literal `"/docs/api"`, consistent with the step's own `docsRoot="/docs"` literal.
 - Concurrent third-party work (an `@types/node` bump in `$PROJECT`'s root manifests) sat uncommitted throughout this iteration — the worker staged around it surgically; staging must stay file-scoped while parallel sessions share the tree.
+- The stale-link family struck again in `publish-astro-docs` phase 2: a bare `npm install` reported "up to date" while quietly keeping the `file:` symlink; reification needed an explicit `npm install @noodlestan/astro-docs@0.0.1 --save-exact -w apps-art-md-web`. Same defect class as `consume-purrtrait-releases` and `retire-file-links` — prove resolution with `readlink` + `npm ls`, never trust the install exit code.

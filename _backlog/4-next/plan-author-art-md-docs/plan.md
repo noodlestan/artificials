@@ -106,7 +106,7 @@ Executed from `$WORKSPACE/`. Package work happens in `$ART_MD` on branch `main`;
 | Iteration / Instructions       | Status  |
 | ------------------------------ | ------- |
 | Iteration: Document Primitives | `DONE`  |
-| Iteration: Document Constructs | `DRAFT` |
+| Iteration: Document Constructs | `DONE`  |
 | Iteration: Revisit Parser      | `DRAFT` |
 | Iteration: Document Serializer | `DRAFT` |
 | Iteration: Document Codec      | `DRAFT` |
@@ -168,7 +168,7 @@ release(primitives): 0.0.8
 
 **Id:** `document-constructs`
 
-**Status:** `DRAFT`
+**Status:** `DONE`
 
 **Purpose:** The largest public library gets extraction and authored copy.
 
@@ -179,6 +179,8 @@ release(primitives): 0.0.8
 **Instructions:**
 
 Copy the extraction script as in the previous iteration with `meta.package` set to `@art-md/constructs`; run it and confirm `dist/meta.json`. Apply the Authoring Rules — with 154 files this is where the module-versus-symbol non-repetition rule earns its keep: module descriptions say what the constructs are for and when to reach for them; individual factory and type descriptions stay on their own behaviour. In the package manifest, re-pin `@art-md/primitives` to `0.0.8` (published in the previous iteration). Bump `constructs` to `0.0.8`, changelog, refresh the root lock, stop for the user's `npm publish`, confirm with `npm view`.
+
+**Report:** `./instructions/document-constructs__report.md`
 
 **Changes:**
 
@@ -192,10 +194,10 @@ Copy the extraction script as in the previous iteration with `meta.package` set 
 
 #### Commits:
 
-| ID                   | Repository / Checkout / Branch | Policy   | Hash  | Status     |
-| -------------------- | ------------------------------ | -------- | ----- | ---------- |
-| `author-constructs`  | Art MD / `$ART_MD` / `main`    | `NOPUSH` | (TBD) | `AUTHORED` |
-| `release-constructs` | Art MD / `$ART_MD` / `main`    | `NOPUSH` | (TBD) | `AUTHORED` |
+| ID                   | Repository / Checkout / Branch | Policy   | Hash      | Status      |
+| -------------------- | ------------------------------ | -------- | --------- | ----------- |
+| `author-constructs`  | Art MD / `$ART_MD` / `main`    | `NOPUSH` | `d1d6602` | `COMMITTED` |
+| `release-constructs` | Art MD / `$ART_MD` / `main`    | `NOPUSH` | `a378ff2` | `COMMITTED` |
 
 ##### Commit: `author-constructs`
 
@@ -444,7 +446,7 @@ docs(art-md-web): Add getting started, usage, and integrations pages.
 
 ### Next
 
-Draft is complete (all iterations inlined) and execution has started: ~~`document-primitives`~~ (`DONE`, `7dc5ad5` + `f14a377`, published `0.0.8`) → `document-constructs` (dispatched) → `revisit-parser` → `document-serializer` → `document-codec` → `refresh-api-docs` → `write-root-docs`. Both blockers (Plan: Distribute Meta JSON, Plan: Integrate Purrtrait and Shiki) are `DONE`; website iterations serialize against the other plans editing the same manifest.
+Draft is complete (all iterations inlined) and execution is underway: ~~`document-primitives`~~ (`DONE`, `7dc5ad5` + `f14a377`, published `0.0.8`) → ~~`document-constructs`~~ (`DONE`, `d1d6602` + `a378ff2`, published `0.0.8`) → `revisit-parser` (dispatched) → `document-serializer` → `document-codec` → `refresh-api-docs` → `write-root-docs`. Both blockers (Plan: Distribute Meta JSON, Plan: Integrate Purrtrait and Shiki) are `DONE`; website iterations serialize against the other plans editing the same manifest.
 
 ### Blockers
 
@@ -494,6 +496,7 @@ Per package: `npm run ci` from `$ART_MD` passes, `dist/meta.json` exists and con
 ### Evidence
 
 - `document-primitives` (`7dc5ad5`, `f14a377`) — extract script copied from `$PARSER` (`meta.package: @art-md/primitives`, `tsconfig` `scripts/` include), `extract` entry + devDependencies (the instruction's "`@noodlestan/purrfiles-extract` from the workspace" was stale: pinned exact `0.0.1` from npm, as `$PARSER` does), authored copy per the Authoring Rules — 9/9 modules and 25/30 declared symbols carry one-liner descriptions with module "what/when" kept off the symbol level, plus the `toMdastemented` typo fixed in source. Release `0.0.8` (version + CHANGELOG + lock, every lock hunk primitives-related). Published and confirmed: `npm view @art-md/primitives version` → `0.0.8`; `npm pack --dry-run` lists `dist/meta.json` (43 kB); `npm run ci` green on both commits. Report: `./instructions/document-primitives__report.md`.
+- `document-constructs` (`d1d6602`, `a378ff2`) — extract script and devDependencies copied from the primitives pattern (`meta.package: @art-md/constructs`), 7 `factory/index.ts` barrels added so index-less factory modules can carry copy at all; authored per the Authoring Rules across 154 source files: modules **0/33 → 33/33**, declared symbols in meta **1/50 → 44/50** (50/50 authored in source — the 6 gaps are extractor limits, see Feedback); `@art-md/primitives` re-pinned `0.0.8`. Release `0.0.8` (version + CHANGELOG + lock, constructs-related hunks only). Published and confirmed: `npm view @art-md/constructs version` → `0.0.8`; `npm pack --dry-run` lists `dist/meta.json` (91.6 kB, 290 files); `npm run ci` green on both commits; `npm ci --dry-run` in sync. Report: `./instructions/document-constructs__report.md`.
 
 ### Decisions
 
@@ -511,4 +514,5 @@ Per package: `npm run ci` from `$ART_MD` passes, `dist/meta.json` exists and con
 
 ### Feedback
 
-- Nested @art-md registry entries in the lock are transient — track their drain (5 now) with `npm ls @art-md/primitives`; target 0 nested copies after `document-codec` re-pins all four dependencies.
+- Nested @art-md registry entries in the lock are transient — track their drain with `npm ls @art-md/primitives` (4 nested `0.0.7` copies remaining after `document-constructs` re-pinned, down from 5; parked as `3226fc1`); target 0 nested copies after `document-codec` re-pins all four dependencies.
+- `document-constructs`' 6 meta gaps are extractor limits, not authoring gaps: 2 interfaces and 4 typed arrow-const parsers are documented in source but never reach `dist/meta.json` (44/50) — the fix belongs in `@noodlestan/purrfiles-extract`, not this plan's copy.

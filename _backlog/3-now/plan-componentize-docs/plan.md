@@ -96,7 +96,7 @@ Executed from `$WORKSPACE/`. Package work happens in `$NOODLESTAN_WEB` on branch
 | Iteration / Instructions                                                   | Status  |
 | -------------------------------------------------------------------------- | ------- |
 | Iteration: Scaffold Astro Docs `./instructions/scaffold-astro-docs.md`     | `DONE`  |
-| Iteration: Extract Docs Sections `./instructions/extract-docs-sections.md` | `READY` |
+| Iteration: Extract Docs Sections `./instructions/extract-docs-sections.md` | `DONE`  |
 | Iteration: Record Astro Docs `./instructions/record-astro-docs.md`         | `READY` |
 
 ### Iteration: Scaffold Astro Docs
@@ -144,7 +144,7 @@ build(astro-docs): Scaffold the docs components package.
 
 **Id:** `extract-docs-sections`
 
-**Status:** `READY`
+**Status:** `DONE`
 
 **Purpose:** Move the five docs sections into the shared package and re-point the Art MD Website with byte-identical output.
 
@@ -153,6 +153,8 @@ build(astro-docs): Scaffold the docs components package.
 **Instructions Mode:** `INSTRUCTIONS_SELF_CONTAINED_FILE`
 
 **Instructions:** `./instructions/extract-docs-sections.md`
+
+**Report:** `./instructions/extract-docs-sections__report.md`
 
 **Changes:**
 
@@ -170,10 +172,10 @@ build(astro-docs): Scaffold the docs components package.
 
 #### Commits:
 
-| ID                      | Repository / Checkout / Branch              | Policy   | Hash  | Status     |
-| ----------------------- | ------------------------------------------- | -------- | ----- | ---------- |
-| `extract-docs-sections` | Noodlestan Web / `$NOODLESTAN_WEB` / `main` | `NOPUSH` | (TBD) | `AUTHORED` |
-| `repoint-art-md-docs`   | Artificials / `$PROJECT` / `main`           | `NOPUSH` | (TBD) | `AUTHORED` |
+| ID                      | Repository / Checkout / Branch              | Policy   | Hash      | Status      |
+| ----------------------- | ------------------------------------------- | -------- | --------- | ----------- |
+| `extract-docs-sections` | Noodlestan Web / `$NOODLESTAN_WEB` / `main` | `NOPUSH` | `a406701` | `COMMITTED` |
+| `repoint-art-md-docs`   | Artificials / `$PROJECT` / `main`           | `NOPUSH` | `03b51d1` | `COMMITTED` |
 
 ##### Commit: `extract-docs-sections`
 
@@ -297,6 +299,7 @@ Then confirm the JSDoc surface survived the extraction — for every rendered en
 ### Evidence
 
 - `scaffold-astro-docs` (`077f840`) — `@noodlestan/astro-docs` scaffolded as a sibling of `@noodlestan/astro-components`: manifest (raw-TS `main`, exports `.` + `./global.css`, peer `astro ^7.4.2`, exact npm pin `@purrtrait/astro-components@0.0.1`, type-only `@purrception/lang-ts` devDependency), the Purrtrait consumer styles copied verbatim (`shiki-light` ×5), empty component barrel + `src/index.ts`, a minimal fixture proving the `.astro` graph and styles build, `_records/package.art`, README, CHANGELOG. `npm ci` + `npm run ci` green (3/3 turbo tasks including the model package); `$ART_MD_WEB` untouched. Report: `./instructions/scaffold-astro-docs__report.md`.
+- `extract-docs-sections` (`a406701`, `03b51d1`) — the five docs sections moved into `packages/astro-docs/src/components/` with a barrel and a `DocsResolveLink` of identical shape to the app's; `DocsBreadcrumbs` route-injected (`docsRoot="/docs"`, `apiRoot="/docs/api"`, `packageHref`, `moduleHref`); the app pages/layouts import from `@noodlestan/astro-docs`, `PageLayout` pulls the package's `./global.css`, and the local `src/components/docs/` plus the Purrtrait style block are gone (−57 lines); the fixture now renders breadcrumbs and entities. Gate: normalized diff **0/15** under the ratified waiver of the three move-inherent classes; coverage: params parity 3×2 = 6 `jsdoc-params` blocks, `ParserConfig` 2 member descriptions, `{@link ParserConfig}` → `/docs/api/...` anchor, both greps empty; `$NOODLESTAN_WEB` and app CI green. Report: `./instructions/extract-docs-sections__report.md`.
 
 ### Decisions
 
@@ -314,3 +317,6 @@ Then confirm the JSDoc surface survived the extraction — for every rendered en
 ### Feedback
 
 - First delegation of `scaffold-astro-docs` BLOCKED on an internal contradiction: Step 3's fixture had to render `DocsBreadcrumbs`/`EntitiesSection` that do not exist until iteration 2 (whose `git mv` also forbids pre-created placeholders), while Step 5 demanded all-green CI. The worker reported the blocker without touching either tree; with the user's approval the delegator applied Fix (a) — the iteration-1 fixture now imports only the package entry and copied styles, and `extract-docs-sections.md` explicitly takes over the component renders — then re-delegated to the same session, which completed first try. Lesson for instruction writing: a step must not require artefacts the same instruction defers.
+- The literal byte-identical contract could not hold for a component move: Astro's `data-astro-cid-*` scope id is filename-derived, the gate's `sed` pattern stopped at the dot (could not match `name.HASH.ext`), and moving the stylesheet import shifts emission between the external chunk and inline `<style>`. Ratified by the user — those three classes normalize away (visible markup 0/15 identical) — and the amended Step 5 now carries the fixed pattern and the waiver so the next reader is not blocked by a dead rule.
+- Step 4.2's `apiRoot={DOCS_ROOT}` was unsatisfiable (`DOCS_ROOT` declared without `export`, `src/lib/routes.ts` frozen by the same step); ratified to the literal `"/docs/api"`, consistent with the step's own `docsRoot="/docs"` literal.
+- Concurrent third-party work (an `@types/node` bump in `$PROJECT`'s root manifests) sat uncommitted throughout this iteration — the worker staged around it surgically; staging must stay file-scoped while parallel sessions share the tree.

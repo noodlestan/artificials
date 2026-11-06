@@ -162,7 +162,7 @@ cp -r dist /tmp/docs-before
 Then:
 
 1. Add to `$ART_MD_WEB/package.json` dependencies: `"@noodlestan/astro-docs": "file:../../../noodlestan-web/packages/astro-docs"` — unpublished, so a `file:` link is the policy-compliant form — and run `npm install` from `$PROJECT`. RULE: no other dependency changes.
-2. The three pages (`[ns]/[pkg].astro`, `[ns]/[pkg]/[mod].astro`, `[ns]/[pkg]/[mod]/[type]/[ent].astro`) import the five components from `@noodlestan/astro-docs` instead of `../components/docs/…`, and pass breadcrumbs: `docsRoot="/docs"`, `apiRoot={DOCS_ROOT}` (from `lib/routes`), `packageHref`, `moduleHref` — the app keeps its own route knowledge.
+2. The three pages (`[ns]/[pkg].astro`, `[ns]/[pkg]/[mod].astro`, `[ns]/[pkg]/[mod]/[type]/[ent].astro`) import the five components from `@noodlestan/astro-docs` instead of `../components/docs/…`, and pass breadcrumbs: `docsRoot="/docs"`, `apiRoot="/docs/api"` (literal — `DOCS_ROOT` is declared without `export` in `src/lib/routes.ts` and this step forbids editing it; the literal is ratified, route knowledge still lives in the consumer exactly as the `docsRoot` literal does), `packageHref`, `moduleHref` — the app keeps its own route knowledge.
 3. `src/layouts/PageLayout.astro`: add `import '@noodlestan/astro-docs/global.css';` immediately after the existing `@noodlestan/astro-components/global.css` import.
 4. Delete `$ART_MD_WEB/src/components/docs/` (the directory is now empty) and remove the Purrtrait docs block from `$ART_MD_WEB/src/styles/global.css` — from the `/* --- Purrtrait docs rendering --- */` marker to the end of the file; the package's copy, now imported by PageLayout, owns those rules.
 5. RULE: `src/lib/meta.ts` and `src/lib/routes.ts` are unchanged — `createDocsResolveLink` keeps feeding `resolveLink` props.
@@ -175,15 +175,24 @@ cd $ART_MD_WEB && npx astro sync && npm run build && npm run lint
 
 All MUST pass. Then:
 
-1. **Byte-identical**: normalize hashed asset names in both trees and diff:
+1. **Byte-identical, as amended 2026-11-06 (ratified by the user):** three move-inherent classes are normalized away, because a component move provably produces them without changing visible output —
+   (a) `data-astro-cid-*` — Astro derives the style-scope id from the component's file path; the `<style>` content itself is byte-identical,
+   (b) `SiteFooter.HASH.css` asset hashes — the original `sed` pattern stopped at the dot and could not match `name.HASH.ext` (a normalization defect, not a content change),
+   (c) external chunk vs inline `<style>` — the package's stylesheet crosses Astro's `inlineStylesheets: 'auto'` threshold when its import source moves; same rules, different emission.
+   Normalize each side with the same script, then diff:
    ```bash
+   normalize() {
+     sed -E 's#/_astro/[^"]*\.(css|js)#/_astro/ASSET.\1#g; s/data-astro-cid-[a-z0-9]+/data-astro-cid-CID/g' "$1" \
+       | perl -0pe 's#<style>.*?</style>##gs'
+   }
    find dist -name '*.html' | while read f; do
      mkdir -p "/tmp/after/$(dirname "$f")"
-     sed -E 's#/_astro/[A-Za-z0-9_-]+\.(css|js)#/_astro/ASSET.\1#g' "$f" > "/tmp/after/$f"
+     normalize "$f" > "/tmp/after/$f"
    done
-   diff -r /tmp/docs-before-normalized /tmp/after   # both sides normalized the same way
+   # /tmp/docs-before-normalized was produced from the pre-move build with the same normalize()
+   diff -r /tmp/docs-before-normalized /tmp/after
    ```
-   Zero differences required (normalize `/tmp/docs-before` with the same `sed`). Any HTML delta = REPORT A BLOCKER with the diff — do not proceed to the commit.
+   Zero differences required after this normalization — that empty diff PLUS the coverage checks in items 2–3 below is the acceptance criterion for the three ratified classes; do not re-litigate them. Any delta **outside** those three classes = REPORT A BLOCKER with the diff — do not proceed to the commit.
 2. **JSDoc coverage** (count parity, not spot checks): every function in `src/data/meta.json` carrying `paramTags` has a rendered `jsdoc-params` block in `dist` (count them); `ParserConfig`'s member descriptions render; the `config` module description renders with `{@link …}` as `/docs/api/...` anchors.
 3. `grep -rn "'/docs" $NOODLESTAN_WEB/packages/astro-docs/src` returns nothing; `grep -rn "components/docs" $ART_MD_WEB/src` returns nothing.
 

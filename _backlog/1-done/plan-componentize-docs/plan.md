@@ -2,7 +2,7 @@
 
 **ID:** `componentize-docs`
 
-**Status:** `READY`
+**Status:** `DONE`
 
 **Template:** `$DOMAINS/plans/templates/plan.tart`
 
@@ -93,11 +93,11 @@ Executed from `$WORKSPACE/`. Package work happens in `$NOODLESTAN_WEB` on branch
 
 ## Items:
 
-| Iteration / Instructions                                                   | Status  |
-| -------------------------------------------------------------------------- | ------- |
-| Iteration: Scaffold Astro Docs `./instructions/scaffold-astro-docs.md`     | `DONE`  |
-| Iteration: Extract Docs Sections `./instructions/extract-docs-sections.md` | `DONE`  |
-| Iteration: Record Astro Docs `./instructions/record-astro-docs.md`         | `READY` |
+| Iteration / Instructions                                                   | Status |
+| -------------------------------------------------------------------------- | ------ |
+| Iteration: Scaffold Astro Docs `./instructions/scaffold-astro-docs.md`     | `DONE` |
+| Iteration: Extract Docs Sections `./instructions/extract-docs-sections.md` | `DONE` |
+| Iteration: Record Astro Docs `./instructions/record-astro-docs.md`         | `DONE` |
 
 ### Iteration: Scaffold Astro Docs
 
@@ -197,7 +197,7 @@ refactor(art-md-web): Consume `@noodlestan/astro-docs`.
 
 **Id:** `record-astro-docs`
 
-**Status:** `READY`
+**Status:** `DONE`
 
 **Purpose:** Register the new package and close the coordination loop.
 
@@ -244,7 +244,7 @@ roadmap(art-md-hello-world): Move `componentize-docs` forward; reflected upstrea
 
 ### Next
 
-All three iterations are `READY` with self-contained instructions: `./instructions/scaffold-astro-docs.md`, `./instructions/extract-docs-sections.md`, `./instructions/record-astro-docs.md`. Plan: Integrate Purrtrait and Shiki is complete and the tree is clean — delegate in order; serialize iteration 2's consumer commit against Plan: Distribute Meta JSON's app-side edits (both touch `$ART_MD_WEB/package.json`, different sections).
+All three iterations are `DONE` — `scaffold-astro-docs` (`077f840`), `extract-docs-sections` (`a406701` in `$NOODLESTAN_WEB`, `03b51d1` here), and `record-astro-docs` (the package registered in the Noodlestan Web guide, this plan's evidence recorded, and the milestone row reflected upstream). Plan complete, moving to `done`; open items stay in **Follow Ups** and `$PROJECT/_backlog/_parking-lot.md`.
 
 ### Blockers
 
@@ -299,7 +299,7 @@ Then confirm the JSDoc surface survived the extraction — for every rendered en
 ### Evidence
 
 - `scaffold-astro-docs` (`077f840`) — `@noodlestan/astro-docs` scaffolded as a sibling of `@noodlestan/astro-components`: manifest (raw-TS `main`, exports `.` + `./global.css`, peer `astro ^7.4.2`, exact npm pin `@purrtrait/astro-components@0.0.1`, type-only `@purrception/lang-ts` devDependency), the Purrtrait consumer styles copied verbatim (`shiki-light` ×5), empty component barrel + `src/index.ts`, a minimal fixture proving the `.astro` graph and styles build, `_records/package.art`, README, CHANGELOG. `npm ci` + `npm run ci` green (3/3 turbo tasks including the model package); `$ART_MD_WEB` untouched. Report: `./instructions/scaffold-astro-docs__report.md`.
-- `extract-docs-sections` (`a406701`, `03b51d1`) — the five docs sections moved into `packages/astro-docs/src/components/` with a barrel and a `DocsResolveLink` of identical shape to the app's; `DocsBreadcrumbs` route-injected (`docsRoot="/docs"`, `apiRoot="/docs/api"`, `packageHref`, `moduleHref`); the app pages/layouts import from `@noodlestan/astro-docs`, `PageLayout` pulls the package's `./global.css`, and the local `src/components/docs/` plus the Purrtrait style block are gone (−57 lines); the fixture now renders breadcrumbs and entities. Gate: normalized diff **0/15** under the ratified waiver of the three move-inherent classes; coverage: params parity 3×2 = 6 `jsdoc-params` blocks, `ParserConfig` 2 member descriptions, `{@link ParserConfig}` → `/docs/api/...` anchor, both greps empty; `$NOODLESTAN_WEB` and app CI green. Report: `./instructions/extract-docs-sections__report.md`.
+- `extract-docs-sections` (`a406701`, `03b51d1`) — the five docs sections moved into `packages/astro-docs/src/components/` with a barrel and a `DocsResolveLink` of identical shape to the app's; `DocsBreadcrumbs` route-injected (`docsRoot="/docs"`, `apiRoot="/docs/api"`, `packageHref`, `moduleHref`); the app pages/layouts import from `@noodlestan/astro-docs`, `PageLayout` pulls the package's `./global.css`, and the local `src/components/docs/` plus the Purrtrait style block are gone (−57 lines); the fixture now renders breadcrumbs and entities. Gate: normalized HTML diff **0/15 — byte-identical visible markup**, empty under the ratified waiver of the three move-inherent classes (path-derived `data-astro-cid-*`, dotted asset-hash normalization defect, inline-vs-external style emission); coverage parity: functions carrying `paramTags` vs rendered `jsdoc-params` blocks = 3 functions × 2 render sites = 6, `ParserConfig` 2 member descriptions, `{@link ParserConfig}` → `/docs/api/...` anchor; both greps empty; `$NOODLESTAN_WEB` and app CI green. Report: `./instructions/extract-docs-sections__report.md`.
 
 ### Decisions
 

@@ -13,3 +13,7 @@ WIP tracker, structured like the session parking lot: **ACTIONABLE** (in progres
 ## BLOCKERS
 
 - None current.
+
+## FOLLOW-UPS
+
+- Publish `@noodlestan/astro-docs` to npm — deferred by Plan: Componentize Docs (`$PROJECT/_backlog/1-done/plan-componentize-docs/plan.md`).

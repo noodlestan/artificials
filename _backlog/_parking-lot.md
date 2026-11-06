@@ -8,7 +8,7 @@ WIP tracker, structured like the session parking lot: **ACTIONABLE** (in progres
 
 ## PENDING
 
-- None.
+- ONGOING: @art-md lock drain — nested node_modules/@art-md copies in checkouts/art-md/package-lock.json must fall 5→0 by document-codec; check npm ls @art-md/primitives; see plan Feedback.
 
 ## BLOCKERS
 

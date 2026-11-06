@@ -207,6 +207,8 @@ refactor(art-md-web): Consume `@noodlestan/astro-docs`.
 
 **Instructions:** `./instructions/record-astro-docs.md`
 
+**Report:** `./instructions/record-astro-docs__report.md`
+
 **Changes:**
 
 - Finalize `$NOODLESTAN_WEB/packages/astro-docs/_records/package.art` and add the package row to the `$NOODLESTAN_WEB/_guide.md` packages table.
@@ -219,10 +221,10 @@ refactor(art-md-web): Consume `@noodlestan/astro-docs`.
 
 #### Commits:
 
-| ID                   | Repository / Checkout / Branch              | Policy   | Hash  | Status     |
-| -------------------- | ------------------------------------------- | -------- | ----- | ---------- |
-| `record-astro-docs`  | Noodlestan Web / `$NOODLESTAN_WEB` / `main` | `NOPUSH` | (TBD) | `AUTHORED` |
-| `reflect-astro-docs` | Artificials / `$PROJECT` / `main`           | `NOPUSH` | (TBD) | `AUTHORED` |
+| ID                   | Repository / Checkout / Branch              | Policy   | Hash      | Status      |
+| -------------------- | ------------------------------------------- | -------- | --------- | ----------- |
+| `record-astro-docs`  | Noodlestan Web / `$NOODLESTAN_WEB` / `main` | `NOPUSH` | `9f6613e` | `COMMITTED` |
+| `reflect-astro-docs` | Artificials / `$PROJECT` / `main`           | `NOPUSH` | `09de76e` | `COMMITTED` |
 
 ##### Commit: `record-astro-docs`
 
@@ -300,6 +302,7 @@ Then confirm the JSDoc surface survived the extraction — for every rendered en
 
 - `scaffold-astro-docs` (`077f840`) — `@noodlestan/astro-docs` scaffolded as a sibling of `@noodlestan/astro-components`: manifest (raw-TS `main`, exports `.` + `./global.css`, peer `astro ^7.4.2`, exact npm pin `@purrtrait/astro-components@0.0.1`, type-only `@purrception/lang-ts` devDependency), the Purrtrait consumer styles copied verbatim (`shiki-light` ×5), empty component barrel + `src/index.ts`, a minimal fixture proving the `.astro` graph and styles build, `_records/package.art`, README, CHANGELOG. `npm ci` + `npm run ci` green (3/3 turbo tasks including the model package); `$ART_MD_WEB` untouched. Report: `./instructions/scaffold-astro-docs__report.md`.
 - `extract-docs-sections` (`a406701`, `03b51d1`) — the five docs sections moved into `packages/astro-docs/src/components/` with a barrel and a `DocsResolveLink` of identical shape to the app's; `DocsBreadcrumbs` route-injected (`docsRoot="/docs"`, `apiRoot="/docs/api"`, `packageHref`, `moduleHref`); the app pages/layouts import from `@noodlestan/astro-docs`, `PageLayout` pulls the package's `./global.css`, and the local `src/components/docs/` plus the Purrtrait style block are gone (−57 lines); the fixture now renders breadcrumbs and entities. Gate: normalized HTML diff **0/15 — byte-identical visible markup**, empty under the ratified waiver of the three move-inherent classes (path-derived `data-astro-cid-*`, dotted asset-hash normalization defect, inline-vs-external style emission); coverage parity: functions carrying `paramTags` vs rendered `jsdoc-params` blocks = 3 functions × 2 render sites = 6, `ParserConfig` 2 member descriptions, `{@link ParserConfig}` → `/docs/api/...` anchor; both greps empty; `$NOODLESTAN_WEB` and app CI green. Report: `./instructions/extract-docs-sections__report.md`.
+- `record-astro-docs` (`9f6613e`, `09de76e`) — package registered: `## Packages` row in `$NOODLESTAN_WEB/_guide.md`, `_records/package.art` verified against the manifest with no drift; this plan moved to `_backlog/1-done/` with status `DONE` and all iterations `DONE`; the milestone Phase 4 row repointed to `1-done/plan-componentize-docs/plan.md` + `DONE`; the parking lot gains only the genuinely-new follow-ups (publish `@noodlestan/astro-docs`, migrate other Astro sites — cross-checked against Follow Ups so nothing is duplicated). `$NOODLESTAN_WEB` `npm run ci` green (3/3), docs build (`lint:fix` → `sync` → `build` 15 pages → `lint`) green, every cited path resolves, no `None yet` left. Report: `./instructions/record-astro-docs__report.md`.
 
 ### Decisions
 

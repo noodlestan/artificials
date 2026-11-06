@@ -2,7 +2,7 @@
 
 **ID:** `componentize-docs`
 
-**Status:** `READY`
+**Status:** `DONE`
 
 **Template:** `$DOMAINS/plans/templates/plan.tart`
 

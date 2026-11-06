@@ -7,14 +7,16 @@ import {
 	type PurrfilesEntityData,
 } from '@noodlestan/purrfiles-entities';
 
-import DocsBreadcrumbs from '../../../../../components/docs/DocsBreadcrumbs.astro';
-import EntitiesSection from '../../../../../components/docs/EntitiesSection.astro';
-import EntitySummary from '../../../../../components/docs/EntitySummary.astro';
-import FunctionsSection from '../../../../../components/docs/FunctionsSection.astro';
-import TypesSection from '../../../../../components/docs/TypesSection.astro';
 import PageLayout from '../../../../../layouts/PageLayout.astro';
+import {
+	DocsBreadcrumbs,
+	EntitiesSection,
+	EntitySummary,
+	FunctionsSection,
+	TypesSection,
+} from '@noodlestan/astro-docs';
 import { createDocsResolveLink } from '../../../../../lib/meta';
-import { entityHref, packageParts } from '../../../../../lib/routes';
+import { entityHref, moduleHref, packageHref, packageParts } from '../../../../../lib/routes';
 
 interface Props {
 	entry: CollectionEntry<'entities'>;
@@ -70,7 +72,14 @@ const content = {
 ---
 
 <PageLayout content={content}>
-	<DocsBreadcrumbs pkg={pkg} mod={mod} />
+	<DocsBreadcrumbs
+		docsRoot="/docs"
+		apiRoot="/docs/api"
+		packageHref={packageHref}
+		moduleHref={moduleHref}
+		pkg={pkg}
+		mod={mod}
+	/>
 	<h1>{mod}</h1>
 	<EntitySummary jsdoc={{ description, tags }} resolveLink={resolveLink} />
 	<EntitiesSection entities={subEntities} />

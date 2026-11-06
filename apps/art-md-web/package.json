@@ -41,6 +41,7 @@
     "@astrojs/mdx": "8.1.1",
     "@astrojs/solid-js": "7.1.1",
     "@noodlestan/astro-components": "0.1.2",
+    "@noodlestan/astro-docs": "file:../../../noodlestan-web/packages/astro-docs",
     "@noodlestan/purrfiles-entities": "0.0.1",
     "@purrception/lang-ts": "0.1.1",
     "@purrtrait/astro-components": "0.0.1",

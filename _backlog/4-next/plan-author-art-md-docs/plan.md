@@ -107,7 +107,7 @@ Executed from `$WORKSPACE/`. Package work happens in `$ART_MD` on branch `main`;
 | ------------------------------ | ------- |
 | Iteration: Document Primitives | `DONE`  |
 | Iteration: Document Constructs | `DONE`  |
-| Iteration: Revisit Parser      | `DRAFT` |
+| Iteration: Revisit Parser      | `DONE`  |
 | Iteration: Document Serializer | `DRAFT` |
 | Iteration: Document Codec      | `DRAFT` |
 | Iteration: Refresh API Docs    | `DRAFT` |
@@ -219,7 +219,7 @@ release(constructs): 0.0.8
 
 **Id:** `revisit-parser`
 
-**Status:** `DRAFT`
+**Status:** `DONE`
 
 **Purpose:** Link the parser to its now-documented dependencies and adjust its copy against the Authoring Rules.
 
@@ -230,6 +230,8 @@ release(constructs): 0.0.8
 **Instructions:**
 
 Re-author the parser's cross-package links to the qualified form now that targets exist: `{@link ParseContext}` and `{@link ArtDocument}` become `{@link primitives:<owning-module>#ParseContext}`-style targets (discover the owning module from `@art-md/primitives`' `dist/meta.json`; the same for anything living in `constructs`). In-package targets already use `entity#symbol` from the corrective iteration — keep them. Apply the Authoring Rules to the parser's own copy, using the canonical example: the module description carries "what/when" — `parse` is the main entry point, the other functions are exposed so consumers can recompose the parser if needed — and the per-function descriptions do not repeat it. Re-pin `@art-md/primitives` and `@art-md/constructs` to `0.0.8`. Bump `parser` to `0.0.8` (after Distribute Meta JSON's `0.0.7`), changelog, refresh the lock, stop for the user's `npm publish`, confirm with `npm view`, then re-run `npm run extract` so `dist/meta.json` carries the new links.
+
+**Report:** `./instructions/revisit-parser__report.md`
 
 **Changes:**
 
@@ -244,10 +246,10 @@ Re-author the parser's cross-package links to the qualified form now that target
 
 #### Commits:
 
-| ID               | Repository / Checkout / Branch | Policy   | Hash  | Status     |
-| ---------------- | ------------------------------ | -------- | ----- | ---------- |
-| `revisit-parser` | Art MD / `$ART_MD` / `main`    | `NOPUSH` | (TBD) | `AUTHORED` |
-| `release-parser` | Art MD / `$ART_MD` / `main`    | `NOPUSH` | (TBD) | `AUTHORED` |
+| ID               | Repository / Checkout / Branch | Policy   | Hash      | Status      |
+| ---------------- | ------------------------------ | -------- | --------- | ----------- |
+| `revisit-parser` | Art MD / `$ART_MD` / `main`    | `NOPUSH` | `6abf01c` | `COMMITTED` |
+| `release-parser` | Art MD / `$ART_MD` / `main`    | `NOPUSH` | `9a70c03` | `COMMITTED` |
 
 ##### Commit: `revisit-parser`
 
@@ -446,7 +448,7 @@ docs(art-md-web): Add getting started, usage, and integrations pages.
 
 ### Next
 
-Draft is complete (all iterations inlined) and execution is underway: ~~`document-primitives`~~ (`DONE`, `7dc5ad5` + `f14a377`, published `0.0.8`) → ~~`document-constructs`~~ (`DONE`, `d1d6602` + `a378ff2`, published `0.0.8`) → `revisit-parser` (dispatched) → `document-serializer` → `document-codec` → `refresh-api-docs` → `write-root-docs`. Both blockers (Plan: Distribute Meta JSON, Plan: Integrate Purrtrait and Shiki) are `DONE`; website iterations serialize against the other plans editing the same manifest.
+Draft is complete (all iterations inlined) and execution is underway: ~~`document-primitives`~~ (`DONE`, `7dc5ad5` + `f14a377`, published `0.0.8`) → ~~`document-constructs`~~ (`DONE`, `d1d6602` + `a378ff2`, published `0.0.8`) → ~~`revisit-parser`~~ (`DONE`, `6abf01c` + `9a70c03`, published `0.0.8`) → `document-serializer` (dispatched) → `document-codec` → `refresh-api-docs` → `write-root-docs`. Lock-drain at 3 nested `primitives@0.0.7` copies. Both blockers (Plan: Distribute Meta JSON, Plan: Integrate Purrtrait and Shiki) are `DONE`; website iterations serialize against the other plans editing the same manifest.
 
 ### Blockers
 
@@ -497,6 +499,7 @@ Per package: `npm run ci` from `$ART_MD` passes, `dist/meta.json` exists and con
 
 - `document-primitives` (`7dc5ad5`, `f14a377`) — extract script copied from `$PARSER` (`meta.package: @art-md/primitives`, `tsconfig` `scripts/` include), `extract` entry + devDependencies (the instruction's "`@noodlestan/purrfiles-extract` from the workspace" was stale: pinned exact `0.0.1` from npm, as `$PARSER` does), authored copy per the Authoring Rules — 9/9 modules and 25/30 declared symbols carry one-liner descriptions with module "what/when" kept off the symbol level, plus the `toMdastemented` typo fixed in source. Release `0.0.8` (version + CHANGELOG + lock, every lock hunk primitives-related). Published and confirmed: `npm view @art-md/primitives version` → `0.0.8`; `npm pack --dry-run` lists `dist/meta.json` (43 kB); `npm run ci` green on both commits. Report: `./instructions/document-primitives__report.md`.
 - `document-constructs` (`d1d6602`, `a378ff2`) — extract script and devDependencies copied from the primitives pattern (`meta.package: @art-md/constructs`), 7 `factory/index.ts` barrels added so index-less factory modules can carry copy at all; authored per the Authoring Rules across 154 source files: modules **0/33 → 33/33**, declared symbols in meta **1/50 → 44/50** (50/50 authored in source — the 6 gaps are extractor limits, see Feedback); `@art-md/primitives` re-pinned `0.0.8`. Release `0.0.8` (version + CHANGELOG + lock, constructs-related hunks only). Published and confirmed: `npm view @art-md/constructs version` → `0.0.8`; `npm pack --dry-run` lists `dist/meta.json` (91.6 kB, 290 files); `npm run ci` green on both commits; `npm ci --dry-run` in sync. Report: `./instructions/document-constructs__report.md`.
+- `revisit-parser` (`6abf01c`, `9a70c03`) — 5 cross-package links qualified to the full scoped-token form (`{@link @art-md/primitives:context#ParseContext}` ×3, `…:document#ArtDocument}`, `…:context#ParserVisitContext}`; owning modules discovered from primitives' meta; 0 constructs targets existed; the 6 in-package `entity#symbol` links kept). Copy reconciled with the Authoring Rules: canonical what/when on `src/index.ts`, module↔symbol repetition removed across 9 files, every parser module compressed to one paragraph. Re-pinned `@art-md/primitives` and `@art-md/constructs` `0.0.8`; release `0.0.8` (parser hunks only, `npm ci` in sync). Published and confirmed: `npm view @art-md/parser version` → `0.0.8`; `npm pack --dry-run` lists `dist/meta.json` (16.5 kB) with `prepack` re-running extract; `npm run ci` green on both commits (10/10 tasks). Report: `./instructions/revisit-parser__report.md`.
 
 ### Decisions
 
@@ -514,5 +517,8 @@ Per package: `npm run ci` from `$ART_MD` passes, `dist/meta.json` exists and con
 
 ### Feedback
 
-- Nested @art-md registry entries in the lock are transient — track their drain with `npm ls @art-md/primitives` (4 nested `0.0.7` copies remaining after `document-constructs` re-pinned, down from 5; parked as `3226fc1`); target 0 nested copies after `document-codec` re-pins all four dependencies.
+- Nested @art-md registry entries in the lock are transient — track their drain with `npm ls @art-md/primitives`: **3 remaining** after `revisit-parser` re-pinned (`cli/bin`, `libs/codec`, `libs/serializer`); was 4 after `document-constructs`, 5 at `document-primitives`; parked as `3226fc1`; target 0 after `document-codec` re-pins all four dependencies.
 - `document-constructs`' 6 meta gaps are extractor limits, not authoring gaps: 2 interfaces and 4 typed arrow-const parsers are documented in source but never reach `dist/meta.json` (44/50) — the fix belongs in `@noodlestan/purrfiles-extract`, not this plan's copy.
+- Scoped-token correction (ratified by the architect): qualified links must use the **full scoped package name** — `{@link @art-md/primitives:context#Symbol}` — never the `primitives:` shorthand the instruction wrote; the resolver matches `e.package === pkg` with full scoped strings and purrfiles-entities' own tests assert that form. The shorthand must not reappear in instructions.
+- `@art-md/primitives`'s meta lists the name `context` twice — first-match wins, so bare-name fallback lookup is ambiguous; extractor note for the purrfiles follow-up.
+- Only 1 of the 5 qualified links renders in docs today: the other four live in private/test sources the extractor ignores — source hygiene, no action in this plan.

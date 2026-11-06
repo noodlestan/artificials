@@ -2,7 +2,7 @@
 
 **ID:** `author-art-md-docs`
 
-**Status:** `DRAFT`
+**Status:** `WORKING`
 
 **Template:** `$DOMAINS/plans/templates/plan.tart`
 
@@ -105,7 +105,7 @@ Executed from `$WORKSPACE/`. Package work happens in `$ART_MD` on branch `main`;
 
 | Iteration / Instructions       | Status  |
 | ------------------------------ | ------- |
-| Iteration: Document Primitives | `DRAFT` |
+| Iteration: Document Primitives | `DONE`  |
 | Iteration: Document Constructs | `DRAFT` |
 | Iteration: Revisit Parser      | `DRAFT` |
 | Iteration: Document Serializer | `DRAFT` |
@@ -117,7 +117,7 @@ Executed from `$WORKSPACE/`. Package work happens in `$ART_MD` on branch `main`;
 
 **Id:** `document-primitives`
 
-**Status:** `DRAFT`
+**Status:** `DONE`
 
 **Purpose:** First extraction pass — foundational types become documented.
 
@@ -128,6 +128,8 @@ Executed from `$WORKSPACE/`. Package work happens in `$ART_MD` on branch `main`;
 **Instructions:**
 
 Copy `$PARSER/scripts/extract.ts` into `$ART_MD/libs/primitives/scripts/extract.ts` with `meta.package` set to `@art-md/primitives`; add the `extract` script and its dependencies (`@noodlestan/purrfiles-extract` from the workspace, `@purrception/source-fs`, `tsx`) to the package manifest, following how `$PARSER` declares them. Run it and confirm `dist/meta.json` is written. Apply the Authoring Rules to `primitives`' module and symbol JSDoc — foundational packages tend toward the one-liner rule. `primitives` has no Art MD dependencies, so nothing to re-pin. Bump to `0.0.8`, write the `CHANGELOG.md` entry, refresh the root `package-lock.json`, stop and hand the version to the user for `npm publish`, and confirm with `npm view @art-md/primitives version`.
+
+**Report:** `./instructions/document-primitives__report.md`
 
 **Changes:**
 
@@ -141,10 +143,10 @@ Copy `$PARSER/scripts/extract.ts` into `$ART_MD/libs/primitives/scripts/extract.
 
 #### Commits:
 
-| ID                   | Repository / Checkout / Branch | Policy   | Hash  | Status     |
-| -------------------- | ------------------------------ | -------- | ----- | ---------- |
-| `author-primitives`  | Art MD / `$ART_MD` / `main`    | `NOPUSH` | (TBD) | `AUTHORED` |
-| `release-primitives` | Art MD / `$ART_MD` / `main`    | `NOPUSH` | (TBD) | `AUTHORED` |
+| ID                   | Repository / Checkout / Branch | Policy   | Hash      | Status      |
+| -------------------- | ------------------------------ | -------- | --------- | ----------- |
+| `author-primitives`  | Art MD / `$ART_MD` / `main`    | `NOPUSH` | `7dc5ad5` | `COMMITTED` |
+| `release-primitives` | Art MD / `$ART_MD` / `main`    | `NOPUSH` | `f14a377` | `COMMITTED` |
 
 ##### Commit: `author-primitives`
 
@@ -442,7 +444,7 @@ docs(art-md-web): Add getting started, usage, and integrations pages.
 
 ### Next
 
-Draft is complete (all iterations inlined). Sequence: Plan: Distribute Meta JSON ships `parser` `0.0.7` first, then this plan runs its seven iterations in order; website iterations serialize against the other plans editing the same manifest.
+Draft is complete (all iterations inlined) and execution has started: ~~`document-primitives`~~ (`DONE`, `7dc5ad5` + `f14a377`, published `0.0.8`) → `document-constructs` (dispatched) → `revisit-parser` → `document-serializer` → `document-codec` → `refresh-api-docs` → `write-root-docs`. Both blockers (Plan: Distribute Meta JSON, Plan: Integrate Purrtrait and Shiki) are `DONE`; website iterations serialize against the other plans editing the same manifest.
 
 ### Blockers
 
@@ -491,7 +493,7 @@ Per package: `npm run ci` from `$ART_MD` passes, `dist/meta.json` exists and con
 
 ### Evidence
 
-- None yet.
+- `document-primitives` (`7dc5ad5`, `f14a377`) — extract script copied from `$PARSER` (`meta.package: @art-md/primitives`, `tsconfig` `scripts/` include), `extract` entry + devDependencies (the instruction's "`@noodlestan/purrfiles-extract` from the workspace" was stale: pinned exact `0.0.1` from npm, as `$PARSER` does), authored copy per the Authoring Rules — 9/9 modules and 25/30 declared symbols carry one-liner descriptions with module "what/when" kept off the symbol level, plus the `toMdastemented` typo fixed in source. Release `0.0.8` (version + CHANGELOG + lock, every lock hunk primitives-related). Published and confirmed: `npm view @art-md/primitives version` → `0.0.8`; `npm pack --dry-run` lists `dist/meta.json` (43 kB); `npm run ci` green on both commits. Report: `./instructions/document-primitives__report.md`.
 
 ### Decisions
 
@@ -509,4 +511,4 @@ Per package: `npm run ci` from `$ART_MD` passes, `dist/meta.json` exists and con
 
 ### Feedback
 
-- None yet.
+- Nested @art-md registry entries in the lock are transient — track their drain (5 now) with `npm ls @art-md/primitives`; target 0 nested copies after `document-codec` re-pins all four dependencies.

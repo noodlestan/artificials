@@ -110,7 +110,7 @@ Executed from `$WORKSPACE/`. Package work happens in `$ART_MD` on branch `main`;
 | Iteration: Revisit Parser      | `DONE`  |
 | Iteration: Document Serializer | `DONE`  |
 | Iteration: Document Codec      | `DONE`  |
-| Iteration: Refresh API Docs    | `DRAFT` |
+| Iteration: Refresh API Docs    | `DONE`  |
 | Iteration: Write Root Docs     | `DRAFT` |
 
 ### Iteration: Document Primitives
@@ -373,7 +373,7 @@ release(codec): 0.0.6
 
 **Id:** `refresh-api-docs`
 
-**Status:** `DRAFT`
+**Status:** `DONE`
 
 **Purpose:** Point the Art MD Website at all five packages' metas.
 
@@ -384,6 +384,8 @@ release(codec): 0.0.6
 **Instructions:**
 
 Add five entries to `$ART_MD_WEB/meta-docs.config.mts` with the versions this plan published (`primitives` `0.0.8`, `constructs` `0.0.8`, `parser` `0.0.8`, `serializer` `0.0.7`, `codec` `0.0.6`) — the fetcher downloads each from the npm endpoint and merges the `entities` arrays, so `content.config.ts` and the collection schema need no change. Run `npm run fetch-meta` and confirm the merged output contains entities from all five packages. Verify package pages render for all five (`/docs/api/art-md/primitives`, `/constructs`, `/serializer`, `/codec`, plus the existing `parser`), cross-package `{@link pkg:module#Symbol}` targets render as anchors, and `npm run build` + `npm run lint` pass. No dependency or lockfile changes; keep commits ordered against the other plans touching this repo.
+
+**Report:** `./instructions/refresh-api-docs__report.md`
 
 **Changes:**
 
@@ -397,9 +399,9 @@ Add five entries to `$ART_MD_WEB/meta-docs.config.mts` with the versions this pl
 
 #### Commits:
 
-| ID                 | Repository / Checkout / Branch    | Policy   | Hash  | Status     |
-| ------------------ | --------------------------------- | -------- | ----- | ---------- |
-| `refresh-api-docs` | Artificials / `$PROJECT` / `main` | `NOPUSH` | (TBD) | `AUTHORED` |
+| ID                 | Repository / Checkout / Branch    | Policy   | Hash      | Status      |
+| ------------------ | --------------------------------- | -------- | --------- | ----------- |
+| `refresh-api-docs` | Artificials / `$PROJECT` / `main` | `NOPUSH` | `261cffb` | `COMMITTED` |
 
 ##### Commit: `refresh-api-docs`
 
@@ -452,7 +454,7 @@ docs(art-md-web): Add getting started, usage, and integrations pages.
 
 ### Next
 
-Draft is complete (all iterations inlined) and execution is underway: ~~`document-primitives`~~ (`DONE`, `7dc5ad5` + `f14a377`, published `0.0.8`) → ~~`document-constructs`~~ (`DONE`, `d1d6602` + `a378ff2`, published `0.0.8`) → ~~`revisit-parser`~~ (`DONE`, `6abf01c` + `9a70c03`, published `0.0.8`) → ~~`document-serializer`~~ (`DONE`, `79ef0bf` + `262a60b`, published `0.0.7`) → ~~`document-codec`~~ (`DONE`, `3151454` + `3d12397`, published `0.0.6`) → `refresh-api-docs` (dispatched, `$PROJECT` only, no gate) → `write-root-docs`. All five packages are published; the two website iterations remain. Lock-drain at 2 (`cli/bin`, `tests/codec`, both out of scope).
+Draft is complete (all iterations inlined) and execution is underway: ~~`document-primitives`~~ (`DONE`, `7dc5ad5` + `f14a377`, published `0.0.8`) → ~~`document-constructs`~~ (`DONE`, `d1d6602` + `a378ff2`, published `0.0.8`) → ~~`revisit-parser`~~ (`DONE`, `6abf01c` + `9a70c03`, published `0.0.8`) → ~~`document-serializer`~~ (`DONE`, `79ef0bf` + `262a60b`, published `0.0.7`) → ~~`document-codec`~~ (`DONE`, `3151454` + `3d12397`, published `0.0.6`) → ~~`refresh-api-docs`~~ (`DONE`, `261cffb`, five packages rendering, 75 pages) → `write-root-docs` (dispatched, last iteration, no gate). All five packages are published and documented on the site. Lock-drain at 2 (`cli/bin`, `tests/codec`, both out of scope). Two deviations await the architect's ratification — see Feedback (`document-codec` restructure; `content.config.ts` first-match dedupe).
 
 ### Blockers
 
@@ -506,6 +508,7 @@ Per package: `npm run ci` from `$ART_MD` passes, `dist/meta.json` exists and con
 - `revisit-parser` (`6abf01c`, `9a70c03`) — 5 cross-package links qualified to the full scoped-token form (`{@link @art-md/primitives:context#ParseContext}` ×3, `…:document#ArtDocument}`, `…:context#ParserVisitContext}`; owning modules discovered from primitives' meta; 0 constructs targets existed; the 6 in-package `entity#symbol` links kept). Copy reconciled with the Authoring Rules: canonical what/when on `src/index.ts`, module↔symbol repetition removed across 9 files, every parser module compressed to one paragraph. Re-pinned `@art-md/primitives` and `@art-md/constructs` `0.0.8`; release `0.0.8` (parser hunks only, `npm ci` in sync). Published and confirmed: `npm view @art-md/parser version` → `0.0.8`; `npm pack --dry-run` lists `dist/meta.json` (16.5 kB) with `prepack` re-running extract; `npm run ci` green on both commits (10/10 tasks). Report: `./instructions/revisit-parser__report.md`.
 - `document-serializer` (`79ef0bf`, `262a60b`) — extract script copied with `meta.package: @art-md/serializer`; authored per the Authoring Rules: modules **0/3 → 3/3**, declared symbols **0/5 → 5/5** (meta 8,835 → 10,178 B), modules carry the serialize-vs-parse what/when while symbols stay behavioural, 3 qualified `@art-md/primitives:` / `@art-md/constructs:` links. Re-pinned `@art-md/primitives` and `@art-md/constructs` `0.0.8`; release `0.0.7` (version + CHANGELOG + lock, every hunk serializer-caused — including the two reaction hunks under `libs/codec`, precedented by `a378ff2`; `npm ci` in sync, `npm ls` exits 0). Published and confirmed: `npm view @art-md/serializer version` → `0.0.7`; `npm pack --dry-run` lists `dist/meta.json` (10.2 kB, 24 files); `npm run ci` green on both commits (11/11 tasks). Report: `./instructions/document-serializer__report.md`.
 - `document-codec` (`3151454`, `3d12397`) — extract script copied with `meta.package: @art-md/codec`; **flat `src/` yields 0 entities** (the extractor is directory-based), so `createArtCodec.ts`, `types.ts` and the test moved into `src/codec/` behind a new `src/codec/index.ts` entry (constructs-barrel precedent) — then modules **0/1 → 1/1**, symbols **0/3 → 3/3**, meta 7,769 → 8,831 B, 4 qualified full-scoped links verified against the published metas. Re-pinned all four Art MD deps (`primitives`/`constructs`/`parser` `0.0.8`, `serializer` `0.0.7`); release `0.0.6` (version + CHANGELOG + lock, every hunk codec-caused; all 5 `libs/codec/node_modules/*` entries drained). Published and confirmed: `npm view @art-md/codec version` → `0.0.6`; `npm pack --dry-run` lists `dist/meta.json` (9.3 kB, 20 files); `npm run ci` green on both commits (12/12 tasks); `npm ci` in sync, `npm ls` exits 0. Report: `./instructions/document-codec__report.md`.
+- `refresh-api-docs` (`261cffb`) — `meta-docs.config.mts` now pins all five packages (parser `0.0.8` replaces its stale `0.0.7` entry); `npm run fetch-meta` merged five metas first try (no CDN lag): **50 entities** (primitives 9, constructs 33, parser 4, serializer 3, codec 1) → **32 after the collection's dedupe** (8/16/4/3/1). All five package routes exist in `dist/` with `<h1>` + module lists; the qualified `{@link @art-md/primitives:context#ParseContext}` renders as an anchor on `/docs/api/art-md/parser/parse` plus **8 more cross-package anchors** (serializer→primitives/constructs, codec→parser/serializer/primitives); the other four parser qualified links sit in `private/` sources the extractor ignores (as documented). `astro sync` / `build` (75 pages) / `lint` green; `git diff` empty on the manifest and lockfile. Report: `./instructions/refresh-api-docs__report.md`.
 
 ### Decisions
 
@@ -525,6 +528,8 @@ Per package: `npm run ci` from `$ART_MD` passes, `dist/meta.json` exists and con
 
 - Nested @art-md registry entries in the lock are transient — track their drain with `npm ls @art-md/primitives`: **2 remaining** after `document-codec`, but the residue **moved** to (`cli/bin`, `tests/codec`) — codec's own nested copies are all drained, and `tests/codec` pins `@art-md/codec: "0.0.5"` exactly (out of this plan's scope; expect an `invalid` marker there once `0.0.6` installs). Was 3 after `revisit-parser`, 5 at `document-primitives`; parked as `3226fc1`. The plan's "0 after document-codec" target assumed `cli/bin` was codec-caused — it is not; both remainders are out of scope.
 - `document-codec`'s source restructure (flat `src/` → `src/codec/` + `index.ts`, files and test moved) is the one deviation **pending the architect's ratification**: the directory-based extractor cannot see a flat layout, the constructs-barrel precedent applies, and the content is already published as `0.0.6` — a rejection implies a corrected release plus a `refresh-api-docs` pin edit.
+- `refresh-api-docs` disproved the instruction's "no change to `content.config.ts`": merging five metas hard-failed with `Duplicate entity context of type module` (primitives `context` ×2, constructs 17 bare-name collisions — the duplicates the plan already flagged). Fix: first-match dedupe at `readMeta` (no dependency or lockfile change was possible; `purrfiles-entities@0.0.1` is latest). **Trade-off pending ratification:** constructs renders 16 of its 33 modules, because nested modules share bare names under the v1 name-keyed id/route/index schemes — resolving that needs keyed ids upstream (purrfiles follow-up), not this plan.
+- Residual raw `{@link …}` appears only in `<meta name="description">` (pre-existing SEO-meta cosmetic); page bodies are clean.
 - `document-constructs`' 6 meta gaps are extractor limits, not authoring gaps: 2 interfaces and 4 typed arrow-const parsers are documented in source but never reach `dist/meta.json` (44/50) — the fix belongs in `@noodlestan/purrfiles-extract`, not this plan's copy.
 - Scoped-token correction (ratified by the architect): qualified links must use the **full scoped package name** — `{@link @art-md/primitives:context#Symbol}` — never the `primitives:` shorthand the instruction wrote; the resolver matches `e.package === pkg` with full scoped strings and purrfiles-entities' own tests assert that form. The shorthand must not reappear in instructions.
 - `@art-md/primitives`'s meta lists the name `context` twice — first-match wins, so bare-name fallback lookup is ambiguous; extractor note for the purrfiles follow-up.

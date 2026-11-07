@@ -10,7 +10,7 @@
 
 **Purpose:** Document `components` and `props` entities alongside `module` entities.
 
-**Description:** Only `module` entities exist today: `ENTITY_TYPES = ['module']` in `@noodlestan/purrfiles-entities`, one extractor (`createModuleEntityExtractor`) in `@noodlestan/purrfiles-extract`, and routes in the Art MD Website that render modules with their functions and types. This plan extends the entity model and the extraction to `components` and `props`, re-runs extraction so the meta carries them, and gives the website routes and sections that render them at the reference granularity. Both packages are published, so the model change ships as released versions the website pins exact.
+**Description:** Only `module` entities exist today: `ENTITY_TYPES = ['module']` in `@noodlestan/purrfiles-entities`, one extractor (`createModuleEntityExtractor`) in `@noodlestan/purrfiles-extract`, and routes in the Art MD Website that render modules with their functions and types. This plan extends the entity model and the extraction to `components` and `props`, re-runs extraction so the meta carries them, and gives the website routes and sections that render them at the reference granularity. Both packages are published, so the model change ships as released versions the website pins exact. It must also key entity ids and routes by package+type+name: the five-package merge added by Plan: Author Art MD Docs dedupes first-match on bare names and renders only 16 of 33 constructs modules (recorded in that plan's Feedback) — the collision is an id-scheme defect, not a data gap.
 
 ## Mandatory Reading
 

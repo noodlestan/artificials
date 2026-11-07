@@ -234,7 +234,8 @@ Execution is coordinated from `$WORKSPACE`. The implementation target is `$PROJE
 | 4     | Plan: Docs Sidebar `$PROJECT/_backlog/4-next/plan-docs-sidebar/plan.md`                                   | `DRAFT` |
 | 4     | Plan: In-Code Symbol Links `$PROJECT/_backlog/4-next/plan-in-code-symbol-links/plan.md`                   | `DRAFT` |
 | 4     | Plan: Non-Module Entities `$PROJECT/_backlog/4-next/plan-non-module-entities/plan.md`                     | `DRAFT` |
-| 4     | Plan: Distribute Meta JSON `$PROJECT/_backlog/3-now/plan-distribute-meta-json/plan.md`                    | `DONE`  |
+| 4     | Plan: Distribute Meta JSON `$PROJECT/_backlog/1-done/plan-distribute-meta-json/plan.md`                   | `DONE`  |
+| 4     | Plan: Author Art MD Docs `$PROJECT/_backlog/1-done/plan-author-art-md-docs/plan.md`                       | `DONE`  |
 
 The following items are not yet captured in a work item document.
 
@@ -292,7 +293,7 @@ The following items are not yet captured in a work item document.
 
 ### Next
 
-All Phase 2 plans DONE. Plan: Art MD Docs DONE (integrated as `00c5b97` in `$PROJECT`, not pushed). Plan: Add JSDoc Renderer Package DONE (integrated as `097ea8b` in `$PURRTRAIT`, not pushed; `@purrtrait/jsdoc-renderer@0.0.2` and `@purrtrait/solid-code@0.0.13` published; no-comply migrated as `878cd46`, not pushed). Plan: Astro Components DONE (integrated as `8d4a6bc` in `$PURRTRAIT`, not pushed; `@purrtrait/astro-components` 0.0.1 published with `CodeBlock.astro` and `JsDocBlock.astro`). Plan: Integrate Purrtrait and Shiki DONE — the renderers and the purrfiles packages are published and pinned exact in `apps/art-md-web/package.json` (zero `file:` links workspace-wide), `apps/art-md-web/src/lib/signature.ts` is deleted, and the docs render highlighted declarations plus JSDoc descriptions and tags at module, function, and type granularity. Phase 4 continues with the draft successors: Plan: Componentize Docs to DRY docs rendering across Noodlestan Astro sites, plus the follow-ons opened with this plan — Plan: Docs Search, Plan: Docs Sidebar, Plan: In-Code Symbol Links, and Plan: Non-Module Entities.
+All Phase 2 plans DONE. Plan: Art MD Docs DONE (integrated as `00c5b97` in `$PROJECT`, not pushed). Plan: Add JSDoc Renderer Package DONE (integrated as `097ea8b` in `$PURRTRAIT`, not pushed; `@purrtrait/jsdoc-renderer@0.0.2` and `@purrtrait/solid-code@0.0.13` published; no-comply migrated as `878cd46`, not pushed). Plan: Astro Components DONE (integrated as `8d4a6bc` in `$PURRTRAIT`, not pushed; `@purrtrait/astro-components` 0.0.1 published with `CodeBlock.astro` and `JsDocBlock.astro`). Plan: Integrate Purrtrait and Shiki DONE — the renderers and the purrfiles packages are published and pinned exact in `apps/art-md-web/package.json` (zero `file:` links workspace-wide), `apps/art-md-web/src/lib/signature.ts` is deleted, and the docs render highlighted declarations plus JSDoc descriptions and tags at module, function, and type granularity. Phase 4 core delivery COMPLETE: Plan: Componentize Docs, Plan: Distribute Meta JSON, and Plan: Author Art MD Docs are all DONE (five packages published and documented — primitives 0.0.8, constructs 0.0.8, parser 0.0.8, serializer 0.0.7, codec 0.0.6 — five API routes plus three root docs pages, 78 pages total). Phase 4 remains WORKING only on the four follow-ons: Plan: Docs Search, Plan: Docs Sidebar, Plan: In-Code Symbol Links, and Plan: Non-Module Entities (which now also owns the bare-name collision / keyed-ids fix). Phase 3 (Records Demo) is still untouched.
 
 ### Blockers
 
@@ -361,7 +362,7 @@ None.
 ### Follow Ups
 
 - Deploy the Art MD Website.
-- Distribute versioned `meta.json` with each `@art-md/parser` release and pin it in consumers — Plan: Distribute Meta JSON.
+- Distribute versioned `meta.json` with each `@art-md/parser` release and pin it in consumers — Plan: Distribute Meta JSON. **DONE** — plan completed, fetched pins live in `meta-docs.config.mts`.
 
 ### Feedback
 

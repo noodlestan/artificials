@@ -4,11 +4,9 @@ WIP tracker, structured like the session parking lot: **ACTIONABLE** (in progres
 
 ## ACTIONABLE
 
-- Plan: Home Content And About Page.
+- None.
 
 ## PENDING
-
-- ONGOING: @art-md lock drain — nested node_modules/@art-md copies in checkouts/art-md/package-lock.json must fall 5→0 by document-codec; check npm ls @art-md/primitives; see plan Feedback.
 
 ## BLOCKERS
 
@@ -16,4 +14,4 @@ WIP tracker, structured like the session parking lot: **ACTIONABLE** (in progres
 
 ## FOLLOW-UPS
 
-- None current.
+- @art-md lock residue: 2 nested `node_modules/@art-md/*` copies remain (`cli/bin`, `tests/codec`) — out of Plan: Author Art MD Docs scope, see its Feedback; re-pin when those packages release.

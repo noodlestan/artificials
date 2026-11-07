@@ -2,7 +2,7 @@
 
 **ID:** `author-art-md-docs`
 
-**Status:** `WORKING`
+**Status:** `DONE`
 
 **Template:** `$DOMAINS/plans/templates/plan.tart`
 
@@ -103,15 +103,15 @@ Executed from `$WORKSPACE/`. Package work happens in `$ART_MD` on branch `main`;
 
 ## Items:
 
-| Iteration / Instructions       | Status  |
-| ------------------------------ | ------- |
-| Iteration: Document Primitives | `DONE`  |
-| Iteration: Document Constructs | `DONE`  |
-| Iteration: Revisit Parser      | `DONE`  |
-| Iteration: Document Serializer | `DONE`  |
-| Iteration: Document Codec      | `DONE`  |
-| Iteration: Refresh API Docs    | `DONE`  |
-| Iteration: Write Root Docs     | `DRAFT` |
+| Iteration / Instructions       | Status |
+| ------------------------------ | ------ |
+| Iteration: Document Primitives | `DONE` |
+| Iteration: Document Constructs | `DONE` |
+| Iteration: Revisit Parser      | `DONE` |
+| Iteration: Document Serializer | `DONE` |
+| Iteration: Document Codec      | `DONE` |
+| Iteration: Refresh API Docs    | `DONE` |
+| Iteration: Write Root Docs     | `DONE` |
 
 ### Iteration: Document Primitives
 
@@ -415,7 +415,7 @@ build(art-md-web): Document all five art-md packages.
 
 **Id:** `write-root-docs`
 
-**Status:** `DRAFT`
+**Status:** `DONE`
 
 **Purpose:** Give the site its human-facing docs: getting started, usage, integrations.
 
@@ -426,6 +426,8 @@ build(art-md-web): Document all five art-md packages.
 **Instructions:**
 
 Author three pages under `$ART_MD_WEB/src/pages/docs/`, following the existing page and layout conventions: `getting-started` (install the packages, first parse), `usage` (parse/serialize round trip, when to use codec versus parser + serializer), and `integrations`. The integrations page links the sibling projects by GitHub URL — `https://github.com/noodlestan/art-js` and `https://github.com/noodlestan/art-lib` — noting that neither has documentation yet. Cross-link each root page to the generated API reference. Verify with the full docs build (`lint:fix` → `astro sync` → `build` → `lint`) and confirm the three routes render.
+
+**Report:** `./instructions/write-root-docs__report.md`
 
 **Changes:**
 
@@ -438,9 +440,9 @@ Author three pages under `$ART_MD_WEB/src/pages/docs/`, following the existing p
 
 #### Commits:
 
-| ID                | Repository / Checkout / Branch    | Policy   | Hash  | Status     |
-| ----------------- | --------------------------------- | -------- | ----- | ---------- |
-| `write-root-docs` | Artificials / `$PROJECT` / `main` | `NOPUSH` | (TBD) | `AUTHORED` |
+| ID                | Repository / Checkout / Branch    | Policy   | Hash      | Status      |
+| ----------------- | --------------------------------- | -------- | --------- | ----------- |
+| `write-root-docs` | Artificials / `$PROJECT` / `main` | `NOPUSH` | `b65bf8c` | `COMMITTED` |
 
 ##### Commit: `write-root-docs`
 
@@ -454,12 +456,11 @@ docs(art-md-web): Add getting started, usage, and integrations pages.
 
 ### Next
 
-Draft is complete (all iterations inlined) and execution is underway: ~~`document-primitives`~~ (`DONE`, `7dc5ad5` + `f14a377`, published `0.0.8`) → ~~`document-constructs`~~ (`DONE`, `d1d6602` + `a378ff2`, published `0.0.8`) → ~~`revisit-parser`~~ (`DONE`, `6abf01c` + `9a70c03`, published `0.0.8`) → ~~`document-serializer`~~ (`DONE`, `79ef0bf` + `262a60b`, published `0.0.7`) → ~~`document-codec`~~ (`DONE`, `3151454` + `3d12397`, published `0.0.6`) → ~~`refresh-api-docs`~~ (`DONE`, `261cffb`, five packages rendering, 75 pages) → `write-root-docs` (dispatched, last iteration, no gate). All five packages are published and documented on the site. Lock-drain at 2 (`cli/bin`, `tests/codec`, both out of scope). Two deviations await the architect's ratification — see Feedback (`document-codec` restructure; `content.config.ts` first-match dedupe).
+All seven iterations are `DONE` — plan complete: `document-primitives` (`7dc5ad5` + `f14a377`, `0.0.8`) → `document-constructs` (`d1d6602` + `a378ff2`, `0.0.8`) → `revisit-parser` (`6abf01c` + `9a70c03`, `0.0.8`) → `document-serializer` (`79ef0bf` + `262a60b`, `0.0.7`) → `document-codec` (`3151454` + `3d12397`, `0.0.6`) → `refresh-api-docs` (`261cffb`) → `write-root-docs` (`b65bf8c`). All five packages published and documented; the site serves the API reference for all five plus the three root docs pages (78 pages). Two deviations await the architect's ratification (Feedback: codec source restructure; `content.config.ts` first-match dedupe with the constructs 16/33 trade-off); lock-drain residue (`cli/bin`, `tests/codec`) is out of scope and parked (`3226fc1`).
 
 ### Blockers
 
-- Plan: Distribute Meta JSON must land (`parser` `0.0.7` with `prepack`) before `revisit-parser`.
-- Plan: Integrate Purrtrait and Shiki must finish before `refresh-api-docs` and `write-root-docs` (shared manifest and lockfile).
+- None — both upstream plans are `DONE` (Plan: Distribute Meta JSON shipped `parser` with `prepack`; Plan: Integrate Purrtrait and Shiki finished all nine iterations).
 
 ---
 
@@ -509,6 +510,7 @@ Per package: `npm run ci` from `$ART_MD` passes, `dist/meta.json` exists and con
 - `document-serializer` (`79ef0bf`, `262a60b`) — extract script copied with `meta.package: @art-md/serializer`; authored per the Authoring Rules: modules **0/3 → 3/3**, declared symbols **0/5 → 5/5** (meta 8,835 → 10,178 B), modules carry the serialize-vs-parse what/when while symbols stay behavioural, 3 qualified `@art-md/primitives:` / `@art-md/constructs:` links. Re-pinned `@art-md/primitives` and `@art-md/constructs` `0.0.8`; release `0.0.7` (version + CHANGELOG + lock, every hunk serializer-caused — including the two reaction hunks under `libs/codec`, precedented by `a378ff2`; `npm ci` in sync, `npm ls` exits 0). Published and confirmed: `npm view @art-md/serializer version` → `0.0.7`; `npm pack --dry-run` lists `dist/meta.json` (10.2 kB, 24 files); `npm run ci` green on both commits (11/11 tasks). Report: `./instructions/document-serializer__report.md`.
 - `document-codec` (`3151454`, `3d12397`) — extract script copied with `meta.package: @art-md/codec`; **flat `src/` yields 0 entities** (the extractor is directory-based), so `createArtCodec.ts`, `types.ts` and the test moved into `src/codec/` behind a new `src/codec/index.ts` entry (constructs-barrel precedent) — then modules **0/1 → 1/1**, symbols **0/3 → 3/3**, meta 7,769 → 8,831 B, 4 qualified full-scoped links verified against the published metas. Re-pinned all four Art MD deps (`primitives`/`constructs`/`parser` `0.0.8`, `serializer` `0.0.7`); release `0.0.6` (version + CHANGELOG + lock, every hunk codec-caused; all 5 `libs/codec/node_modules/*` entries drained). Published and confirmed: `npm view @art-md/codec version` → `0.0.6`; `npm pack --dry-run` lists `dist/meta.json` (9.3 kB, 20 files); `npm run ci` green on both commits (12/12 tasks); `npm ci` in sync, `npm ls` exits 0. Report: `./instructions/document-codec__report.md`.
 - `refresh-api-docs` (`261cffb`) — `meta-docs.config.mts` now pins all five packages (parser `0.0.8` replaces its stale `0.0.7` entry); `npm run fetch-meta` merged five metas first try (no CDN lag): **50 entities** (primitives 9, constructs 33, parser 4, serializer 3, codec 1) → **32 after the collection's dedupe** (8/16/4/3/1). All five package routes exist in `dist/` with `<h1>` + module lists; the qualified `{@link @art-md/primitives:context#ParseContext}` renders as an anchor on `/docs/api/art-md/parser/parse` plus **8 more cross-package anchors** (serializer→primitives/constructs, codec→parser/serializer/primitives); the other four parser qualified links sit in `private/` sources the extractor ignores (as documented). `astro sync` / `build` (75 pages) / `lint` green; `git diff` empty on the manifest and lockfile. Report: `./instructions/refresh-api-docs__report.md`.
+- `write-root-docs` (`b65bf8c`) — three pages authored (`src/pages/docs/{getting-started,usage,integrations}.astro`, 154 lines): install table + first-parse with highlighted code, the parse/serialize round trip with the codec-vs-parser+serializer guidance, and integrations linking `noodlestan/art-js` + `noodlestan/art-lib` by GitHub URL with the no-docs-yet note; every `/docs/api/...` cross-link resolves to an existing `dist` file; the documented examples were executed live. Build 75 → **78 pages**; `lint:fix` → `astro sync` → `build` → `lint` all green, manifest and lockfile untouched, commit stages exactly the three pages. Report: `./instructions/write-root-docs__report.md`.
 
 ### Decisions
 

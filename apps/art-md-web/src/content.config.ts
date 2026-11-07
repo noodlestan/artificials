@@ -10,7 +10,27 @@ const metaFile = fileURLToPath(new URL('./data/meta.json', import.meta.url));
 
 type MetaFile = { entities: PurrfilesEntityData[] };
 
-const readMeta = (): MetaFile => JSON.parse(readFileSync(metaFile, 'utf8')) as MetaFile;
+/**
+ * Reads the merged meta and keeps the first entity per `package/type/name`.
+ *
+ * `@art-md/primitives` ships two `module` entities named `context`
+ * (`src/parser/context` and `src/serializer/context`); the meta index keys
+ * modules by name and rejects duplicates, so the first match wins — the
+ * extractor follow-up recorded in the plan owns the upstream fix.
+ */
+const readMeta = (): MetaFile => {
+	const { entities } = JSON.parse(readFileSync(metaFile, 'utf8')) as MetaFile;
+	const seen = new Set<string>();
+
+	return {
+		entities: entities.filter(entity => {
+			const key = `${entity.package}/${entity.type}/${entity.name}`;
+			if (seen.has(key)) return false;
+			seen.add(key);
+			return true;
+		}),
+	};
+};
 
 const entities = defineCollection({
 	loader: () =>
